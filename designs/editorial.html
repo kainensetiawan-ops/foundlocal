@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FoundLocal — Websites &amp; Local-Search Visibility</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --cream:#f4efe6;
+    --paper:#faf6ee;
+    --ink:#211c17;
+    --ink-soft:#534b40;
+    --terra:#bd5631;
+    --terra-deep:#a0431f;
+    --olive:#6d7250;
+    --line:#ddd2bf;
+    --shadow:28px 34px 70px -38px rgba(54,38,24,.42);
+    --shadow-sm:12px 16px 34px -24px rgba(54,38,24,.40);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  /* subtle grain / warmth via layered gradients */
+  body::before{
+    content:"";
+    position:fixed;inset:0;z-index:-2;
+    background:
+      radial-gradient(1200px 700px at 82% -8%, rgba(189,86,49,.10), transparent 60%),
+      radial-gradient(900px 600px at -10% 28%, rgba(109,114,80,.10), transparent 55%),
+      var(--cream);
+  }
+
+  ::selection{background:var(--terra);color:#fff;}
+
+  a{color:inherit;text-decoration:none;}
+  img{display:block;max-width:100%;}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+
+  .serif{font-family:'Fraunces',Georgia,serif;}
+
+  /* ——— eyebrow / kicker ——— */
+  .kicker{
+    font-family:'Inter';
+    font-size:.74rem;
+    letter-spacing:.32em;
+    text-transform:uppercase;
+    font-weight:600;
+    color:var(--terra-deep);
+    display:inline-flex;align-items:center;gap:.7em;
+  }
+  .kicker::before{
+    content:"";width:34px;height:1px;background:var(--terra);
+    opacity:.7;display:inline-block;
+  }
+
+  /* ====== TOP BAR ====== */
+  header.bar{
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:saturate(150%) blur(8px);
+    background:linear-gradient(var(--cream),rgba(244,239,230,.72));
+    border-bottom:1px solid rgba(221,210,191,.7);
+  }
+  .bar-inner{display:flex;align-items:center;justify-content:space-between;height:74px;}
+  .brand{
+    font-family:'Fraunces';font-weight:600;font-size:1.42rem;letter-spacing:-.01em;
+    display:flex;align-items:baseline;gap:.12em;
+  }
+  .brand b{color:var(--terra);font-weight:600;font-style:italic;}
+  .brand .dot{color:var(--terra);}
+  nav.links{display:flex;gap:34px;align-items:center;}
+  nav.links a{font-size:.92rem;color:var(--ink-soft);font-weight:500;transition:color .25s;}
+  nav.links a:hover{color:var(--terra-deep);}
+  nav.links a.pill{
+    border:1px solid var(--ink);border-radius:40px;padding:9px 20px;color:var(--ink);
+    transition:.3s;
+  }
+  nav.links a.pill:hover{background:var(--ink);color:var(--paper);}
+  @media(max-width:780px){ nav.links a:not(.pill){display:none;} }
+
+  /* ====== HERO ====== */
+  .hero{padding:88px 0 56px;position:relative;}
+  .hero-grid{
+    display:grid;grid-template-columns:1.18fr .82fr;gap:54px;align-items:end;
+  }
+  .hero h1{
+    font-family:'Fraunces';
+    font-weight:340;
+    font-size:clamp(3.1rem,8.4vw,7.1rem);
+    line-height:.95;
+    letter-spacing:-.025em;
+    margin:26px 0 0;
+  }
+  .hero h1 em{
+    font-style:italic;font-weight:400;color:var(--terra);
+    position:relative;
+  }
+  .hero h1 .small{
+    display:block;
+    font-size:.42em;
+    font-style:italic;
+    font-weight:360;
+    color:var(--ink-soft);
+    letter-spacing:-.01em;
+    margin-top:.18em;
+  }
+  .hero-lead{
+    margin-top:30px;font-size:1.16rem;color:var(--ink-soft);max-width:30ch;line-height:1.55;
+  }
+  .cta-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px;}
+  .btn{
+    font-family:'Inter';font-weight:600;font-size:.96rem;
+    padding:15px 28px;border-radius:46px;display:inline-flex;align-items:center;gap:.55em;
+    transition:transform .28s cubic-bezier(.2,.8,.2,1),box-shadow .28s,background .28s;
+    will-change:transform;
+  }
+  .btn-solid{background:var(--ink);color:var(--paper);box-shadow:0 14px 30px -16px rgba(33,28,23,.7);}
+  .btn-solid:hover{transform:translateY(-3px);box-shadow:0 22px 40px -16px rgba(33,28,23,.8);background:var(--terra-deep);}
+  .btn-ghost{border:1px solid var(--ink);color:var(--ink);}
+  .btn-ghost:hover{transform:translateY(-3px);background:var(--ink);color:var(--paper);}
+  .btn .arr{transition:transform .3s;}
+  .btn:hover .arr{transform:translate(4px,-4px);}
+
+  /* hero side card — editorial "index" block */
+  .hero-aside{
+    border:1px solid var(--line);
+    border-radius:22px;
+    background:linear-gradient(150deg,var(--paper),#f0e9da);
+    padding:30px 30px 26px;
+    box-shadow:var(--shadow-sm);
+    position:relative;
+    transform:rotate(1.3deg);
+  }
+  .hero-aside::after{
+    content:"";position:absolute;inset:8px;border:1px solid rgba(189,86,49,.22);border-radius:16px;pointer-events:none;
+  }
+  .hero-aside .num{
+    font-family:'Fraunces';font-style:italic;font-weight:500;font-size:3.4rem;color:var(--terra);line-height:1;
+  }
+  .hero-aside .num span{font-size:1rem;color:var(--ink-soft);font-style:normal;}
+  .hero-aside h3{font-family:'Fraunces';font-weight:500;font-size:1.3rem;margin:14px 0 6px;}
+  .hero-aside p{font-size:.95rem;color:var(--ink-soft);}
+  .aside-langs{
+    margin-top:18px;padding-top:16px;border-top:1px solid var(--line);
+    display:flex;gap:10px;flex-wrap:wrap;font-size:.82rem;color:var(--ink-soft);
+  }
+  .aside-langs span{background:rgba(109,114,80,.12);color:var(--olive);padding:4px 12px;border-radius:30px;font-weight:500;}
+
+  /* marquee rule under hero */
+  .ticker{
+    margin-top:70px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    overflow:hidden;white-space:nowrap;padding:18px 0;
+  }
+  .ticker-track{display:inline-flex;gap:46px;animation:slide 32s linear infinite;}
+  .ticker-track span{
+    font-family:'Fraunces';font-style:italic;font-size:1.5rem;color:var(--ink);opacity:.78;
+    display:inline-flex;align-items:center;gap:46px;
+  }
+  .ticker-track span::after{content:"✦";color:var(--terra);font-style:normal;font-size:.9rem;}
+  @keyframes slide{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+  /* ====== SECTION HEADS ====== */
+  .sec{padding:96px 0;}
+  .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:30px;flex-wrap:wrap;margin-bottom:54px;}
+  .sec-head h2{
+    font-family:'Fraunces';font-weight:360;font-size:clamp(2.3rem,5.2vw,3.8rem);line-height:1;letter-spacing:-.02em;
+    max-width:14ch;
+  }
+  .sec-head h2 em{font-style:italic;color:var(--terra);}
+  .sec-head .meta{font-size:.92rem;color:var(--ink-soft);max-width:30ch;text-align:right;}
+  @media(max-width:680px){.sec-head .meta{text-align:left;}}
+
+  /* ====== SERVICES ====== */
+  .services{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;}
+  .svc{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:34px 30px 38px;
+    position:relative;
+    transition:transform .4s cubic-bezier(.2,.8,.2,1),box-shadow .4s,border-color .4s;
+    overflow:hidden;
+  }
+  .svc::before{
+    content:"";position:absolute;left:0;top:0;height:100%;width:4px;
+    background:linear-gradient(var(--terra),var(--olive));transform:scaleY(0);transform-origin:top;transition:transform .5s;
+  }
+  .svc:hover{transform:translateY(-8px);box-shadow:var(--shadow);border-color:transparent;}
+  .svc:hover::before{transform:scaleY(1);}
+  .svc .idx{font-family:'Fraunces';font-style:italic;color:var(--terra);font-size:1.05rem;}
+  .svc .ic{
+    margin:20px 0 18px;width:54px;height:54px;border-radius:14px;
+    display:grid;place-items:center;background:rgba(189,86,49,.10);color:var(--terra-deep);
+  }
+  .svc .ic svg{width:26px;height:26px;}
+  .svc h3{font-family:'Fraunces';font-weight:500;font-size:1.42rem;line-height:1.18;margin-bottom:10px;}
+  .svc p{font-size:.98rem;color:var(--ink-soft);}
+
+  /* ====== WORK ====== */
+  .work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;}
+  .work-card{
+    display:flex;flex-direction:column;
+    background:var(--paper);border:1px solid var(--line);border-radius:22px;overflow:hidden;
+    transition:transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s;
+  }
+  .work-card:nth-child(2){transform:translateY(26px);}
+  .work-card:hover{transform:translateY(-10px);box-shadow:var(--shadow);}
+  .work-card:nth-child(2):hover{transform:translateY(16px);}
+  .frame{
+    position:relative;background:#e8e0d1;padding:14px 14px 0;
+  }
+  .frame .bar3{display:flex;gap:6px;padding:4px 4px 12px;}
+  .frame .bar3 i{width:10px;height:10px;border-radius:50%;background:var(--line);display:inline-block;}
+  .frame .bar3 i:first-child{background:var(--terra);}
+  .shot{
+    height:300px;overflow:hidden;border-radius:12px 12px 0 0;border:1px solid var(--line);border-bottom:none;
+    background:#fff;
+  }
+  .shot img{width:100%;height:auto;transition:transform 6s ease-out;}
+  .work-card:hover .shot img{transform:translateY(calc(-100% + 300px));}
+  .work-body{padding:24px 26px 26px;display:flex;flex-direction:column;flex:1;}
+  .tag{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--olive);font-weight:600;}
+  .work-body h3{font-family:'Fraunces';font-weight:500;font-size:1.36rem;margin:8px 0 8px;line-height:1.2;}
+  .work-body p{font-size:.93rem;color:var(--ink-soft);flex:1;}
+  .view{
+    margin-top:18px;font-weight:600;font-size:.92rem;color:var(--terra-deep);
+    display:inline-flex;align-items:center;gap:.5em;align-self:flex-start;
+    border-bottom:1.5px solid transparent;transition:border-color .3s,gap .3s;
+  }
+  .view:hover{border-color:var(--terra);gap:.85em;}
+
+  /* ====== CTA ====== */
+  .cta{
+    margin:40px 0 0;
+    background:
+      radial-gradient(700px 400px at 100% 0%, rgba(189,86,49,.22), transparent 60%),
+      linear-gradient(160deg,#26201a,#332a20);
+    color:var(--paper);border-radius:32px;padding:78px 64px;position:relative;overflow:hidden;
+  }
+  .cta::after{
+    content:"❧";position:absolute;right:48px;bottom:18px;font-size:9rem;color:rgba(244,239,230,.06);
+    font-family:'Fraunces';line-height:1;
+  }
+  .cta .kicker{color:#e6a684;}
+  .cta .kicker::before{background:#e6a684;}
+  .cta h2{
+    font-family:'Fraunces';font-weight:340;font-size:clamp(2.3rem,5.4vw,4.1rem);line-height:1.02;
+    letter-spacing:-.02em;margin:22px 0 0;max-width:18ch;
+  }
+  .cta h2 em{font-style:italic;color:#eba07a;}
+  .cta p{margin-top:20px;color:rgba(244,239,230,.74);max-width:46ch;font-size:1.08rem;}
+  .cta .cta-row{margin-top:34px;}
+  .cta .btn-solid{background:var(--paper);color:var(--ink);}
+  .cta .btn-solid:hover{background:var(--terra);color:#fff;}
+  .cta .btn-ghost{border-color:rgba(244,239,230,.5);color:var(--paper);}
+  .cta .btn-ghost:hover{background:var(--paper);color:var(--ink);border-color:var(--paper);}
+  .guarantee{
+    margin-top:28px;display:inline-flex;align-items:center;gap:.7em;font-size:.92rem;
+    color:rgba(244,239,230,.8);border:1px solid rgba(244,239,230,.22);
+    padding:10px 18px;border-radius:40px;
+  }
+  .guarantee b{color:#eba07a;font-weight:600;}
+
+  /* ====== FOOTER ====== */
+  footer{padding:64px 0 70px;}
+  .foot-grid{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;}
+  .foot-brand{font-family:'Fraunces';font-weight:600;font-size:2rem;letter-spacing:-.01em;}
+  .foot-brand b{color:var(--terra);font-style:italic;font-weight:600;}
+  .foot-grid p{font-size:.92rem;color:var(--ink-soft);margin-top:8px;}
+  .foot-langs{display:flex;gap:8px;flex-wrap:wrap;}
+  .foot-langs span{font-size:.82rem;color:var(--olive);background:rgba(109,114,80,.1);padding:5px 13px;border-radius:30px;font-weight:500;}
+  .foot-note{
+    margin-top:40px;padding-top:22px;border-top:1px solid var(--line);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+    font-size:.82rem;color:var(--ink-soft);
+  }
+  .foot-note em{font-family:'Fraunces';font-style:italic;}
+
+  /* reveal */
+  .rise{opacity:0;transform:translateY(26px);animation:rise .9s cubic-bezier(.2,.8,.2,1) forwards;}
+  @keyframes rise{to{opacity:1;transform:none;}}
+  .d1{animation-delay:.08s;} .d2{animation-delay:.18s;} .d3{animation-delay:.28s;}
+  .d4{animation-delay:.38s;} .d5{animation-delay:.5s;}
+
+  /* ====== RESPONSIVE ====== */
+  @media(max-width:960px){
+    .hero-grid{grid-template-columns:1fr;gap:40px;}
+    .hero-aside{transform:rotate(0);max-width:420px;}
+    .services{grid-template-columns:1fr;}
+    .work-grid{grid-template-columns:1fr;}
+    .work-card:nth-child(2),.work-card:nth-child(2):hover{transform:none;}
+    .work-card:hover{transform:translateY(-6px);}
+    .cta{padding:56px 34px;}
+  }
+  @media(max-width:560px){
+    .wrap{padding:0 22px;}
+    .hero{padding:54px 0 36px;}
+    .sec{padding:72px 0;}
+    .cta{padding:48px 26px;border-radius:24px;}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;}
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap bar-inner">
+    <div class="brand">Found<b>Local</b><span class="dot">.</span></div>
+    <nav class="links">
+      <a href="#services">Services</a>
+      <a href="#work">Work</a>
+      <a href="#contact" class="pill">Get a free preview</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="kicker rise">Websites &amp; local-search visibility</span>
+      <h1 class="rise d1">
+        Get your shop
+        <em>found</em>
+        <span class="small">— on Google <em>and</em> in the AI answers people now ask.</span>
+      </h1>
+      <p class="hero-lead rise d2">A handcrafted website for your local business, built to be the result Google shows and the name ChatGPT recommends.</p>
+      <div class="cta-row rise d3">
+        <a href="#work" class="btn btn-solid">See my work <span class="arr">↗</span></a>
+        <a href="#contact" class="btn btn-ghost">Get a free preview</a>
+      </div>
+    </div>
+
+    <aside class="hero-aside rise d4">
+      <div class="num">01 <span>— the brief</span></div>
+      <h3>Local, but unmissable.</h3>
+      <p>People search, then AI answers. I make sure your business is the one they find — in three languages.</p>
+      <div class="aside-langs">
+        <span>English</span><span>Malay</span><span>中文</span>
+      </div>
+    </aside>
+  </div>
+
+  <div class="ticker">
+    <div class="ticker-track">
+      <span>mobile-first design</span><span>found on Google</span><span>recommended by AI</span><span>WhatsApp enquiries</span><span>local &amp; multilingual</span>
+      <span>mobile-first design</span><span>found on Google</span><span>recommended by AI</span><span>WhatsApp enquiries</span><span>local &amp; multilingual</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SERVICES ===== -->
+<section class="sec" id="services">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="rise">What I make for <em>you</em></h2>
+      <p class="meta rise d1">Three quiet, well-built pieces that do one loud thing — bring the right people through your door.</p>
+    </div>
+
+    <div class="services">
+      <article class="svc rise d1">
+        <div class="idx">i.</div>
+        <div class="ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+        </div>
+        <h3>A modern, mobile-first website</h3>
+        <p>Designed for the phone first, where your customers actually are — fast, elegant, and effortless to read at arm's length.</p>
+      </article>
+
+      <article class="svc rise d2">
+        <div class="idx">ii.</div>
+        <div class="ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/><path d="M11 8v3l2 1.5"/></svg>
+        </div>
+        <h3>Found on Google &amp; AI search</h3>
+        <p>Built so search engines and AI assistants understand who you are — and put your name forward when someone nearby is looking.</p>
+      </article>
+
+      <article class="svc rise d3">
+        <div class="idx">iii.</div>
+        <div class="ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-12.1 7.5L3 21l2-5.9A8.5 8.5 0 1 1 21 11.5Z"/></svg>
+        </div>
+        <h3>A WhatsApp button that works</h3>
+        <p>One tap turns a curious visitor into a real enquiry on the app you already use — no forms, no friction, just a conversation.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WORK ===== -->
+<section class="sec" id="work" style="padding-top:0;">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="rise">Selected <em>work</em></h2>
+      <p class="meta rise d1">A small gallery of sites and visibility reports. Hover to scroll the page.</p>
+    </div>
+
+    <div class="work-grid">
+      <article class="work-card rise d1">
+        <div class="frame">
+          <div class="bar3"><i></i><i></i><i></i></div>
+          <div class="shot"><img src="../work/teacher-koh.png" alt="Teacher Koh tuition-centre website" loading="lazy" /></div>
+        </div>
+        <div class="work-body">
+          <span class="tag">Tuition centre</span>
+          <h3>Teacher Koh</h3>
+          <p>A warm, trustworthy home for a neighbourhood tuition centre — class info, results and a parent-friendly enquiry tap.</p>
+          <a href="../work/teacher-koh.html" class="view">View live ↗</a>
+        </div>
+      </article>
+
+      <article class="work-card rise d2">
+        <div class="frame">
+          <div class="bar3"><i></i><i></i><i></i></div>
+          <div class="shot"><img src="../work/snapshot.png" alt="Get-found visibility report snapshot" loading="lazy" /></div>
+        </div>
+        <div class="work-body">
+          <span class="tag">Visibility report</span>
+          <h3>Get-Found Snapshot</h3>
+          <p>A plain-language look at where a business shows up today across Google and AI search — and exactly what to fix first.</p>
+          <a href="../work/snapshot.html" class="view">View live ↗</a>
+        </div>
+      </article>
+
+      <article class="work-card rise d3">
+        <div class="frame">
+          <div class="bar3"><i></i><i></i><i></i></div>
+          <div class="shot"><img src="../work/brightminds.png" alt="BrightMinds education landing page" loading="lazy" /></div>
+        </div>
+        <div class="work-body">
+          <span class="tag">Education landing</span>
+          <h3>BrightMinds</h3>
+          <p>A bright, conversion-minded landing page for an enrichment school — built to win the click and start the chat.</p>
+          <a href="../work/brightminds.html" class="view">View live ↗</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="sec" id="contact" style="padding-bottom:0;">
+  <div class="wrap">
+    <div class="cta rise">
+      <span class="kicker">A standing offer</span>
+      <h2>I'll send you a <em>free preview</em> of your new site — first.</h2>
+      <p>See it before you decide. If your new site doesn't bring a fresh enquiry within fourteen days, you pay nothing at all.</p>
+      <div class="cta-row">
+        <a href="#contact" class="btn btn-solid">Get my free preview <span class="arr">↗</span></a>
+        <a href="#work" class="btn btn-ghost">See the work again</a>
+      </div>
+      <div class="guarantee">✦&nbsp; <b>First new enquiry in 14 days</b> — or you pay nothing.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand">Found<b>Local</b>.</div>
+        <p>Websites &amp; local-search visibility for the businesses around the corner.</p>
+      </div>
+      <div class="foot-langs">
+        <span>English</span><span>Malay</span><span>中文</span>
+      </div>
+    </div>
+    <div class="foot-note">
+      <span>© 2026 FoundLocal — made by hand, for the high street.</span>
+      <span><em>Sample / concept work shown.</em></span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,115 +1,140 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FoundLocal — Websites that get local businesses found on Google &amp; AI</title>
-<meta name="description" content="I build fast, modern websites for local businesses and get them found on Google and AI search like ChatGPT. Done-for-you, mobile-first, with WhatsApp lead capture.">
+<title>FoundLocal — Get your local business found on Google &amp; AI</title>
+<meta name="description" content="I build beautiful, fast websites for local businesses and get them found on Google and AI search like ChatGPT. Done-for-you, mobile-first, with WhatsApp lead capture.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{--navy:#0f2a4a;--blue:#2f6df0;--green:#1aa260;--gold:#f5a623;--ink:#1b2430;--soft:#f4f7fb;--line:#e6edf6}
+  /* ---------- THEME TOKENS ---------- */
+  :root{
+    --font: 'Plus Jakarta Sans', -apple-system, Segoe UI, Roboto, sans-serif;
+    --bg:#ffffff; --text:#1d2430; --muted:#697892; --line:#eef1f6;
+    --card:#ffffff; --card-bd:#eef1f6; --card-sh:0 14px 38px rgba(40,60,90,.08);
+    --nav:rgba(255,255,255,.72); --nav-bd:#eef1f6;
+    --grad:linear-gradient(100deg,#7c5cff,#ff7a59 55%,#16b6a8);
+    --btn:linear-gradient(100deg,#7c5cff,#ff7a59); --btn-tx:#fff; --btn-sh:0 10px 24px rgba(124,92,255,.30);
+    --chip:#f4f1ff; --chip-tx:#7c5cff;
+    --b1:#ffd9c0; --b2:#e3d9ff; --b3:#cfeede; --b-op:.85; --b-blur:70px;
+  }
+  [data-theme="dark"]{
+    --font:'Space Grotesk', -apple-system, Segoe UI, Roboto, sans-serif;
+    --bg:#05060a; --text:#e9edf6; --muted:#9aa6bd; --line:rgba(255,255,255,.08);
+    --card:rgba(255,255,255,.045); --card-bd:rgba(255,255,255,.09); --card-sh:0 18px 50px rgba(0,0,0,.55);
+    --nav:rgba(10,12,20,.55); --nav-bd:rgba(255,255,255,.08);
+    --grad:linear-gradient(100deg,#5b8cff,#b06bff 55%,#ff6bd0);
+    --btn:linear-gradient(100deg,#3f7bff,#9a4dff); --btn-tx:#fff; --btn-sh:0 0 28px rgba(90,120,255,.55);
+    --chip:rgba(124,140,255,.12); --chip-tx:#9ab0ff;
+    --b1:#2f6dff; --b2:#7c3cff; --b3:#ff3ca0; --b-op:.34; --b-blur:90px;
+  }
   *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);line-height:1.6}
-  .wrap{max-width:1040px;margin:0 auto;padding:0 22px}
-  header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}
-  .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
-  .logo{font-weight:800;color:var(--navy);font-size:20px}
-  .logo span{color:var(--blue)}
-  .nav a.cta{background:var(--blue);color:#fff;padding:9px 18px;border-radius:30px;text-decoration:none;font-weight:700;font-size:14px}
-  .hero{background:linear-gradient(160deg,#0f2a4a,#15407a);color:#fff;padding:66px 0 74px}
-  .hero h1{font-size:40px;line-height:1.15;font-weight:800;max-width:780px}
-  .hero p{font-size:18px;opacity:.92;margin-top:16px;max-width:620px}
-  .hero .btns{margin-top:28px;display:flex;gap:14px;flex-wrap:wrap}
-  .btn{padding:14px 26px;border-radius:32px;text-decoration:none;font-weight:700;font-size:15px;display:inline-block}
-  .btn-p{background:var(--gold);color:#23303f}
-  .btn-g{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.35)}
-  section{padding:56px 0}
-  .h2{font-size:28px;font-weight:800;color:var(--navy);text-align:center}
-  .sub{text-align:center;color:#5a6b80;margin:8px auto 36px;max-width:560px}
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px}
-  .card h3{color:var(--navy);font-size:18px;margin-bottom:6px}
-  .card p{color:#5a6b80;font-size:14px}
-  .soft{background:var(--soft)}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;transition:background .4s,color .4s}
+  /* ambient blobs / aurora */
+  .bg{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+  .bg span{position:absolute;border-radius:50%;filter:blur(var(--b-blur));opacity:var(--b-op);transition:opacity .4s,background .4s}
+  .bg .a{width:520px;height:520px;background:var(--b1);top:-120px;left:-100px;animation:float 18s ease-in-out infinite}
+  .bg .b{width:560px;height:560px;background:var(--b2);top:140px;right:-160px;animation:float 22s ease-in-out infinite reverse}
+  .bg .c{width:480px;height:480px;background:var(--b3);bottom:-160px;left:35%;animation:float 26s ease-in-out infinite}
+  @keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,-40px)}}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 22px}
+  /* nav */
+  header{position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);background:var(--nav);border-bottom:1px solid var(--nav-bd)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:66px}
+  .logo{font-weight:800;font-size:20px;letter-spacing:-.3px}
+  .logo b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .navr{display:flex;align-items:center;gap:14px}
+  .toggle{cursor:pointer;border:1px solid var(--card-bd);background:var(--card);width:46px;height:30px;border-radius:30px;font-size:14px;display:flex;align-items:center;justify-content:center}
+  .nbtn{background:var(--btn);color:var(--btn-tx);padding:10px 18px;border-radius:30px;text-decoration:none;font-weight:700;font-size:14px;box-shadow:var(--btn-sh)}
+  /* hero */
+  .hero{padding:78px 0 60px;text-align:center}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);border:1px solid var(--card-bd);padding:6px 14px;border-radius:30px;margin-bottom:22px}
+  .hero h1{font-size:clamp(34px,6vw,58px);line-height:1.08;font-weight:800;letter-spacing:-1.5px;max-width:880px;margin:0 auto}
+  .hero h1 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p{font-size:18px;color:var(--muted);max-width:560px;margin:20px auto 0}
+  .btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:30px}
+  .btn{padding:15px 28px;border-radius:32px;text-decoration:none;font-weight:700;font-size:15px;display:inline-block;transition:transform .15s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-p{background:var(--btn);color:var(--btn-tx);box-shadow:var(--btn-sh)}
+  .btn-s{background:var(--card);color:var(--text);border:1px solid var(--card-bd)}
+  /* sections */
+  section{padding:62px 0}
+  .h2{font-size:clamp(26px,4vw,34px);font-weight:800;text-align:center;letter-spacing:-.8px}
+  .h2 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{text-align:center;color:var(--muted);margin:10px auto 40px;max-width:520px}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .card{background:var(--card);border:1px solid var(--card-bd);border-radius:20px;padding:28px;box-shadow:var(--card-sh);backdrop-filter:blur(8px)}
+  .card .ic{width:46px;height:46px;border-radius:13px;background:var(--chip);color:var(--chip-tx);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px}
+  .card h3{font-size:18px;font-weight:700;margin-bottom:6px}
+  .card p{color:var(--muted);font-size:14.5px}
+  /* work */
   .work{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-  .proj{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
-  .proj .shot{height:180px;overflow:hidden;border-bottom:1px solid var(--line);background:#eef3f9}
+  .proj{background:var(--card);border:1px solid var(--card-bd);border-radius:20px;overflow:hidden;box-shadow:var(--card-sh)}
+  .proj .shot{height:180px;overflow:hidden;border-bottom:1px solid var(--card-bd);background:var(--chip)}
   .proj .shot img{width:100%;display:block}
-  .proj .body{padding:18px;flex:1;display:flex;flex-direction:column}
-  .proj h3{color:var(--navy);font-size:17px}
-  .proj .tag{font-size:11px;font-weight:700;color:var(--blue);background:var(--soft);padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:10px}
-  .proj p{color:#5a6b80;font-size:13.5px;flex:1}
-  .proj a.view{margin-top:14px;color:var(--blue);font-weight:700;text-decoration:none;font-size:14px}
-  .cta-band{background:var(--navy);color:#fff;text-align:center;border-radius:18px;padding:48px 22px}
-  .cta-band h2{font-size:27px;font-weight:800}
-  .cta-band p{opacity:.9;margin:12px 0 24px}
-  footer{background:#0b1f38;color:#9fb2cc;font-size:13px;padding:26px 0;text-align:center}
-  @media(max-width:760px){.hero h1{font-size:30px}.grid,.work{grid-template-columns:1fr}}
+  .proj .pb{padding:20px}
+  .chip{display:inline-block;font-size:11px;font-weight:700;color:var(--chip-tx);background:var(--chip);padding:4px 11px;border-radius:20px;margin-bottom:10px}
+  .proj h3{font-size:17px;font-weight:700}
+  .proj p{color:var(--muted);font-size:13.5px;margin:6px 0 12px}
+  .proj a{color:var(--chip-tx);font-weight:700;text-decoration:none;font-size:14px}
+  /* cta */
+  .cta{background:var(--grad);border-radius:26px;padding:54px 24px;text-align:center;color:#fff;box-shadow:var(--btn-sh)}
+  .cta h2{font-size:clamp(24px,4vw,32px);font-weight:800;letter-spacing:-.6px}
+  .cta p{opacity:.95;margin:14px auto 26px;max-width:520px}
+  .cta .btn-w{background:#fff;color:#23303f}
+  footer{padding:34px 0;text-align:center;color:var(--muted);font-size:13px;border-top:1px solid var(--line);margin-top:20px}
+  @media(max-width:760px){.grid,.work{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
+<div class="bg"><span class="a"></span><span class="b"></span><span class="c"></span></div>
+
 <header><div class="wrap nav">
-  <div class="logo">Found<span>Local</span></div>
-  <a class="cta" href="#contact">Work with me</a>
+  <div class="logo">Found<b>Local</b></div>
+  <div class="navr">
+    <div class="toggle" id="tg" title="Toggle dark mode">🌙</div>
+    <a class="nbtn" href="#contact">Free preview</a>
+  </div>
 </div></header>
 
 <div class="hero"><div class="wrap">
-  <h1>Websites that get your local business found — on Google and AI.</h1>
-  <p>I build fast, modern, mobile-first websites for local businesses and make sure customers actually find you: Google, Google Maps, and AI search like ChatGPT. Done-for-you, with a WhatsApp button that turns visitors into real enquiries.</p>
+  <span class="eyebrow">Websites · Local search · AI visibility</span>
+  <h1>Get your local business <span class="g">found</span> — on Google and AI.</h1>
+  <p>I build beautiful, fast websites for local businesses and make sure customers actually find you — on Google, Maps, and AI search like ChatGPT. Done-for-you, with a one-tap WhatsApp button that turns visitors into real enquiries.</p>
   <div class="btns">
-    <a class="btn btn-p" href="#work">See my work →</a>
-    <a class="btn btn-g" href="#contact">Get a free preview</a>
+    <a class="btn btn-p" href="#work">See my work</a>
+    <a class="btn btn-s" href="#contact">Get a free preview</a>
   </div>
 </div></div>
 
-<section id="services"><div class="wrap">
-  <div class="h2">What I do</div>
+<section><div class="wrap">
+  <div class="h2">Three things that turn <span class="g">clicks into customers</span></div>
   <div class="sub">Everything handled for you — no tech stress, no jargon.</div>
   <div class="grid">
-    <div class="card"><h3>🌐 Modern website</h3><p>A clean, fast site that looks great on phone and desktop — built around your business and your customers.</p></div>
-    <div class="card"><h3>🔎 Get found</h3><p>Google Business setup + on-page SEO + visibility in AI search, so you show up when customers are looking.</p></div>
-    <div class="card"><h3>💬 Turn clicks into enquiries</h3><p>A one-tap WhatsApp button and clear calls-to-action that turn visitors into real conversations.</p></div>
+    <div class="card"><div class="ic">🌐</div><h3>A beautiful website</h3><p>Modern, fast, and flawless on phone and desktop — designed around your business and your customers.</p></div>
+    <div class="card"><div class="ic">🔎</div><h3>Found on Google &amp; AI</h3><p>Google Business setup, on-page SEO, and visibility in AI search — so you show up when people are looking.</p></div>
+    <div class="card"><div class="ic">💬</div><h3>One-tap WhatsApp</h3><p>A WhatsApp button and clear calls-to-action that turn curious visitors into real conversations.</p></div>
   </div>
 </div></section>
 
-<section id="work" class="soft"><div class="wrap">
-  <div class="h2">Sample work</div>
-  <div class="sub">Concept projects showing the kind of sites and visibility reports I deliver.</div>
+<section id="work"><div class="wrap">
+  <div class="h2">A look at <span class="g">what I make</span></div>
+  <div class="sub">Concept projects showing the kind of sites and reports I deliver.</div>
   <div class="work">
-    <div class="proj">
-      <div class="shot"><img src="work/teacher-koh.png" alt="Tuition centre website sample"></div>
-      <div class="body">
-        <span class="tag">Website</span>
-        <h3>Tuition centre site</h3>
-        <p>A full mobile-first website for a local tuition centre — subjects, free-trial CTA, WhatsApp capture.</p>
-        <a class="view" href="work/teacher-koh.html" target="_blank">View live demo →</a>
-      </div>
-    </div>
-    <div class="proj">
-      <div class="shot"><img src="work/snapshot.png" alt="Visibility snapshot sample"></div>
-      <div class="body">
-        <span class="tag">Visibility report</span>
-        <h3>"Get found" snapshot</h3>
-        <p>A free visibility audit showing a business where they sit vs competitors in Google and AI search.</p>
-        <a class="view" href="work/snapshot.html" target="_blank">View live demo →</a>
-      </div>
-    </div>
-    <div class="proj">
-      <div class="shot"><img src="work/brightminds.png" alt="Education landing page sample"></div>
-      <div class="body">
-        <span class="tag">Landing page</span>
-        <h3>Education landing page</h3>
-        <p>A clean, conversion-focused landing page concept with trust signals and a clear booking action.</p>
-        <a class="view" href="work/brightminds.html" target="_blank">View live demo →</a>
-      </div>
-    </div>
+    <div class="proj"><div class="shot"><img src="work/teacher-koh.png" alt="Tuition centre website"></div><div class="pb"><span class="chip">Website</span><h3>Tuition centre site</h3><p>Full mobile-first site — subjects, free-trial CTA, WhatsApp capture.</p><a href="work/teacher-koh.html" target="_blank">View live →</a></div></div>
+    <div class="proj"><div class="shot"><img src="work/snapshot.png" alt="Get-found visibility report"></div><div class="pb"><span class="chip">Visibility report</span><h3>"Get found" snapshot</h3><p>A free audit showing a business where they sit vs competitors online.</p><a href="work/snapshot.html" target="_blank">View live →</a></div></div>
+    <div class="proj"><div class="shot"><img src="work/brightminds.png" alt="Education landing page"></div><div class="pb"><span class="chip">Landing page</span><h3>Education landing page</h3><p>Clean, conversion-focused page with trust signals and a clear action.</p><a href="work/brightminds.html" target="_blank">View live →</a></div></div>
   </div>
 </div></section>
 
 <section id="contact"><div class="wrap">
-  <div class="cta-band">
+  <div class="cta">
     <h2>Want to see what customers find when they search for you?</h2>
-    <p>I'll send you a free preview — no cost, no obligation. If you like it, I build it. First new enquiry in 14 days or you pay nothing.</p>
-    <a class="btn btn-p" href="https://www.fiverr.com" target="_blank" style="font-size:16px">Message me on Fiverr →</a>
+    <p>I'll send you a free preview — no cost, no obligation. Like it? I build it. First new enquiry in 14 days or you pay nothing.</p>
+    <a class="btn btn-w" href="https://www.fiverr.com" target="_blank">Message me on Fiverr →</a>
   </div>
 </div></section>
 
@@ -117,5 +142,16 @@
   FoundLocal · Websites &amp; local-search visibility for small businesses · English · Malay · 中文<br>
   Sample/concept work shown for demonstration. © 2026 FoundLocal.
 </div></footer>
+
+<script>
+  (function(){
+    var root=document.documentElement, tg=document.getElementById('tg');
+    function set(t){root.setAttribute('data-theme',t);tg.textContent=t==='dark'?'☀️':'🌙';try{localStorage.setItem('flt',t)}catch(e){}}
+    var p=new URLSearchParams(location.search).get('theme');
+    var saved;try{saved=localStorage.getItem('flt')}catch(e){}
+    set(p||saved||'light');
+    tg.addEventListener('click',function(){set(root.getAttribute('data-theme')==='dark'?'light':'dark')});
+  })();
+</script>
 </body>
 </html>
