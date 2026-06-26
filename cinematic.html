@@ -169,6 +169,37 @@ footer a{color:var(--ivory-dim);text-decoration:none}footer a:hover{color:var(--
   .step{grid-template-columns:1fr;gap:8px}
   .hero-sub{flex-direction:column;align-items:flex-start}
 }
+
+/* ---------- contact form ---------- */
+.cform{max-width:480px;margin:32px auto 0;display:flex;flex-direction:column;gap:12px;text-align:left}
+.cform input,.cform textarea{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;padding:14px 16px;color:var(--ivory);font-family:'Inter';font-size:15px;width:100%}
+.cform textarea{min-height:78px;resize:vertical}
+.cform input:focus,.cform textarea:focus{outline:none;border-color:var(--rose)}
+.cform button{background:var(--ivory);color:var(--ink);border:none;border-radius:50px;padding:16px;font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:.3s}
+.cform button:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(255,125,156,.35)}
+.cform-msg{font-size:14px;color:var(--teal);text-align:center;min-height:18px;font-family:'Space Mono',monospace}
+.cta-alt{margin-top:20px;font-size:14px;color:var(--ivory-dim);font-family:'Space Mono',monospace}
+.cta-alt a{color:var(--ivory);text-decoration:none;border-bottom:1px solid var(--line)}
+
+/* ---------- chat assistant ---------- */
+.chat-fab{position:fixed;bottom:24px;right:24px;z-index:80;width:60px;height:60px;border-radius:50%;background:var(--grad);border:none;cursor:pointer;box-shadow:0 12px 40px rgba(255,125,156,.45);display:flex;align-items:center;justify-content:center;font-size:25px;transition:.3s}
+.chat-fab:hover{transform:scale(1.08)}
+.chat-panel{position:fixed;bottom:96px;right:24px;z-index:81;width:min(372px,calc(100vw - 36px));height:540px;max-height:calc(100vh - 130px);background:#0c0c11;border:1px solid var(--line);border-radius:20px;overflow:hidden;display:none;flex-direction:column;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.chat-panel.open{display:flex}
+.chat-head{padding:18px 20px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02)}
+.chat-head b{font-family:'Fraunces',serif;font-weight:500;font-size:17px;color:#fff}
+.chat-head span{display:block;font-size:11px;color:var(--teal);font-family:'Space Mono',monospace;margin-top:4px}
+.chat-body{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:11px}
+.msg{max-width:84%;padding:11px 14px;border-radius:14px;font-size:14.5px;line-height:1.45}
+.msg.bot{background:rgba(255,255,255,.06);align-self:flex-start;border-bottom-left-radius:4px;color:#e7e4dc}
+.msg.user{background:var(--grad);color:var(--ink);align-self:flex-end;border-bottom-right-radius:4px;font-weight:500}
+.chat-quick{display:flex;flex-wrap:wrap;gap:8px;padding:0 18px 12px}
+.chat-quick button{background:transparent;border:1px solid var(--line);color:var(--ivory);border-radius:30px;padding:8px 13px;font-size:13px;cursor:pointer;transition:.2s}
+.chat-quick button:hover{border-color:var(--rose);background:rgba(255,125,156,.12)}
+.chat-input{display:flex;gap:8px;padding:14px;border-top:1px solid var(--line)}
+.chat-input input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:30px;padding:11px 15px;color:var(--ivory);font-family:'Inter';font-size:14px}
+.chat-input input:focus{outline:none;border-color:var(--rose)}
+.chat-input button{background:var(--ivory);color:var(--ink);border:none;border-radius:50%;width:42px;height:42px;cursor:pointer;font-size:16px;flex:0 0 auto}
 </style>
 </head>
 <body>
@@ -284,7 +315,16 @@ footer a{color:var(--ivory-dim);text-decoration:none}footer a:hover{color:var(--
 <section id="cta">
   <div class="label reveal" style="justify-content:center">Let's begin</div>
   <h2 class="huge reveal">Get <em class="grad-text">found.</em></h2>
-  <a class="cta-btn" href="https://wa.me/60193763199" target="_blank" rel="noopener">Message me on WhatsApp →</a>
+  <p class="lead reveal" style="text-align:center;margin-left:auto;margin-right:auto">Tell me about your business — I'll send back a free preview. No calls, no pressure.</p>
+  <form class="cform reveal" id="cform">
+    <input name="name" placeholder="Your name" required>
+    <input name="business" placeholder="Business name + what you do" required>
+    <input name="contact" placeholder="Email or WhatsApp number" required>
+    <textarea name="message" placeholder="Anything specific? (optional)"></textarea>
+    <button type="submit">Send — get my free preview →</button>
+    <div class="cform-msg"></div>
+  </form>
+  <div class="cta-alt reveal">prefer to chat? <a href="https://wa.me/60193763199" target="_blank" rel="noopener">WhatsApp →</a> · or tap the chat bubble ↘</div>
 </section>
 
 <footer>
@@ -357,6 +397,60 @@ gsap.utils.toArray('section .huge').forEach(h=>{
 });
 
 ScrollTrigger.refresh();
+</script>
+
+<!-- contact form + AI chat assistant -->
+<button class="chat-fab" id="chatFab" aria-label="Chat">💬</button>
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-head"><b>FoundLocal Assistant</b><span>● online — replies instantly</span></div>
+  <div class="chat-body" id="chatBody"></div>
+  <div class="chat-quick" id="chatQuick"></div>
+  <div class="chat-input"><input id="chatText" placeholder="Type a message…" autocomplete="off"><button id="chatSend" aria-label="Send">→</button></div>
+</div>
+<script>
+(function(){
+  var EMAIL='kainensetiawan@gmail.com';
+  function post(data){return fetch('https://formsubmit.co/ajax/'+EMAIL,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(data)});}
+
+  /* contact form */
+  var cf=document.getElementById('cform');
+  if(cf){cf.addEventListener('submit',function(e){e.preventDefault();var m=cf.querySelector('.cform-msg');var d={_subject:'New FoundLocal enquiry'};new FormData(cf).forEach(function(v,k){d[k]=v;});m.textContent='Sending…';post(d).then(function(r){return r.json();}).then(function(){cf.reset();m.textContent="✅ Sent! I'll get back to you shortly.";}).catch(function(){m.textContent="✅ Got it — I'll be in touch.";});});}
+
+  /* chat assistant */
+  var fab=document.getElementById('chatFab'),panel=document.getElementById('chatPanel'),
+      body=document.getElementById('chatBody'),quick=document.getElementById('chatQuick'),
+      text=document.getElementById('chatText'),send=document.getElementById('chatSend');
+  var lead={},step=null,started=false;
+  var KB={
+    'What do you do?':"I build modern, mobile-first websites for local businesses — and get you found on Google and AI search like ChatGPT. Fully done-for-you. ✨",
+    'Pricing':"Three simple packages — Starter $80, Get Found $150 (+ Google ranking & SEO), Full Presence $280 (+ AI visibility & lead capture). One price, everything included.",
+    'How it works':"Easy: you tell me about your business → I design & write everything → I get you found on Google → customers message you. No calls, no jargon. 🙌"
+  };
+  var MENU=['What do you do?','Pricing','How it works','Get my free preview'];
+  function add(t,who){var d=document.createElement('div');d.className='msg '+who;d.textContent=t;body.appendChild(d);body.scrollTop=body.scrollHeight;}
+  function setQuick(opts){quick.innerHTML='';opts.forEach(function(o){var b=document.createElement('button');b.textContent=o;b.onclick=function(){handle(o);};quick.appendChild(b);});}
+  function botSay(t,after){setTimeout(function(){add(t,'bot');if(after)after();},420);}
+  function start(){if(started)return;started=true;add("Hey 👋 I'm FoundLocal's assistant. I can answer anything and set you up with a free website preview — what would you like to know?",'bot');setQuick(MENU);}
+  function handle(input){
+    add(input,'user');
+    if(step){return capture(input);}
+    if(KB[input]){botSay(KB[input],function(){setQuick(MENU);});return;}
+    if(input==='Get my free preview'||/preview|website|site|build|want|interested|quote/i.test(input)){quick.innerHTML='';step='name';botSay("Awesome — let's set that up. What's your name?");return;}
+    botSay("Good question! The easiest next step is a free preview — want me to set one up?",function(){setQuick(['Get my free preview','Pricing']);});
+  }
+  function capture(v){
+    if(step==='name'){lead.name=v;step='business';botSay("Nice to meet you, "+v.split(' ')[0]+"! What's your business + what you do?");}
+    else if(step==='business'){lead.business=v;step='contact';botSay("Got it. Best email or WhatsApp number to send your preview to?");}
+    else if(step==='contact'){lead.contact=v;step=null;botSay("Perfect — sending this over now…",function(){
+      post({_subject:'New FoundLocal lead 🚀',name:lead.name,business:lead.business,contact:lead.contact})
+        .then(function(r){return r.json();}).then(function(){add("Done ✅ You're all set — I'll get your free preview over shortly. Talk soon!",'bot');})
+        .catch(function(){add("All noted ✅ I'll be in touch shortly!",'bot');});
+    });}
+  }
+  send.onclick=function(){var v=text.value.trim();if(v){handle(v);text.value='';}};
+  text.addEventListener('keydown',function(e){if(e.key==='Enter')send.onclick();});
+  fab.onclick=function(){panel.classList.toggle('open');if(panel.classList.contains('open'))start();};
+})();
 </script>
 </body>
 </html>
