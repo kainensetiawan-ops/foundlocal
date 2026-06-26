@@ -1,157 +1,340 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" data-theme="light">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FoundLocal — Get your local business found on Google &amp; AI</title>
-<meta name="description" content="I build beautiful, fast websites for local businesses and get them found on Google and AI search like ChatGPT. Done-for-you, mobile-first, with WhatsApp lead capture.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  /* ---------- THEME TOKENS ---------- */
-  :root{
-    --font: 'Plus Jakarta Sans', -apple-system, Segoe UI, Roboto, sans-serif;
-    --bg:#ffffff; --text:#1d2430; --muted:#697892; --line:#eef1f6;
-    --card:#ffffff; --card-bd:#eef1f6; --card-sh:0 14px 38px rgba(40,60,90,.08);
-    --nav:rgba(255,255,255,.72); --nav-bd:#eef1f6;
-    --grad:linear-gradient(100deg,#7c5cff,#ff7a59 55%,#16b6a8);
-    --btn:linear-gradient(100deg,#7c5cff,#ff7a59); --btn-tx:#fff; --btn-sh:0 10px 24px rgba(124,92,255,.30);
-    --chip:#f4f1ff; --chip-tx:#7c5cff;
-    --b1:#ffd9c0; --b2:#e3d9ff; --b3:#cfeede; --b-op:.85; --b-blur:70px;
-  }
-  [data-theme="dark"]{
-    --font:'Space Grotesk', -apple-system, Segoe UI, Roboto, sans-serif;
-    --bg:#05060a; --text:#e9edf6; --muted:#9aa6bd; --line:rgba(255,255,255,.08);
-    --card:rgba(255,255,255,.045); --card-bd:rgba(255,255,255,.09); --card-sh:0 18px 50px rgba(0,0,0,.55);
-    --nav:rgba(10,12,20,.55); --nav-bd:rgba(255,255,255,.08);
-    --grad:linear-gradient(100deg,#5b8cff,#b06bff 55%,#ff6bd0);
-    --btn:linear-gradient(100deg,#3f7bff,#9a4dff); --btn-tx:#fff; --btn-sh:0 0 28px rgba(90,120,255,.55);
-    --chip:rgba(124,140,255,.12); --chip-tx:#9ab0ff;
-    --b1:#2f6dff; --b2:#7c3cff; --b3:#ff3ca0; --b-op:.34; --b-blur:90px;
-  }
-  *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;transition:background .4s,color .4s}
-  /* ambient blobs / aurora */
-  .bg{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
-  .bg span{position:absolute;border-radius:50%;filter:blur(var(--b-blur));opacity:var(--b-op);transition:opacity .4s,background .4s}
-  .bg .a{width:520px;height:520px;background:var(--b1);top:-120px;left:-100px;animation:float 18s ease-in-out infinite}
-  .bg .b{width:560px;height:560px;background:var(--b2);top:140px;right:-160px;animation:float 22s ease-in-out infinite reverse}
-  .bg .c{width:480px;height:480px;background:var(--b3);bottom:-160px;left:35%;animation:float 26s ease-in-out infinite}
-  @keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,-40px)}}
-  .wrap{max-width:1060px;margin:0 auto;padding:0 22px}
-  /* nav */
-  header{position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);background:var(--nav);border-bottom:1px solid var(--nav-bd)}
-  .nav{display:flex;align-items:center;justify-content:space-between;height:66px}
-  .logo{font-weight:800;font-size:20px;letter-spacing:-.3px}
-  .logo b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .navr{display:flex;align-items:center;gap:14px}
-  .toggle{cursor:pointer;border:1px solid var(--card-bd);background:var(--card);width:46px;height:30px;border-radius:30px;font-size:14px;display:flex;align-items:center;justify-content:center}
-  .nbtn{background:var(--btn);color:var(--btn-tx);padding:10px 18px;border-radius:30px;text-decoration:none;font-weight:700;font-size:14px;box-shadow:var(--btn-sh)}
-  /* hero */
-  .hero{padding:78px 0 60px;text-align:center}
-  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);border:1px solid var(--card-bd);padding:6px 14px;border-radius:30px;margin-bottom:22px}
-  .hero h1{font-size:clamp(34px,6vw,58px);line-height:1.08;font-weight:800;letter-spacing:-1.5px;max-width:880px;margin:0 auto}
-  .hero h1 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .hero p{font-size:18px;color:var(--muted);max-width:560px;margin:20px auto 0}
-  .btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:30px}
-  .btn{padding:15px 28px;border-radius:32px;text-decoration:none;font-weight:700;font-size:15px;display:inline-block;transition:transform .15s}
-  .btn:hover{transform:translateY(-2px)}
-  .btn-p{background:var(--btn);color:var(--btn-tx);box-shadow:var(--btn-sh)}
-  .btn-s{background:var(--card);color:var(--text);border:1px solid var(--card-bd)}
-  /* sections */
-  section{padding:62px 0}
-  .h2{font-size:clamp(26px,4vw,34px);font-weight:800;text-align:center;letter-spacing:-.8px}
-  .h2 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .sub{text-align:center;color:var(--muted);margin:10px auto 40px;max-width:520px}
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-  .card{background:var(--card);border:1px solid var(--card-bd);border-radius:20px;padding:28px;box-shadow:var(--card-sh);backdrop-filter:blur(8px)}
-  .card .ic{width:46px;height:46px;border-radius:13px;background:var(--chip);color:var(--chip-tx);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px}
-  .card h3{font-size:18px;font-weight:700;margin-bottom:6px}
-  .card p{color:var(--muted);font-size:14.5px}
-  /* work */
-  .work{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-  .proj{background:var(--card);border:1px solid var(--card-bd);border-radius:20px;overflow:hidden;box-shadow:var(--card-sh)}
-  .proj .shot{height:180px;overflow:hidden;border-bottom:1px solid var(--card-bd);background:var(--chip)}
-  .proj .shot img{width:100%;display:block}
-  .proj .pb{padding:20px}
-  .chip{display:inline-block;font-size:11px;font-weight:700;color:var(--chip-tx);background:var(--chip);padding:4px 11px;border-radius:20px;margin-bottom:10px}
-  .proj h3{font-size:17px;font-weight:700}
-  .proj p{color:var(--muted);font-size:13.5px;margin:6px 0 12px}
-  .proj a{color:var(--chip-tx);font-weight:700;text-decoration:none;font-size:14px}
-  /* cta */
-  .cta{background:var(--grad);border-radius:26px;padding:54px 24px;text-align:center;color:#fff;box-shadow:var(--btn-sh)}
-  .cta h2{font-size:clamp(24px,4vw,32px);font-weight:800;letter-spacing:-.6px}
-  .cta p{opacity:.95;margin:14px auto 26px;max-width:520px}
-  .cta .btn-w{background:#fff;color:#23303f}
-  footer{padding:34px 0;text-align:center;color:var(--muted);font-size:13px;border-top:1px solid var(--line);margin-top:20px}
-  @media(max-width:760px){.grid,.work{grid-template-columns:1fr}}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FoundLocal — Get your local business found on Google &amp; AI</title>
+  <meta name="description" content="I build beautiful, fast websites for local businesses and get them found on Google and AI search like ChatGPT. Done-for-you, mobile-first, with WhatsApp lead capture." />
+
+  <!-- Fonts: Sora + Plus Jakarta Sans (headings, rounded/modern) + Inter (body). No serif. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind + DaisyUI (CDN, no build step) -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      corePlugins: { preflight: false },   // let DaisyUI/our CSS own resets; keep utilities
+      theme: {
+        extend: {
+          fontFamily: {
+            sans:    ['Inter', 'system-ui', 'sans-serif'],
+            heading: ['Sora', '"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+          },
+          maxWidth: { content: '1080px' },
+        }
+      }
+    }
+  </script>
+
+  <!-- GSAP + ScrollTrigger + Lenis (enhance-only) -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+  <style>
+    /* ---------- THEME TOKENS (purple is the through-line in both modes) ---------- */
+    :root{
+      --bg:#ffffff; --bg2:#faf9ff; --text:#1d2233; --muted:#697292; --line:#ece9f6;
+      --card:#ffffff; --card-bd:#ece9f6; --card-sh:0 18px 44px rgba(80,60,160,.10);
+      --nav:rgba(255,255,255,.72); --nav-bd:#ece9f6;
+      /* signature purple gradient + warm peach secondary */
+      --grad:linear-gradient(100deg,#7c5cff 0%,#a78bff 40%,#ff8d6b 100%);
+      --btn:linear-gradient(100deg,#7c5cff,#9a6bff 55%,#ff8d6b);
+      --btn-tx:#fff; --btn-sh:0 14px 30px rgba(124,92,255,.32);
+      --chip:#f3f0ff; --chip-tx:#6d4bff;
+      /* gradient-mesh blobs: lavender + violet + peach */
+      --b1:#e7ddff; --b2:#d9ccff; --b3:#ffd9c6; --b-op:.85; --b-blur:80px;
+      color-scheme: light;
+    }
+    [data-theme="dark"]{
+      --bg:#06070d; --bg2:#080912; --text:#eef1fb; --muted:#9aa3c0; --line:rgba(255,255,255,.08);
+      --card:rgba(255,255,255,.045); --card-bd:rgba(255,255,255,.09); --card-sh:0 22px 60px rgba(0,0,0,.6);
+      --nav:rgba(10,11,22,.55); --nav-bd:rgba(255,255,255,.08);
+      /* premium aurora: violet -> magenta, same purple as the through-line */
+      --grad:linear-gradient(100deg,#8a6bff 0%,#b06bff 50%,#ff6bd0 100%);
+      --btn:linear-gradient(100deg,#7c5cff,#a24dff 55%,#ff5fc0);
+      --btn-tx:#fff; --btn-sh:0 0 34px rgba(140,107,255,.55);
+      --chip:rgba(140,120,255,.14); --chip-tx:#b6a6ff;
+      --b1:#5b3cff; --b2:#9a3cff; --b3:#ff3ca0; --b-op:.40; --b-blur:100px;
+      color-scheme: dark;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0; font-family:'Inter',system-ui,sans-serif;
+      background:var(--bg); color:var(--text); line-height:1.6;
+      overflow-x:hidden; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      transition:background .45s ease, color .45s ease;
+    }
+    .font-heading{font-family:'Sora','Plus Jakarta Sans',system-ui,sans-serif}
+
+    /* ---------- THE ONE WOW MOMENT: gradient-mesh / aurora behind everything ---------- */
+    .bg{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+    .bg span{position:absolute;border-radius:50%;filter:blur(var(--b-blur));opacity:var(--b-op);transition:opacity .45s ease,background .45s ease}
+    .bg .a{width:560px;height:560px;background:var(--b1);top:-140px;left:-120px;animation:float 20s ease-in-out infinite}
+    .bg .b{width:600px;height:600px;background:var(--b2);top:120px;right:-180px;animation:float 24s ease-in-out infinite reverse}
+    .bg .c{width:520px;height:520px;background:var(--b3);bottom:-180px;left:34%;animation:float 28s ease-in-out infinite}
+    @keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(34px,-44px)}}
+    @media (prefers-reduced-motion: reduce){ .bg span{animation:none} }
+
+    /* gradient text helper (signature) */
+    .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+    /* ---------- COMPONENTS (tokens drive theming; Tailwind drives layout) ---------- */
+    .nav-wrap{position:sticky;top:0;z-index:30;backdrop-filter:blur(16px);background:var(--nav);border-bottom:1px solid var(--nav-bd)}
+    .logo{font-weight:800;font-size:21px;letter-spacing:-.4px}
+    .toggle{cursor:pointer;border:1px solid var(--card-bd);background:var(--card);width:48px;height:32px;border-radius:32px;font-size:15px;display:flex;align-items:center;justify-content:center;transition:transform .2s ease}
+    .toggle:hover{transform:translateY(-1px)}
+    .nbtn{background:var(--btn);color:var(--btn-tx);padding:10px 20px;border-radius:32px;text-decoration:none;font-weight:700;font-size:14px;box-shadow:var(--btn-sh);transition:transform .2s ease}
+    .nbtn:hover{transform:translateY(-2px)}
+
+    .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);border:1px solid var(--card-bd);background:var(--card);padding:7px 15px;border-radius:32px}
+
+    .btn-p{background:var(--btn);color:var(--btn-tx);box-shadow:var(--btn-sh)}
+    .btn-s{background:var(--card);color:var(--text);border:1px solid var(--card-bd)}
+    .btn-pill{padding:15px 30px;border-radius:34px;text-decoration:none;font-weight:700;font-size:15px;display:inline-block;transition:transform .18s ease}
+    .btn-pill:hover{transform:translateY(-2px)}
+
+    .card{background:var(--card);border:1px solid var(--card-bd);border-radius:22px;box-shadow:var(--card-sh);backdrop-filter:blur(8px)}
+    .ic{width:48px;height:48px;border-radius:14px;background:var(--chip);color:var(--chip-tx);display:flex;align-items:center;justify-content:center;font-size:23px}
+    .chip{display:inline-block;font-size:11px;font-weight:700;color:var(--chip-tx);background:var(--chip);padding:5px 12px;border-radius:22px}
+
+    .work-card{transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s ease}
+    .work-card:hover{transform:translateY(-6px)}
+    .work-card .shot img{transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+    .work-card:hover .shot img{transform:scale(1.04)}
+
+    .cta-card{background:var(--grad);box-shadow:var(--btn-sh)}
+    .muted{color:var(--muted)}
+    .ln{border-color:var(--line)}
+    ::selection{background:rgba(124,92,255,.25)}
+
+    /* Reveal: VISIBLE by default. GSAP only nudges FROM an offset; if JS never runs, all shows. */
+    .reveal{opacity:1}
+  </style>
 </head>
+
 <body>
-<div class="bg"><span class="a"></span><span class="b"></span><span class="c"></span></div>
+  <!-- gradient-mesh blobs / aurora (the single wow moment per mode) -->
+  <div class="bg"><span class="a"></span><span class="b"></span><span class="c"></span></div>
 
-<header><div class="wrap nav">
-  <div class="logo">Found<b>Local</b></div>
-  <div class="navr">
-    <div class="toggle" id="tg" title="Toggle dark mode">🌙</div>
-    <a class="nbtn" href="#contact">Free preview</a>
-  </div>
-</div></header>
+  <!-- NAV -->
+  <header class="nav-wrap">
+    <div class="mx-auto max-w-content px-6">
+      <nav class="flex items-center justify-between" style="height:68px">
+        <a href="#top" class="logo font-heading">Found<span class="g">Local</span></a>
+        <div class="flex items-center gap-3">
+          <a href="#services" class="hidden md:inline text-sm muted mr-2 hover:opacity-70 transition">Services</a>
+          <a href="#work" class="hidden md:inline text-sm muted mr-2 hover:opacity-70 transition">Work</a>
+          <div class="toggle" id="tg" title="Toggle dark mode" aria-label="Toggle dark mode">🌙</div>
+          <a class="nbtn" href="#cta">Free preview</a>
+        </div>
+      </nav>
+    </div>
+  </header>
 
-<div class="hero"><div class="wrap">
-  <span class="eyebrow">Websites · Local search · AI visibility</span>
-  <h1>Get your local business <span class="g">found</span> — on Google and AI.</h1>
-  <p>I build beautiful, fast websites for local businesses and make sure customers actually find you — on Google, Maps, and AI search like ChatGPT. Done-for-you, with a one-tap WhatsApp button that turns visitors into real enquiries.</p>
-  <div class="btns">
-    <a class="btn btn-p" href="#work">See my work</a>
-    <a class="btn btn-s" href="#contact">Get a free preview</a>
-  </div>
-</div></div>
+  <!-- HERO -->
+  <section id="top" class="relative">
+    <div class="mx-auto max-w-content px-6 pt-20 pb-16 md:pt-28 md:pb-24 text-center">
+      <span class="eyebrow reveal" data-reveal>Websites · Local search · AI visibility</span>
+      <h1 class="reveal font-heading mx-auto mt-7 max-w-4xl text-[2.3rem] sm:text-5xl md:text-[3.7rem]"
+          style="font-weight:800;line-height:1.07;letter-spacing:-1.5px" data-reveal>
+        Get your local business <span class="g">found</span> — on Google and AI.
+      </h1>
+      <p class="reveal muted mx-auto mt-6 max-w-xl text-lg leading-relaxed" data-reveal>
+        I build beautiful, fast websites for local businesses and make sure customers actually find you —
+        on Google, Maps, and AI search like ChatGPT. Done-for-you, with a one-tap WhatsApp button that turns
+        visitors into real enquiries.
+      </p>
+      <div class="reveal mt-9 flex flex-wrap items-center justify-center gap-4" data-reveal>
+        <a href="#work" class="btn-pill btn-p">See my work</a>
+        <a href="#cta" class="btn-pill btn-s">Get a free preview</a>
+      </div>
+      <div class="reveal muted mt-12 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm" data-reveal>
+        <span>Built for Google + AI search</span>
+        <span class="opacity-30">·</span>
+        <span>WhatsApp lead capture</span>
+        <span class="opacity-30">·</span>
+        <span>English · Malay · 中文</span>
+      </div>
+    </div>
+  </section>
 
-<section><div class="wrap">
-  <div class="h2">Three things that turn <span class="g">clicks into customers</span></div>
-  <div class="sub">Everything handled for you — no tech stress, no jargon.</div>
-  <div class="grid">
-    <div class="card"><div class="ic">🌐</div><h3>A beautiful website</h3><p>Modern, fast, and flawless on phone and desktop — designed around your business and your customers.</p></div>
-    <div class="card"><div class="ic">🔎</div><h3>Found on Google &amp; AI</h3><p>Google Business setup, on-page SEO, and visibility in AI search — so you show up when people are looking.</p></div>
-    <div class="card"><div class="ic">💬</div><h3>One-tap WhatsApp</h3><p>A WhatsApp button and clear calls-to-action that turn curious visitors into real conversations.</p></div>
-  </div>
-</div></section>
+  <!-- SERVICES -->
+  <section id="services" class="mx-auto max-w-content px-6 py-16 md:py-24">
+    <div class="text-center mb-12">
+      <h2 class="reveal font-heading text-3xl md:text-4xl" style="font-weight:800;letter-spacing:-.8px" data-reveal>
+        Three things that turn <span class="g">clicks into customers</span>
+      </h2>
+      <p class="reveal muted mx-auto mt-3 max-w-lg" data-reveal>Everything handled for you — no tech stress, no jargon.</p>
+    </div>
 
-<section id="work"><div class="wrap">
-  <div class="h2">A look at <span class="g">what I make</span></div>
-  <div class="sub">Concept projects showing the kind of sites and reports I deliver.</div>
-  <div class="work">
-    <div class="proj"><div class="shot"><img src="work/teacher-koh.png" alt="Tuition centre website"></div><div class="pb"><span class="chip">Website</span><h3>Tuition centre site</h3><p>Full mobile-first site — subjects, free-trial CTA, WhatsApp capture.</p><a href="work/teacher-koh.html" target="_blank">View live →</a></div></div>
-    <div class="proj"><div class="shot"><img src="work/snapshot.png" alt="Get-found visibility report"></div><div class="pb"><span class="chip">Visibility report</span><h3>"Get found" snapshot</h3><p>A free audit showing a business where they sit vs competitors online.</p><a href="work/snapshot.html" target="_blank">View live →</a></div></div>
-    <div class="proj"><div class="shot"><img src="work/brightminds.png" alt="Education landing page"></div><div class="pb"><span class="chip">Landing page</span><h3>Education landing page</h3><p>Clean, conversion-focused page with trust signals and a clear action.</p><a href="work/brightminds.html" target="_blank">View live →</a></div></div>
-  </div>
-</div></section>
+    <div class="grid gap-6 md:grid-cols-3">
+      <article class="reveal card p-8" data-reveal>
+        <div class="ic">🌐</div>
+        <h3 class="font-heading mt-5 text-xl" style="font-weight:700">A beautiful website</h3>
+        <p class="muted mt-3 text-[15px] leading-relaxed">Modern, fast, and flawless on phone and desktop — designed around your business and your customers.</p>
+      </article>
+      <article class="reveal card p-8" data-reveal>
+        <div class="ic">🔎</div>
+        <h3 class="font-heading mt-5 text-xl" style="font-weight:700">Found on Google &amp; AI</h3>
+        <p class="muted mt-3 text-[15px] leading-relaxed">Google Business setup, on-page SEO, and visibility in AI search — so you show up when people are looking.</p>
+      </article>
+      <article class="reveal card p-8" data-reveal>
+        <div class="ic">💬</div>
+        <h3 class="font-heading mt-5 text-xl" style="font-weight:700">One-tap WhatsApp</h3>
+        <p class="muted mt-3 text-[15px] leading-relaxed">A WhatsApp button and clear calls-to-action that turn curious visitors into real conversations.</p>
+      </article>
+    </div>
+  </section>
 
-<section id="contact"><div class="wrap">
-  <div class="cta">
-    <h2>Want to see what customers find when they search for you?</h2>
-    <p>I'll send you a free preview — no cost, no obligation. Like it? I build it. First new enquiry in 14 days or you pay nothing.</p>
-    <a class="btn btn-w" href="https://www.fiverr.com" target="_blank">Message me on Fiverr →</a>
-  </div>
-</div></section>
+  <!-- WORK -->
+  <section id="work" class="mx-auto max-w-content px-6 py-16 md:py-24">
+    <div class="text-center mb-12">
+      <h2 class="reveal font-heading text-3xl md:text-4xl" style="font-weight:800;letter-spacing:-.8px" data-reveal>
+        A look at <span class="g">what I make</span>
+      </h2>
+      <p class="reveal muted mx-auto mt-3 max-w-lg" data-reveal>Sample designs across fine dining, fitness, and family care — each built to get the phone ringing.</p>
+    </div>
 
-<footer><div class="wrap">
-  FoundLocal · Websites &amp; local-search visibility for small businesses · English · Malay · 中文<br>
-  Sample/concept work shown for demonstration. © 2026 FoundLocal.
-</div></footer>
+    <div class="grid gap-6 md:grid-cols-3">
+      <!-- noir -->
+      <figure class="reveal work-card card overflow-hidden" data-reveal>
+        <div class="shot overflow-hidden" style="aspect-ratio:4/5;border-bottom:1px solid var(--card-bd)">
+          <img src="designs/v2/noir.png" alt="Noir — fine-dining restaurant website design" class="h-full w-full object-cover object-top" />
+        </div>
+        <figcaption class="p-6">
+          <span class="chip">Fine dining</span>
+          <h3 class="font-heading mt-3 text-lg" style="font-weight:700">Noir</h3>
+          <p class="muted mt-1 text-sm">An elegant restaurant site — menu, reservations, and a WhatsApp booking button.</p>
+        </figcaption>
+      </figure>
 
-<script>
-  (function(){
-    var root=document.documentElement, tg=document.getElementById('tg');
-    function set(t){root.setAttribute('data-theme',t);tg.textContent=t==='dark'?'☀️':'🌙';try{localStorage.setItem('flt',t)}catch(e){}}
-    var p=new URLSearchParams(location.search).get('theme');
-    var saved;try{saved=localStorage.getItem('flt')}catch(e){}
-    set(p||saved||'light');
-    tg.addEventListener('click',function(){set(root.getAttribute('data-theme')==='dark'?'light':'dark')});
-  })();
-</script>
+      <!-- forge -->
+      <figure class="reveal work-card card overflow-hidden" data-reveal>
+        <div class="shot overflow-hidden" style="aspect-ratio:4/5;border-bottom:1px solid var(--card-bd)">
+          <img src="designs/v2/forge.png" alt="Forge — gym and fitness studio website design" class="h-full w-full object-cover object-top" />
+        </div>
+        <figcaption class="p-6">
+          <span class="chip">Gym &amp; fitness</span>
+          <h3 class="font-heading mt-3 text-lg" style="font-weight:700">Forge</h3>
+          <p class="muted mt-1 text-sm">A bold strength-gym site — classes, trainers, and a one-tap free-trial enquiry.</p>
+        </figcaption>
+      </figure>
+
+      <!-- bloom -->
+      <figure class="reveal work-card card overflow-hidden" data-reveal>
+        <div class="shot overflow-hidden" style="aspect-ratio:4/5;border-bottom:1px solid var(--card-bd)">
+          <img src="designs/v2/bloom.png" alt="Bloom — kids' dental clinic website design" class="h-full w-full object-cover object-top" />
+        </div>
+        <figcaption class="p-6">
+          <span class="chip">Kids dental</span>
+          <h3 class="font-heading mt-3 text-lg" style="font-weight:700">Bloom</h3>
+          <p class="muted mt-1 text-sm">A friendly kids' dental clinic — services, gentle vibe, and easy WhatsApp bookings.</p>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="cta" class="mx-auto max-w-content px-6 pb-20 md:pb-28">
+    <div class="reveal cta-card text-center text-white" style="border-radius:28px;padding:56px 28px" data-reveal>
+      <p class="eyebrow" style="color:#fff;background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.28)">Free preview</p>
+      <h2 class="font-heading mx-auto mt-6 max-w-3xl text-3xl md:text-5xl" style="font-weight:800;letter-spacing:-.6px;line-height:1.08">
+        Your first enquiry within 14 days — or you pay nothing.
+      </h2>
+      <p class="mx-auto mt-5 max-w-xl text-lg" style="opacity:.95">
+        I'll design a preview of your new site for free. If it doesn't bring you an enquiry in the first two weeks,
+        it costs you nothing. Simple as that.
+      </p>
+      <div class="mt-9 flex flex-wrap justify-center gap-4">
+        <a href="#top" class="btn-pill" style="background:#fff;color:#5b3cff">Claim my free preview</a>
+        <a href="#work" class="btn-pill" style="background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.35)">View samples</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t ln">
+    <div class="mx-auto max-w-content px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-5">
+      <a href="#top" class="logo font-heading">Found<span class="g">Local</span></a>
+      <div class="muted flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm">
+        <span>English</span><span class="opacity-30">·</span>
+        <span>Malay</span><span class="opacity-30">·</span>
+        <span>中文</span>
+      </div>
+      <p class="muted text-xs">© 2026 FoundLocal · Sample work shown</p>
+    </div>
+  </footer>
+
+  <!-- ---------- THEME TOGGLE (remembers choice + ?theme=dark for screenshots) ---------- -->
+  <script>
+    (function(){
+      var root=document.documentElement, tg=document.getElementById('tg');
+      function set(t){ root.setAttribute('data-theme',t); tg.textContent = (t==='dark') ? '☀️' : '🌙'; try{ localStorage.setItem('flt',t); }catch(e){} }
+      var p=new URLSearchParams(location.search).get('theme');
+      var saved; try{ saved=localStorage.getItem('flt'); }catch(e){}
+      set(p || saved || 'light');
+      tg.addEventListener('click', function(){ set(root.getAttribute('data-theme')==='dark' ? 'light' : 'dark'); });
+    })();
+  </script>
+
+  <!-- ---------- ENHANCE-ONLY MOTION (GSAP + ScrollTrigger + Lenis), screenshot-safe ---------- -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var hasGSAP = (typeof gsap !== 'undefined') && (typeof ScrollTrigger !== 'undefined');
+
+      // Lenis buttery smooth scroll — degrades to native if absent or reduced-motion.
+      if (typeof Lenis !== 'undefined' && !reduce) {
+        var lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+        function raf(t){ lenis.raf(t); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+        if (hasGSAP) {
+          lenis.on('scroll', ScrollTrigger.update);
+          gsap.ticker.add(function(time){ lenis.raf(time * 1000); });
+          gsap.ticker.lagSmoothing(0);
+        }
+        document.querySelectorAll('a[href^="#"]').forEach(function(a){
+          a.addEventListener('click', function(e){
+            var el = document.querySelector(a.getAttribute('href'));
+            if (el){ e.preventDefault(); lenis.scrollTo(el, { offset: -20 }); }
+          });
+        });
+      }
+
+      if (!hasGSAP || reduce) return; // content already visible; no-op.
+      gsap.registerPlugin(ScrollTrigger);
+
+      // ONE subtle hero reveal: eyebrow + headline + subline + buttons rise from a small offset.
+      gsap.from('#top [data-reveal]', {
+        y: 24, opacity: 0, duration: 0.9, ease: 'power3.out',
+        stagger: 0.10, delay: 0.1, clearProps: 'all'
+      });
+
+      // Tasteful scroll reveals everywhere else: animate FROM a subtle offset, clearProps after.
+      // once:true + clearProps means nothing is ever parked at opacity:0 awaiting scroll.
+      gsap.utils.toArray('[data-reveal]').forEach(function(el){
+        if (el.closest('#top')) return; // hero handled above
+        gsap.from(el, {
+          y: 26, opacity: 0, duration: 0.85, ease: 'power3.out',
+          clearProps: 'all',
+          scrollTrigger: { trigger: el, start: 'top 90%', once: true }
+        });
+      });
+
+      // Safety net: after libs settle, force everything fully visible — a late screenshot is safe.
+      setTimeout(function(){
+        document.querySelectorAll('.reveal,[data-reveal]').forEach(function(el){
+          el.style.opacity = '1'; el.style.transform = 'none';
+        });
+        ScrollTrigger.refresh();
+      }, 2400);
+    });
+  </script>
 </body>
 </html>
