@@ -1,322 +1,361 @@
-<!doctype html>
-<html lang="en" data-theme="light">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>FoundLocal — Get your local business found on Google &amp; AI</title>
-  <meta name="description" content="I build beautiful, fast websites for local businesses and get them found on Google and AI search like ChatGPT. Done-for-you, mobile-first, with WhatsApp lead capture." />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FoundLocal — get found.</title>
+<meta name="description" content="We build cinematic websites for local businesses and make sure customers find you on Google and AI search." />
 
-  <!-- Fonts: Sora + Plus Jakarta Sans (headings, rounded/modern) + Inter (body). No serif. -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<!-- Fonts: Fraunces (editorial luxury serif) + Inter (clean) + Space Mono (labels) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
-  <!-- Tailwind + DaisyUI (CDN, no build step) -->
-  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      corePlugins: { preflight: false },   // let DaisyUI/our CSS own resets; keep utilities
-      theme: {
-        extend: {
-          fontFamily: {
-            sans:    ['Inter', 'system-ui', 'sans-serif'],
-            heading: ['Sora', '"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
-          },
-          maxWidth: { content: '1080px' },
-        }
-      }
-    }
-  </script>
+<!-- GSAP + ScrollTrigger (free) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
-  <!-- GSAP + ScrollTrigger + Lenis (enhance-only) -->
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<style>
+:root{
+  --ink:#08080b;
+  --ink-2:#0d0d12;
+  --ivory:#f4f1ea;
+  --ivory-dim:#a8a49b;
+  --line:rgba(244,241,234,.12);
+  --amber:#ffb877;
+  --rose:#ff7d9c;
+  --teal:#6fe3d2;
+  --grad:linear-gradient(105deg,#ffd29e 0%,#ff9a76 38%,#ff7d9c 70%,#c98bff 100%);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--ink);
+  color:var(--ivory);
+  font-family:'Inter',sans-serif;
+  font-weight:300;
+  line-height:1.6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--rose);color:var(--ink)}
 
-  <style>
-    /* ---------- THEME TOKENS (purple is the through-line in both modes) ---------- */
-    :root{
-      --bg:#ffffff; --bg2:#faf9ff; --text:#1d2233; --muted:#697292; --line:#ece9f6;
-      --card:#ffffff; --card-bd:#ece9f6; --card-sh:0 18px 44px rgba(80,60,160,.10);
-      --nav:rgba(255,255,255,.72); --nav-bd:#ece9f6;
-      /* signature purple gradient + warm peach secondary */
-      --grad:linear-gradient(100deg,#7c5cff 0%,#a78bff 40%,#ff8d6b 100%);
-      --btn:linear-gradient(100deg,#7c5cff,#9a6bff 55%,#ff8d6b);
-      --btn-tx:#fff; --btn-sh:0 14px 30px rgba(124,92,255,.32);
-      --chip:#f3f0ff; --chip-tx:#6d4bff;
-      /* gradient-mesh blobs: lavender + violet + peach */
-      --b1:#e7ddff; --b2:#d9ccff; --b3:#ffd9c6; --b-op:.85; --b-blur:80px;
-      color-scheme: light;
-    }
-    [data-theme="dark"]{
-      --bg:#06070d; --bg2:#080912; --text:#eef1fb; --muted:#9aa3c0; --line:rgba(255,255,255,.08);
-      --card:rgba(255,255,255,.045); --card-bd:rgba(255,255,255,.09); --card-sh:0 22px 60px rgba(0,0,0,.6);
-      --nav:rgba(10,11,22,.55); --nav-bd:rgba(255,255,255,.08);
-      /* premium aurora: violet -> magenta, same purple as the through-line */
-      --grad:linear-gradient(100deg,#8a6bff 0%,#b06bff 50%,#ff6bd0 100%);
-      --btn:linear-gradient(100deg,#7c5cff,#a24dff 55%,#ff5fc0);
-      --btn-tx:#fff; --btn-sh:0 0 34px rgba(140,107,255,.55);
-      --chip:rgba(140,120,255,.14); --chip-tx:#b6a6ff;
-      --b1:#5b3cff; --b2:#9a3cff; --b3:#ff3ca0; --b-op:.40; --b-blur:100px;
-      color-scheme: dark;
-    }
+/* ---------- living cinematic background ---------- */
+.aurora{position:fixed;inset:-30% -10% -10% -10%;z-index:-2;filter:blur(90px);opacity:.55;pointer-events:none}
+.aurora span{position:absolute;border-radius:50%;mix-blend-mode:screen;animation:drift 26s ease-in-out infinite}
+.aurora .a1{width:48vw;height:48vw;left:-6vw;top:-6vw;background:radial-gradient(circle,#ff9a5a,transparent 60%)}
+.aurora .a2{width:52vw;height:52vw;right:-10vw;top:18vh;background:radial-gradient(circle,#ff5e8a,transparent 60%);animation-delay:-8s}
+.aurora .a3{width:46vw;height:46vw;left:18vw;bottom:-12vw;background:radial-gradient(circle,#7d6bff,transparent 60%);animation-delay:-15s}
+.aurora .a4{width:40vw;height:40vw;right:6vw;bottom:-6vw;background:radial-gradient(circle,#4fd6c4,transparent 62%);animation-delay:-20s}
+@keyframes drift{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(6vw,-4vh) scale(1.12)}66%{transform:translate(-4vw,5vh) scale(.95)}}
+.grain{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+@media(prefers-reduced-motion:reduce){.aurora span{animation:none}}
 
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
-      margin:0; font-family:'Inter',system-ui,sans-serif;
-      background:var(--bg); color:var(--text); line-height:1.6;
-      overflow-x:hidden; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
-      transition:background .45s ease, color .45s ease;
-    }
-    .font-heading{font-family:'Sora','Plus Jakarta Sans',system-ui,sans-serif}
+/* ---------- nav ---------- */
+nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
+  padding:22px clamp(20px,5vw,64px);mix-blend-mode:difference}
+.brand{font-family:'Fraunces',serif;font-weight:500;font-size:20px;letter-spacing:-.01em;color:#fff}
+.brand b{font-style:italic;font-weight:400}
+.nav-cta{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+  color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.5);border-radius:40px;padding:9px 18px;
+  transition:.4s}
+.nav-cta:hover{background:#fff;color:#000}
 
-    /* ---------- THE ONE WOW MOMENT: gradient-mesh / aurora behind everything ---------- */
-    .bg{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
-    .bg span{position:absolute;border-radius:50%;filter:blur(var(--b-blur));opacity:var(--b-op);transition:opacity .45s ease,background .45s ease}
-    .bg .a{width:560px;height:560px;background:var(--b1);top:-140px;left:-120px;animation:float 20s ease-in-out infinite}
-    .bg .b{width:600px;height:600px;background:var(--b2);top:120px;right:-180px;animation:float 24s ease-in-out infinite reverse}
-    .bg .c{width:520px;height:520px;background:var(--b3);bottom:-180px;left:34%;animation:float 28s ease-in-out infinite}
-    @keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(34px,-44px)}}
-    @media (prefers-reduced-motion: reduce){ .bg span{animation:none} }
+/* progress bar */
+.progress{position:fixed;top:0;left:0;height:2px;width:0;z-index:60;background:var(--grad)}
 
-    /* gradient text helper (signature) */
-    .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+/* ---------- shared scene ---------- */
+section{position:relative;padding:clamp(80px,12vh,150px) clamp(20px,6vw,90px);min-height:100vh;
+  display:flex;flex-direction:column;justify-content:center}
+.label{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ivory-dim);display:flex;align-items:center;gap:14px;margin-bottom:34px}
+.label::before{content:'';width:34px;height:1px;background:var(--ivory-dim)}
+.huge{font-family:'Fraunces',serif;font-weight:300;line-height:.92;letter-spacing:-.025em;
+  font-size:clamp(3.4rem,15vw,15rem)}
+.huge em{font-style:italic;font-weight:400}
+.grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.lead{font-size:clamp(1.05rem,2vw,1.5rem);font-weight:300;color:#cfccc4;max-width:620px;margin-top:34px;line-height:1.55}
+.reveal{opacity:0;transform:translateY(34px)}
 
-    /* ---------- COMPONENTS (tokens drive theming; Tailwind drives layout) ---------- */
-    .nav-wrap{position:sticky;top:0;z-index:30;backdrop-filter:blur(16px);background:var(--nav);border-bottom:1px solid var(--nav-bd)}
-    .logo{font-weight:800;font-size:21px;letter-spacing:-.4px}
-    .toggle{cursor:pointer;border:1px solid var(--card-bd);background:var(--card);width:48px;height:32px;border-radius:32px;font-size:15px;display:flex;align-items:center;justify-content:center;transition:transform .2s ease}
-    .toggle:hover{transform:translateY(-1px)}
-    .nbtn{background:var(--btn);color:var(--btn-tx);padding:10px 20px;border-radius:32px;text-decoration:none;font-weight:700;font-size:14px;box-shadow:var(--btn-sh);transition:transform .2s ease}
-    .nbtn:hover{transform:translateY(-2px)}
+/* ---------- HERO ---------- */
+#hero{justify-content:flex-end;padding-bottom:clamp(60px,10vh,120px)}
+#hero .huge{font-size:clamp(4rem,20vw,20rem)}
+.hero-sub{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:30px;margin-top:42px}
+.hero-sub p{max-width:440px;font-size:clamp(1rem,1.6vw,1.25rem);color:#cfccc4;font-weight:300}
+.scroll-cue{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ivory-dim);display:flex;align-items:center;gap:10px}
+.scroll-cue i{display:block;width:1px;height:46px;background:linear-gradient(var(--ivory-dim),transparent);position:relative;overflow:hidden}
+.scroll-cue i::after{content:'';position:absolute;top:0;left:0;width:100%;height:14px;background:var(--ivory);animation:run 2s ease-in-out infinite}
+@keyframes run{0%{transform:translateY(-14px)}100%{transform:translateY(46px)}}
 
-    .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);border:1px solid var(--card-bd);background:var(--card);padding:7px 15px;border-radius:32px}
+/* ---------- SERP climb ---------- */
+.serp{margin-top:40px;max-width:680px;width:100%;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.02)}
+.serp-row{display:flex;align-items:center;gap:16px;padding:16px 20px;border-bottom:1px solid var(--line);transition:.6s}
+.serp-row:last-child{border-bottom:0}
+.serp-row .rank{font-family:'Space Mono',monospace;font-size:13px;color:var(--ivory-dim);width:26px}
+.serp-row .nm{font-size:15px;color:#d9d6cf}
+.serp-row .meta{margin-left:auto;font-size:12px;color:var(--ivory-dim);font-family:'Space Mono',monospace}
+.serp-row.you{background:linear-gradient(90deg,rgba(255,125,156,.16),rgba(201,139,255,.10));border-left:2px solid var(--rose)}
+.serp-row.you .nm{color:#fff;font-weight:500}
+.serp-row.you .rank{color:var(--rose)}
 
-    .btn-p{background:var(--btn);color:var(--btn-tx);box-shadow:var(--btn-sh)}
-    .btn-s{background:var(--card);color:var(--text);border:1px solid var(--card-bd)}
-    .btn-pill{padding:15px 30px;border-radius:34px;text-decoration:none;font-weight:700;font-size:15px;display:inline-block;transition:transform .18s ease}
-    .btn-pill:hover{transform:translateY(-2px)}
+/* ---------- what we do ---------- */
+.do-line{font-family:'Fraunces',serif;font-weight:300;line-height:1.04;letter-spacing:-.02em;
+  font-size:clamp(2.4rem,8vw,7rem);padding:6px 0;color:#56524a;transition:color .4s}
+.do-line.on{color:var(--ivory)}
+.do-line span{font-style:italic}
+.do-num{font-family:'Space Mono',monospace;font-size:13px;color:var(--ivory-dim);vertical-align:super;margin-right:18px}
 
-    .card{background:var(--card);border:1px solid var(--card-bd);border-radius:22px;box-shadow:var(--card-sh);backdrop-filter:blur(8px)}
-    .ic{width:48px;height:48px;border-radius:14px;background:var(--chip);color:var(--chip-tx);display:flex;align-items:center;justify-content:center;font-size:23px}
-    .chip{display:inline-block;font-size:11px;font-weight:700;color:var(--chip-tx);background:var(--chip);padding:5px 12px;border-radius:22px}
+/* ---------- WORK horizontal ---------- */
+#work{padding-right:0}
+.work-track{display:flex;gap:26px;overflow-x:auto;scroll-snap-type:x mandatory;padding:10px clamp(20px,6vw,90px) 30px 0;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none}
+.work-track::-webkit-scrollbar{display:none}
+.work-card{scroll-snap-align:start;flex:0 0 min(82vw,560px);border-radius:18px;overflow:hidden;position:relative;
+  aspect-ratio:3/4;border:1px solid var(--line);display:flex;flex-direction:column;justify-content:flex-end;
+  padding:30px;isolation:isolate}
+.work-card::before{content:'';position:absolute;inset:0;z-index:-2;background:var(--cg)}
+.work-card::after{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(transparent 35%,rgba(0,0,0,.72))}
+.work-card .cat{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.75);margin-bottom:8px}
+.work-card h3{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(1.6rem,3vw,2.4rem);line-height:1;color:#fff}
+.work-card p{font-size:14px;color:rgba(255,255,255,.8);margin-top:10px;max-width:90%}
+.c-noir{--cg:linear-gradient(150deg,#1a1410,#3a2a1c 55%,#7a5a36)}
+.c-forge{--cg:linear-gradient(150deg,#0c0c0c,#1a1a1a 50%,#2a3a10)}
+.c-bloom{--cg:linear-gradient(150deg,#3a2746,#6a3f72 55%,#d98fb0)}
+.c-air{--cg:linear-gradient(150deg,#10314a,#2f6da8 55%,#9fd6ff)}
 
-    .work-card{transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s ease}
-    .work-card:hover{transform:translateY(-6px)}
-    .work-card .shot img{transition:transform .7s cubic-bezier(.2,.7,.2,1)}
-    .work-card:hover .shot img{transform:scale(1.04)}
+/* ---------- process ---------- */
+.steps{display:grid;gap:0;margin-top:30px;max-width:880px}
+.step{display:grid;grid-template-columns:auto 1fr;gap:clamp(20px,4vw,60px);padding:34px 0;border-top:1px solid var(--line)}
+.step:last-child{border-bottom:1px solid var(--line)}
+.step .sn{font-family:'Space Mono',monospace;font-size:13px;color:var(--rose)}
+.step h4{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(1.5rem,3.4vw,2.4rem);line-height:1.05;margin-bottom:10px}
+.step p{color:#bcb8b0;font-size:clamp(.98rem,1.5vw,1.12rem);max-width:560px}
 
-    .cta-card{background:var(--grad);box-shadow:var(--btn-sh)}
-    .muted{color:var(--muted)}
-    .ln{border-color:var(--line)}
-    ::selection{background:rgba(124,92,255,.25)}
+/* ---------- packages ---------- */
+.tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:40px}
+.tier{border:1px solid var(--line);border-radius:18px;padding:34px 30px;background:rgba(255,255,255,.015);transition:.4s}
+.tier:hover{border-color:rgba(255,255,255,.3);transform:translateY(-6px)}
+.tier.feat{background:linear-gradient(165deg,rgba(255,125,156,.12),rgba(201,139,255,.06));border-color:rgba(255,125,156,.4)}
+.tier .tname{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ivory-dim)}
+.tier .price{font-family:'Fraunces',serif;font-weight:400;font-size:3rem;margin:16px 0 4px;line-height:1}
+.tier .price small{font-size:1rem;color:var(--ivory-dim);font-family:'Inter'}
+.tier ul{list-style:none;margin-top:22px;display:flex;flex-direction:column;gap:12px}
+.tier li{font-size:14.5px;color:#cfccc4;display:flex;gap:11px;align-items:flex-start}
+.tier li::before{content:'';margin-top:8px;width:6px;height:6px;border-radius:50%;background:var(--rose);flex:0 0 auto}
 
-    /* Reveal: VISIBLE by default. GSAP only nudges FROM an offset; if JS never runs, all shows. */
-    .reveal{opacity:1}
-  </style>
+/* ---------- faq ---------- */
+.faq{max-width:820px;margin-top:30px}
+.q{border-top:1px solid var(--line);padding:26px 0}
+.q:last-child{border-bottom:1px solid var(--line)}
+.q h5{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(1.15rem,2.4vw,1.6rem);margin-bottom:10px;color:var(--ivory)}
+.q p{color:#bcb8b0;font-size:1rem;max-width:680px}
+
+/* ---------- CTA ---------- */
+#cta{align-items:center;text-align:center}
+#cta .huge{font-size:clamp(3rem,13vw,12rem)}
+.cta-btn{display:inline-flex;align-items:center;gap:12px;margin-top:44px;background:var(--ivory);color:var(--ink);
+  font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;
+  padding:18px 34px;border-radius:50px;transition:.4s}
+.cta-btn:hover{transform:translateY(-4px) scale(1.03);box-shadow:0 20px 60px rgba(255,125,156,.4)}
+footer{padding:50px clamp(20px,6vw,90px);border-top:1px solid var(--line);display:flex;flex-wrap:wrap;
+  justify-content:space-between;gap:20px;color:var(--ivory-dim);font-size:13px;font-family:'Space Mono',monospace}
+footer a{color:var(--ivory-dim);text-decoration:none}footer a:hover{color:var(--ivory)}
+
+@media(max-width:680px){
+  .label{margin-bottom:22px}
+  .step{grid-template-columns:1fr;gap:8px}
+  .hero-sub{flex-direction:column;align-items:flex-start}
+}
+</style>
 </head>
-
 <body>
-  <!-- gradient-mesh blobs / aurora (the single wow moment per mode) -->
-  <div class="bg"><span class="a"></span><span class="b"></span><span class="c"></span></div>
 
-  <!-- NAV -->
-  <header class="nav-wrap">
-    <div class="mx-auto max-w-content px-6">
-      <nav class="flex items-center justify-between" style="height:68px">
-        <a href="#top" class="logo font-heading">Found<span class="g">Local</span></a>
-        <div class="flex items-center gap-3">
-          <a href="#services" class="hidden md:inline text-sm muted mr-2 hover:opacity-70 transition">Services</a>
-          <a href="#work" class="hidden md:inline text-sm muted mr-2 hover:opacity-70 transition">Work</a>
-          <div class="toggle" id="tg" title="Toggle dark mode" aria-label="Toggle dark mode">🌙</div>
-          <a class="nbtn" href="#cta">Free preview</a>
-        </div>
-      </nav>
+<div class="aurora"><span class="a1"></span><span class="a2"></span><span class="a3"></span><span class="a4"></span></div>
+<div class="grain"></div>
+<div class="progress" id="progress"></div>
+
+<nav>
+  <div class="brand">Found<b><em>Local</em></b></div>
+  <a class="nav-cta" href="https://wa.me/60193763199" target="_blank" rel="noopener">Get found →</a>
+</nav>
+
+<!-- 01 HERO -->
+<section id="hero">
+  <div class="label">FoundLocal — Studio for local businesses</div>
+  <h1 class="huge" id="heroWord">Found.</h1>
+  <div class="hero-sub">
+    <p>Your customers are searching right now. We make sure the one they find — and remember — is you.</p>
+    <div class="scroll-cue">Scroll to discover <i></i></div>
+  </div>
+</section>
+
+<!-- 02 PROBLEM -->
+<section id="problem">
+  <div class="label reveal">01 — The quiet problem</div>
+  <h2 class="huge reveal">In<em>visible.</em></h2>
+  <p class="lead reveal">Right now a customer near you is typing "best near me" into Google — or asking ChatGPT for a recommendation. If you're not there, you don't lose on quality. You lose on being <span class="grad-text">found.</span></p>
+</section>
+
+<!-- 03 THE SHIFT (serp climb) -->
+<section id="shift">
+  <div class="label reveal">02 — What we change</div>
+  <h2 class="huge reveal" style="font-size:clamp(2.6rem,9vw,8rem)">Top of the <em class="grad-text">list.</em></h2>
+  <p class="lead reveal">Watch what we do: take a business buried where nobody scrolls — and move it to where every customer looks first.</p>
+  <div class="serp" id="serp">
+    <div class="serp-row"><span class="rank">#8</span><span class="nm you">Your business</span><span class="meta">page 1 ↑</span></div>
+    <div class="serp-row"><span class="rank">#3</span><span class="nm">A competitor</span><span class="meta">★ 4.6</span></div>
+    <div class="serp-row"><span class="rank">#2</span><span class="nm">A competitor</span><span class="meta">★ 4.8</span></div>
+    <div class="serp-row"><span class="rank">#1</span><span class="nm">A competitor</span><span class="meta">★ 4.9</span></div>
+  </div>
+</section>
+
+<!-- 04 WHAT WE DO -->
+<section id="dowedo">
+  <div class="label reveal">03 — What you get, done for you</div>
+  <div class="do-list">
+    <div class="do-line"><span class="do-num">a</span>We <span>build</span> the site.</div>
+    <div class="do-line"><span class="do-num">b</span>We make Google <span>rank</span> you.</div>
+    <div class="do-line"><span class="do-num">c</span>We get you into <span>AI</span> answers.</div>
+    <div class="do-line"><span class="do-num">d</span>We turn clicks into <span>chats.</span></div>
+  </div>
+</section>
+
+<!-- 05 WORK -->
+<section id="work">
+  <div class="label reveal">04 — Selected work</div>
+  <h2 class="huge reveal" style="font-size:clamp(2.4rem,8vw,6.5rem);margin-bottom:20px">Made to be <em>seen.</em></h2>
+  <div class="work-track">
+    <div class="work-card c-noir"><div class="cat">Fine dining</div><h3>Maison Noir</h3><p>A candle-lit reservation experience — found first when diners search the city.</p></div>
+    <div class="work-card c-forge"><div class="cat">Fitness</div><h3>Forge Gym</h3><p>Black &amp; acid energy. Built to convert "gym near me" into a trial booking.</p></div>
+    <div class="work-card c-bloom"><div class="cat">Dental · kids</div><h3>Bloom Dental</h3><p>Warm, calm, parent-friendly — top of the map pack in its town.</p></div>
+    <div class="work-card c-air"><div class="cat">Local services</div><h3>Air Plumbing</h3><p>One-tap WhatsApp call-outs. From invisible to fully booked.</p></div>
+  </div>
+</section>
+
+<!-- 06 PROCESS -->
+<section id="process">
+  <div class="label reveal">05 — How it works</div>
+  <h2 class="huge reveal" style="font-size:clamp(2.4rem,8vw,6rem);margin-bottom:10px">You do <em>nothing.</em></h2>
+  <div class="steps">
+    <div class="step reveal"><div class="sn">01</div><div><h4>You tell me about your business</h4><p>One short message — your name, what you do, your area. No call needed. No tech words.</p></div></div>
+    <div class="step reveal"><div class="sn">02</div><div><h4>I design &amp; write everything</h4><p>The site, the words, the photos, the layout. You don't lift a finger — I send you a preview.</p></div></div>
+    <div class="step reveal"><div class="sn">03</div><div><h4>I get you found</h4><p>Google Business setup, on-page SEO, and AI-search visibility so you appear where customers look.</p></div></div>
+    <div class="step reveal"><div class="sn">04</div><div><h4>Customers message you</h4><p>A WhatsApp button turns a curious visitor into a real enquiry in one tap. You just reply.</p></div></div>
+  </div>
+</section>
+
+<!-- 07 PACKAGES -->
+<section id="packages">
+  <div class="label reveal">06 — Simple pricing</div>
+  <h2 class="huge reveal" style="font-size:clamp(2.4rem,8vw,6rem);margin-bottom:10px">One price. <em>Everything.</em></h2>
+  <div class="tiers">
+    <div class="tier reveal">
+      <div class="tname">Starter</div>
+      <div class="price">$80</div>
+      <ul><li>One-page cinematic site</li><li>Mobile &amp; desktop</li><li>WhatsApp enquiry button</li><li>Delivered in 3 days</li></ul>
     </div>
-  </header>
-
-  <!-- HERO -->
-  <section id="top" class="relative">
-    <div class="mx-auto max-w-content px-6 pt-20 pb-16 md:pt-28 md:pb-24 text-center">
-      <span class="eyebrow reveal" data-reveal>Websites · Local search · AI visibility</span>
-      <h1 class="reveal font-heading mx-auto mt-7 max-w-4xl text-[2.3rem] sm:text-5xl md:text-[3.7rem]"
-          style="font-weight:800;line-height:1.07;letter-spacing:-1.5px" data-reveal>
-        Get your local business <span class="g">found</span> — on Google and AI.
-      </h1>
-      <p class="reveal muted mx-auto mt-6 max-w-xl text-lg leading-relaxed" data-reveal>
-        I build beautiful, fast websites for local businesses and make sure customers actually find you —
-        on Google, Maps, and AI search like ChatGPT. Done-for-you, with a one-tap WhatsApp button that turns
-        visitors into real enquiries.
-      </p>
-      <div class="reveal mt-9 flex flex-wrap items-center justify-center gap-4" data-reveal>
-        <a href="#work" class="btn-pill btn-p">See my work</a>
-        <a href="#cta" class="btn-pill btn-s">Get a free preview</a>
-      </div>
-      <div class="reveal muted mt-12 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm" data-reveal>
-        <span>Built for Google + AI search</span>
-        <span class="opacity-30">·</span>
-        <span>WhatsApp lead capture</span>
-        <span class="opacity-30">·</span>
-        <span>English · Malay · 中文</span>
-      </div>
+    <div class="tier feat reveal">
+      <div class="tname">Get Found · most popular</div>
+      <div class="price">$150</div>
+      <ul><li>Everything in Starter</li><li>Up to 5 sections</li><li>Google Business setup</li><li>On-page SEO so you rank</li><li>Delivered in 5 days</li></ul>
     </div>
-  </section>
-
-  <!-- SERVICES -->
-  <section id="services" class="mx-auto max-w-content px-6 py-16 md:py-24">
-    <div class="text-center mb-12">
-      <h2 class="reveal font-heading text-3xl md:text-4xl" style="font-weight:800;letter-spacing:-.8px" data-reveal>
-        Three things that turn <span class="g">clicks into customers</span>
-      </h2>
-      <p class="reveal muted mx-auto mt-3 max-w-lg" data-reveal>Everything handled for you — no tech stress, no jargon.</p>
+    <div class="tier reveal">
+      <div class="tname">Full Presence</div>
+      <div class="price">$280</div>
+      <ul><li>Everything in Get Found</li><li>AI / ChatGPT visibility</li><li>Lead-capture &amp; reviews</li><li>Priority delivery</li></ul>
     </div>
+  </div>
+</section>
 
-    <div class="grid gap-6 md:grid-cols-3">
-      <article class="reveal card p-8" data-reveal>
-        <div class="ic">🌐</div>
-        <h3 class="font-heading mt-5 text-xl" style="font-weight:700">A beautiful website</h3>
-        <p class="muted mt-3 text-[15px] leading-relaxed">Modern, fast, and flawless on phone and desktop — designed around your business and your customers.</p>
-      </article>
-      <article class="reveal card p-8" data-reveal>
-        <div class="ic">🔎</div>
-        <h3 class="font-heading mt-5 text-xl" style="font-weight:700">Found on Google &amp; AI</h3>
-        <p class="muted mt-3 text-[15px] leading-relaxed">Google Business setup, on-page SEO, and visibility in AI search — so you show up when people are looking.</p>
-      </article>
-      <article class="reveal card p-8" data-reveal>
-        <div class="ic">💬</div>
-        <h3 class="font-heading mt-5 text-xl" style="font-weight:700">One-tap WhatsApp</h3>
-        <p class="muted mt-3 text-[15px] leading-relaxed">A WhatsApp button and clear calls-to-action that turn curious visitors into real conversations.</p>
-      </article>
-    </div>
-  </section>
+<!-- 08 FAQ -->
+<section id="faq">
+  <div class="label reveal">07 — Questions</div>
+  <div class="faq">
+    <div class="q reveal"><h5>I don't have content or photos — can you still help?</h5><p>Yes. Tell me your business name, what you do, and your area — I write the words and design it all for you.</p></div>
+    <div class="q reveal"><h5>Will this really get me found?</h5><p>A proper site + Google setup + AI visibility puts you where searching customers actually look. Full Presence adds SEO and ChatGPT visibility for the strongest result.</p></div>
+    <div class="q reveal"><h5>Do I need to get on a call?</h5><p>No calls. Everything's handled by message — quick and easy.</p></div>
+  </div>
+</section>
 
-  <!-- WORK -->
-  <section id="work" class="mx-auto max-w-content px-6 py-16 md:py-24">
-    <div class="text-center mb-12">
-      <h2 class="reveal font-heading text-3xl md:text-4xl" style="font-weight:800;letter-spacing:-.8px" data-reveal>
-        A look at <span class="g">what I make</span>
-      </h2>
-      <p class="reveal muted mx-auto mt-3 max-w-lg" data-reveal>Sample designs across fine dining, fitness, and family care — each built to get the phone ringing.</p>
-    </div>
+<!-- 09 CTA -->
+<section id="cta">
+  <div class="label reveal" style="justify-content:center">Let's begin</div>
+  <h2 class="huge reveal">Get <em class="grad-text">found.</em></h2>
+  <a class="cta-btn" href="https://wa.me/60193763199" target="_blank" rel="noopener">Message me on WhatsApp →</a>
+</section>
 
-    <div class="grid gap-6 md:grid-cols-3">
-      <!-- noir -->
-      <figure class="reveal work-card card overflow-hidden" data-reveal>
-        <div class="shot overflow-hidden" style="aspect-ratio:4/5;border-bottom:1px solid var(--card-bd)">
-          <img src="designs/v2/noir.png" alt="Noir — fine-dining restaurant website design" class="h-full w-full object-cover object-top" />
-        </div>
-        <figcaption class="p-6">
-          <span class="chip">Fine dining</span>
-          <h3 class="font-heading mt-3 text-lg" style="font-weight:700">Noir</h3>
-          <p class="muted mt-1 text-sm">An elegant restaurant site — menu, reservations, and a WhatsApp booking button.</p>
-        </figcaption>
-      </figure>
+<footer>
+  <span>FoundLocal — websites that get local businesses found.</span>
+  <span><a href="https://wa.me/60193763199" target="_blank" rel="noopener">WhatsApp</a> · © 2026</span>
+</footer>
 
-      <!-- forge -->
-      <figure class="reveal work-card card overflow-hidden" data-reveal>
-        <div class="shot overflow-hidden" style="aspect-ratio:4/5;border-bottom:1px solid var(--card-bd)">
-          <img src="designs/v2/forge.png" alt="Forge — gym and fitness studio website design" class="h-full w-full object-cover object-top" />
-        </div>
-        <figcaption class="p-6">
-          <span class="chip">Gym &amp; fitness</span>
-          <h3 class="font-heading mt-3 text-lg" style="font-weight:700">Forge</h3>
-          <p class="muted mt-1 text-sm">A bold strength-gym site — classes, trainers, and a one-tap free-trial enquiry.</p>
-        </figcaption>
-      </figure>
+<script>
+gsap.registerPlugin(ScrollTrigger);
 
-      <!-- bloom -->
-      <figure class="reveal work-card card overflow-hidden" data-reveal>
-        <div class="shot overflow-hidden" style="aspect-ratio:4/5;border-bottom:1px solid var(--card-bd)">
-          <img src="designs/v2/bloom.png" alt="Bloom — kids' dental clinic website design" class="h-full w-full object-cover object-top" />
-        </div>
-        <figcaption class="p-6">
-          <span class="chip">Kids dental</span>
-          <h3 class="font-heading mt-3 text-lg" style="font-weight:700">Bloom</h3>
-          <p class="muted mt-1 text-sm">A friendly kids' dental clinic — services, gentle vibe, and easy WhatsApp bookings.</p>
-        </figcaption>
-      </figure>
-    </div>
-  </section>
+/* SHOT mode: force everything visible for clean section screenshots (?shot#section) */
+const SHOT = location.search.indexOf('shot') > -1;
+if(SHOT){
+  const s=document.createElement('style');
+  s.textContent='.reveal{opacity:1!important;transform:none!important}.do-line{color:var(--ivory)!important}';
+  document.head.appendChild(s);
+}
 
-  <!-- CTA -->
-  <section id="cta" class="mx-auto max-w-content px-6 pb-20 md:pb-28">
-    <div class="reveal cta-card text-center text-white" style="border-radius:28px;padding:56px 28px" data-reveal>
-      <p class="eyebrow" style="color:#fff;background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.28)">Free preview</p>
-      <h2 class="font-heading mx-auto mt-6 max-w-3xl text-3xl md:text-5xl" style="font-weight:800;letter-spacing:-.6px;line-height:1.08">
-        Your first enquiry within 14 days — or you pay nothing.
-      </h2>
-      <p class="mx-auto mt-5 max-w-xl text-lg" style="opacity:.95">
-        I'll design a preview of your new site for free. If it doesn't bring you an enquiry in the first two weeks,
-        it costs you nothing. Simple as that.
-      </p>
-      <div class="mt-9 flex flex-wrap justify-center gap-4">
-        <a href="#top" class="btn-pill" style="background:#fff;color:#5b3cff">Claim my free preview</a>
-        <a href="#work" class="btn-pill" style="background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.35)">View samples</a>
-      </div>
-    </div>
-  </section>
+/* progress bar */
+gsap.to('#progress',{width:'100%',ease:'none',scrollTrigger:{trigger:'body',start:'top top',end:'bottom bottom',scrub:.3}});
 
-  <!-- FOOTER -->
-  <footer class="border-t ln">
-    <div class="mx-auto max-w-content px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-5">
-      <a href="#top" class="logo font-heading">Found<span class="g">Local</span></a>
-      <div class="muted flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm">
-        <span>English</span><span class="opacity-30">·</span>
-        <span>Malay</span><span class="opacity-30">·</span>
-        <span>中文</span>
-      </div>
-      <p class="muted text-xs">© 2026 FoundLocal · Sample work shown</p>
-    </div>
-  </footer>
+/* hero word: split into chars and rise in */
+(function(){
+  const el=document.getElementById('heroWord');
+  const txt=el.textContent; el.textContent='';
+  [...txt].forEach(ch=>{
+    const s=document.createElement('span');
+    s.textContent=ch; s.style.display='inline-block'; s.style.willChange='transform';
+    el.appendChild(s);
+  });
+  gsap.from('#heroWord span',{yPercent:120,opacity:0,duration:1.1,ease:'expo.out',stagger:.06,delay:.15});
+  gsap.from('#hero .label',{opacity:0,y:18,duration:1,delay:.1});
+  gsap.from('#hero .hero-sub',{opacity:0,y:24,duration:1,delay:.7});
+})();
 
-  <!-- ---------- THEME TOGGLE (remembers choice + ?theme=dark for screenshots) ---------- -->
-  <script>
-    (function(){
-      var root=document.documentElement, tg=document.getElementById('tg');
-      function set(t){ root.setAttribute('data-theme',t); tg.textContent = (t==='dark') ? '☀️' : '🌙'; try{ localStorage.setItem('flt',t); }catch(e){} }
-      var p=new URLSearchParams(location.search).get('theme');
-      var saved; try{ saved=localStorage.getItem('flt'); }catch(e){}
-      set(p || saved || 'light');
-      tg.addEventListener('click', function(){ set(root.getAttribute('data-theme')==='dark' ? 'light' : 'dark'); });
-    })();
-  </script>
+/* generic reveals */
+gsap.utils.toArray('.reveal').forEach(el=>{
+  gsap.to(el,{opacity:1,y:0,duration:1,ease:'power3.out',
+    scrollTrigger:{trigger:el,start:'top 85%'}});
+});
 
-  <!-- ---------- ENHANCE-ONLY MOTION (GSAP + ScrollTrigger + Lenis), screenshot-safe ---------- -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      var hasGSAP = (typeof gsap !== 'undefined') && (typeof ScrollTrigger !== 'undefined');
+/* SERP climb: when section enters, "you" row jumps to #1 and others slide down */
+ScrollTrigger.create({
+  trigger:'#serp', start:'top 70%', once:true,
+  onEnter:()=>{
+    const rows=gsap.utils.toArray('#serp .serp-row');
+    const you=rows[0];
+    const tl=gsap.timeline({delay:.3});
+    tl.to(rows.slice(1),{y:64,duration:.7,ease:'power2.inOut',stagger:.04})
+      .to(you,{y:-192,duration:.9,ease:'power3.inOut'},'<')
+      .add(()=>{ you.querySelector('.rank').textContent='#1'; you.querySelector('.meta').textContent='top result ✓'; })
+      .to(rows,{y:0,duration:.6,ease:'power2.out',onStart:()=>{
+        // reorder DOM so it sits cleanly at top
+        const serp=document.getElementById('serp'); serp.insertBefore(you,serp.firstChild);
+        gsap.set(rows,{clearProps:'transform'});
+      }});
+  }
+});
 
-      // NATIVE scroll (CSS scroll-behavior:smooth handles anchor smoothness). No scroll-hijack lib.
-      if (!hasGSAP || reduce) return; // content already visible; no-op.
-      gsap.registerPlugin(ScrollTrigger);
+/* what-we-do: lines light up one by one as they cross center */
+gsap.utils.toArray('.do-line').forEach(line=>{
+  ScrollTrigger.create({trigger:line,start:'top 72%',end:'bottom 40%',
+    onEnter:()=>line.classList.add('on'),
+    onLeaveBack:()=>line.classList.remove('on')});
+});
 
-      // ONE subtle hero reveal: eyebrow + headline + subline + buttons rise from a small offset.
-      gsap.from('#top [data-reveal]', {
-        y: 24, opacity: 0, duration: 0.9, ease: 'power3.out',
-        stagger: 0.10, delay: 0.1, clearProps: 'all'
-      });
+/* subtle parallax on huge words */
+gsap.utils.toArray('section .huge').forEach(h=>{
+  gsap.to(h,{yPercent:-8,ease:'none',scrollTrigger:{trigger:h,start:'top bottom',end:'bottom top',scrub:1}});
+});
 
-      // Tasteful scroll reveals everywhere else: animate FROM a subtle offset, clearProps after.
-      // once:true + clearProps means nothing is ever parked at opacity:0 awaiting scroll.
-      gsap.utils.toArray('[data-reveal]').forEach(function(el){
-        if (el.closest('#top')) return; // hero handled above
-        gsap.from(el, {
-          y: 26, opacity: 0, duration: 0.85, ease: 'power3.out',
-          clearProps: 'all',
-          scrollTrigger: { trigger: el, start: 'top 90%', once: true }
-        });
-      });
-
-      // Safety net: after libs settle, force everything fully visible — a late screenshot is safe.
-      setTimeout(function(){
-        document.querySelectorAll('.reveal,[data-reveal]').forEach(function(el){
-          el.style.opacity = '1'; el.style.transform = 'none';
-        });
-        ScrollTrigger.refresh();
-      }, 2400);
-    });
-  </script>
+ScrollTrigger.refresh();
+</script>
 </body>
 </html>

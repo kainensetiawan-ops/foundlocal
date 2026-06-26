@@ -1,0 +1,27 @@
+{
+  "name": "foundlocal-portfolio",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kainensetiawan-ops/foundlocal.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/kainensetiawan-ops/foundlocal/issues"
+  },
+  "homepage": "https://github.com/kainensetiawan-ops/foundlocal#readme",
+  "dependencies": {
+    "playwright": "^1.61.1",
+    "puppeteer": "^25.2.1",
+    "puppeteer-core": "^25.2.1",
+    "timecut": "^0.3.3"
+  }
+}

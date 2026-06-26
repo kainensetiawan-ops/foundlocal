@@ -294,6 +294,14 @@ footer a{color:var(--ivory-dim);text-decoration:none}footer a:hover{color:var(--
 <script>
 gsap.registerPlugin(ScrollTrigger);
 
+/* SHOT mode: force everything visible for clean section screenshots (?shot#section) */
+const SHOT = location.search.indexOf('shot') > -1;
+if(SHOT){
+  const s=document.createElement('style');
+  s.textContent='.reveal{opacity:1!important;transform:none!important}.do-line{color:var(--ivory)!important}';
+  document.head.appendChild(s);
+}
+
 /* progress bar */
 gsap.to('#progress',{width:'100%',ease:'none',scrollTrigger:{trigger:'body',start:'top top',end:'bottom bottom',scrub:.3}});
 
