@@ -210,7 +210,7 @@ footer a{color:var(--ivory-dim);text-decoration:none}footer a:hover{color:var(--
 
 <nav>
   <div class="brand">Found<b><em>Local</em></b></div>
-  <a class="nav-cta" href="https://wa.me/60193763199" target="_blank" rel="noopener">Get found →</a>
+  <a class="nav-cta" href="#cta">Get found →</a>
 </nav>
 
 <!-- 01 HERO -->
@@ -262,7 +262,7 @@ footer a{color:var(--ivory-dim);text-decoration:none}footer a:hover{color:var(--
     <div class="work-card c-noir"><img class="wc-img" src="assets/site-noir.png"><div class="cat">Fine dining</div><h3>Maison Noir</h3><p>A candle-lit reservation experience — found first when diners search the city.</p></div>
     <div class="work-card c-forge"><img class="wc-img" src="assets/site-forge.png"><div class="cat">Fitness</div><h3>Forge Gym</h3><p>Black &amp; acid energy. Built to convert "gym near me" into a trial booking.</p></div>
     <div class="work-card c-bloom"><img class="wc-img" src="assets/site-bloom.png"><div class="cat">Dental · kids</div><h3>Bloom Dental</h3><p>Warm, calm, parent-friendly — top of the map pack in its town.</p></div>
-    <div class="work-card c-air"><div class="cat">Local services</div><h3>Air Plumbing</h3><p>One-tap WhatsApp call-outs. From invisible to fully booked.</p></div>
+    <div class="work-card c-air"><div class="cat">Local services</div><h3>Air Plumbing</h3><p>One-tap enquiries. From invisible to fully booked.</p></div>
   </div>
 </section>
 
@@ -274,7 +274,7 @@ footer a{color:var(--ivory-dim);text-decoration:none}footer a:hover{color:var(--
     <div class="step reveal"><div class="sn">01</div><div><h4>You tell me about your business</h4><p>One short message — your name, what you do, your area. No call needed. No tech words.</p></div></div>
     <div class="step reveal"><div class="sn">02</div><div><h4>I design &amp; write everything</h4><p>The site, the words, the photos, the layout. You don't lift a finger — I send you a preview.</p></div></div>
     <div class="step reveal"><div class="sn">03</div><div><h4>I get you found</h4><p>Google Business setup, on-page SEO, and AI-search visibility so you appear where customers look.</p></div></div>
-    <div class="step reveal"><div class="sn">04</div><div><h4>Customers message you</h4><p>A WhatsApp button turns a curious visitor into a real enquiry in one tap. You just reply.</p></div></div>
+    <div class="step reveal"><div class="sn">04</div><div><h4>Customers reach you</h4><p>A built-in enquiry form turns a curious visitor into a real message — landing straight in your inbox.</p></div></div>
   </div>
 </section>
 
@@ -286,7 +286,7 @@ footer a{color:var(--ivory-dim);text-decoration:none}footer a:hover{color:var(--
     <div class="tier reveal">
       <div class="tname">Starter</div>
       <div class="price">$80</div>
-      <ul><li>One-page cinematic site</li><li>Mobile &amp; desktop</li><li>WhatsApp enquiry button</li><li>Delivered in 3 days</li></ul>
+      <ul><li>One-page cinematic site</li><li>Mobile &amp; desktop</li><li>Enquiry form to your inbox</li><li>Delivered in 3 days</li></ul>
     </div>
     <div class="tier feat reveal">
       <div class="tname">Get Found · most popular</div>
@@ -319,17 +319,18 @@ footer a{color:var(--ivory-dim);text-decoration:none}footer a:hover{color:var(--
   <form class="cform reveal" id="cform">
     <input name="name" placeholder="Your name" required>
     <input name="business" placeholder="Business name + what you do" required>
-    <input name="contact" placeholder="Email or WhatsApp number" required>
+    <input name="email" type="email" placeholder="Your email" required>
+    <input type="hidden" name="_autoresponse" value="Thanks for reaching out to FoundLocal! 🎉 I've got your details — I'll send your free website preview shortly. — FoundLocal">
     <textarea name="message" placeholder="Anything specific? (optional)"></textarea>
     <button type="submit">Send — get my free preview →</button>
     <div class="cform-msg"></div>
   </form>
-  <div class="cta-alt reveal">prefer to chat? <a href="https://wa.me/60193763199" target="_blank" rel="noopener">WhatsApp →</a> · or tap the chat bubble ↘</div>
+  <div class="cta-alt reveal">No calls needed — just the form above, or tap the chat bubble ↘</div>
 </section>
 
 <footer>
   <span>FoundLocal — websites that get local businesses found.</span>
-  <span><a href="https://wa.me/60193763199" target="_blank" rel="noopener">WhatsApp</a> · © 2026</span>
+  <span>© 2026 FoundLocal</span>
 </footer>
 
 <script>
@@ -430,7 +431,7 @@ ScrollTrigger.refresh();
   function add(t,who){var d=document.createElement('div');d.className='msg '+who;d.textContent=t;body.appendChild(d);body.scrollTop=body.scrollHeight;}
   function setQuick(opts){quick.innerHTML='';opts.forEach(function(o){var b=document.createElement('button');b.textContent=o;b.onclick=function(){handle(o);};quick.appendChild(b);});}
   function botSay(t,after){setTimeout(function(){add(t,'bot');if(after)after();},420);}
-  function start(){if(started)return;started=true;add("Hey 👋 I'm FoundLocal's assistant. I can answer anything and set you up with a free website preview — what would you like to know?",'bot');setQuick(MENU);}
+  function start(){if(started)return;started=true;add("Hey 👋 I'm FoundLocal's assistant. I can tell you about our service and set you up with a free website preview — what would you like to know?",'bot');setQuick(MENU);}
   function handle(input){
     add(input,'user');
     if(step){return capture(input);}
@@ -440,9 +441,9 @@ ScrollTrigger.refresh();
   }
   function capture(v){
     if(step==='name'){lead.name=v;step='business';botSay("Nice to meet you, "+v.split(' ')[0]+"! What's your business + what you do?");}
-    else if(step==='business'){lead.business=v;step='contact';botSay("Got it. Best email or WhatsApp number to send your preview to?");}
+    else if(step==='business'){lead.business=v;step='contact';botSay("Got it. What's the best email to send your preview to?");}
     else if(step==='contact'){lead.contact=v;step=null;botSay("Perfect — sending this over now…",function(){
-      post({_subject:'New FoundLocal lead 🚀',name:lead.name,business:lead.business,contact:lead.contact})
+      post({_subject:'New FoundLocal lead 🚀',_autoresponse:"Thanks for reaching out to FoundLocal! 🎉 I've got your details — I'll send your free website preview shortly. — FoundLocal",name:lead.name,business:lead.business,email:lead.contact})
         .then(function(r){return r.json();}).then(function(){add("Done ✅ You're all set — I'll get your free preview over shortly. Talk soon!",'bot');})
         .catch(function(){add("All noted ✅ I'll be in touch shortly!",'bot');});
     });}
