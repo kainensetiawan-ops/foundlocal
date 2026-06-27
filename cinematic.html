@@ -423,7 +423,8 @@ ScrollTrigger.refresh();
   var fab=document.getElementById('chatFab'),panel=document.getElementById('chatPanel'),
       body=document.getElementById('chatBody'),quick=document.getElementById('chatQuick'),
       text=document.getElementById('chatText'),send=document.getElementById('chatSend');
-  var lead={},step=null,started=false;
+  var lead={},step=null,started=false,convo=[];
+  var AI='';  // FoundLocal AI brain endpoint — set after the free Worker deploys
   var KB={
     'What do you do?':"I build modern, mobile-first websites for local businesses — and get you found on Google and AI search like ChatGPT. Fully done-for-you. ✨",
     'Pricing':"Three simple packages — Starter $80, Get Found $150 (+ Google ranking & SEO), Full Presence $280 (+ AI visibility & lead capture). One price, everything included.",
@@ -434,12 +435,21 @@ ScrollTrigger.refresh();
   function setQuick(opts){quick.innerHTML='';opts.forEach(function(o){var b=document.createElement('button');b.textContent=o;b.onclick=function(){handle(o);};quick.appendChild(b);});}
   function botSay(t,after){setTimeout(function(){add(t,'bot');if(after)after();},420);}
   function start(){if(started)return;started=true;add("Hey 👋 I'm FoundLocal's assistant. I can tell you about our service and set you up with a free website preview — what would you like to know?",'bot');setQuick(MENU);}
+  function addTyping(){var d=document.createElement('div');d.className='msg bot';d.textContent='…';body.appendChild(d);body.scrollTop=body.scrollHeight;return d;}
   function handle(input){
     add(input,'user');
     if(step){return capture(input);}
-    if(KB[input]){botSay(KB[input],function(){setQuick(MENU);});return;}
-    if(input==='Get my free preview'||/preview|website|site|build|want|interested|quote/i.test(input)){quick.innerHTML='';step='name';botSay("Awesome — let's set that up. What's your name?");return;}
-    botSay("Good question! The easiest next step is a free preview — want me to set one up?",function(){setQuick(['Get my free preview','Pricing']);});
+    if(KB[input]){convo.push({role:'user',content:input},{role:'assistant',content:KB[input]});botSay(KB[input],function(){setQuick(MENU);});return;}
+    if(input==='Get my free preview'||/\b(get (my )?(free )?preview|sign me up|let'?s start|book me|i'?m interested)\b/i.test(input)){quick.innerHTML='';step='name';botSay("Awesome — let's set that up. What's your name?");return;}
+    aiReply(input);
+  }
+  function aiReply(input){
+    convo.push({role:'user',content:input});
+    if(!AI){botSay("Good question! The easiest next step is a free preview — want me to set one up?",function(){setQuick(['Get my free preview','Pricing']);});return;}
+    var t=addTyping();
+    fetch(AI,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:convo})})
+      .then(function(r){return r.json();}).then(function(d){t.remove();var msg=(d&&d.reply)||"Want a free preview? Just share your name, business & email.";add(msg,'bot');convo.push({role:'assistant',content:msg});setQuick(['Get my free preview','Pricing']);})
+      .catch(function(){t.remove();botSay("Hmm, quick connection hiccup — want a free preview? Tap below.",function(){setQuick(['Get my free preview']);});});
   }
   function capture(v){
     if(step==='name'){lead.name=v;step='business';botSay("Nice to meet you, "+v.split(' ')[0]+"! What's your business + what you do?");}
