@@ -114,7 +114,9 @@ section{position:relative;padding:clamp(80px,12vh,150px) clamp(20px,6vw,90px);mi
 .work-track::-webkit-scrollbar{display:none}
 .work-card{scroll-snap-align:start;flex:0 0 min(82vw,560px);border-radius:18px;overflow:hidden;position:relative;
   aspect-ratio:3/4;border:1px solid var(--line);display:flex;flex-direction:column;justify-content:flex-end;
-  padding:30px;isolation:isolate}
+  padding:30px;isolation:isolate;text-decoration:none;color:inherit;cursor:pointer;transition:transform .45s cubic-bezier(.22,1,.36,1),border-color .4s}
+.work-card:hover{transform:translateY(-8px);border-color:rgba(255,255,255,.4)}
+.wc-go{font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.08em;color:#fff;margin-top:14px;opacity:.9}
 .work-card::before{content:'';position:absolute;inset:0;z-index:-2;background:var(--cg)}
 .work-card::after{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(transparent 30%,rgba(0,0,0,.78))}
 .work-card .wc-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;z-index:-2}
@@ -261,10 +263,9 @@ footer a{color:var(--ivory-dim);text-decoration:none}footer a:hover{color:var(--
   <div class="label reveal">04 — Selected work</div>
   <h2 class="huge reveal" style="font-size:clamp(2.4rem,8vw,6.5rem);margin-bottom:20px">Made to be <em>seen.</em></h2>
   <div class="work-track">
-    <div class="work-card c-noir"><img class="wc-img" src="assets/site-noir.png"><div class="cat">Fine dining</div><h3>Maison Noir</h3><p>A candle-lit reservation experience — found first when diners search the city.</p></div>
-    <div class="work-card c-forge"><img class="wc-img" src="assets/site-forge.png"><div class="cat">Fitness</div><h3>Forge Gym</h3><p>Black &amp; acid energy. Built to convert "gym near me" into a trial booking.</p></div>
-    <div class="work-card c-bloom"><img class="wc-img" src="assets/site-bloom.png"><div class="cat">Dental · kids</div><h3>Bloom Dental</h3><p>Warm, calm, parent-friendly — top of the map pack in its town.</p></div>
-    <div class="work-card c-air"><div class="cat">Local services</div><h3>Air Plumbing</h3><p>One-tap enquiries. From invisible to fully booked.</p></div>
+    <a class="work-card c-noir" href="samples/noir.html" target="_blank" rel="noopener"><img class="wc-img" src="assets/site-noir.png"><div class="cat">Fine dining</div><h3>Maison Noir</h3><p>A candle-lit reservation experience — found first when diners search the city.</p><span class="wc-go">View live site ↗</span></a>
+    <a class="work-card c-forge" href="samples/forge.html" target="_blank" rel="noopener"><img class="wc-img" src="assets/site-forge.png"><div class="cat">Fitness</div><h3>Forge Gym</h3><p>Black &amp; acid energy. Built to convert "gym near me" into a trial booking.</p><span class="wc-go">View live site ↗</span></a>
+    <a class="work-card c-bloom" href="samples/bloom.html" target="_blank" rel="noopener"><img class="wc-img" src="assets/site-bloom.png"><div class="cat">Dental · kids</div><h3>Bloom Dental</h3><p>Warm, calm, parent-friendly — top of the map pack in its town.</p><span class="wc-go">View live site ↗</span></a>
   </div>
 </section>
 
