@@ -1,0 +1,42 @@
+[
+ {
+  "slug": "saas-software-product-landing-",
+  "name": "Flowdesk \u2014 SaaS Product Landing Page",
+  "category": "SaaS / Software Product Landing Page",
+  "price": 49,
+  "desc": "Flowdesk is a premium, conversion-ready SaaS landing page template with a striking gradient hero, a fully built-in product UI mock (pure CSS/SVG \u2014 no image assets to break), and a modern bento-grid feature layout. It ships as one clean, self-contained HTML file with a sticky nav, animated logo strip, 3-step how-it-works, testimonial with live stats, a working monthly/yearly pricing toggle across 3 tiers, and a polished CTA + footer \u2014 fully responsive from 375px to 1440px with tasteful scroll animations and zero dependencies.",
+  "bytes": 50739
+ },
+ {
+  "slug": "creative-agency-portfolio-temp",
+  "name": "FOUNDLOCAL \u2014 Creative Studio Template",
+  "category": "Creative agency / portfolio template",
+  "price": 59,
+  "desc": "FOUNDLOCAL is a dark-luxe editorial landing page template for creative studios and design agencies who need to look the part. It pairs oversized Fraunces serif display type with a refined gold accent system, asymmetric work grids, and tasteful scroll-triggered motion \u2014 fully responsive, dependency-free, and shipped as one clean self-contained HTML file ready to brand and launch in minutes.",
+  "bytes": 36689
+ },
+ {
+  "slug": "creative-portfolio-atelier-min",
+  "name": "Atelier \u2014 Minimal Luxe Portfolio Template",
+  "category": "Creative Portfolio",
+  "price": 49,
+  "desc": "A refined, editorial portfolio template for designers, developers and creators who want to look the part. Built on a warm paper palette with a Fraunces serif / Inter pairing, one tasteful terracotta accent, and considered scroll-reveal motion across eight sections \u2014 nav, kinetic hero, selected-work cards, about, experience timeline, testimonial and contact. One self-contained HTML file, fully responsive 375px to 1440px, zero dependencies, sub-second load. Clean enough to ship as-is, structured enough to make your own in minutes.",
+  "bytes": 31714
+ },
+ {
+  "slug": "ecommerce-dtc-single-product-l",
+  "name": "Lume \u2014 Warm DTC Single-Product Landing Page",
+  "category": "Ecommerce / DTC Single-Product Landing Page",
+  "price": 59,
+  "desc": "A premium, conversion-focused landing page template for any single-product DTC brand \u2014 wellness, gadgets, home goods, or skincare. Features a fully CSS-rendered product hero (no images to break), adaptive scroll animations, benefit blocks, a how-it-works flow, verified-style reviews, a high-converting offer card, an accordion FAQ, and a sticky buy bar \u2014 all in one self-contained HTML file that loads in under a second and looks flawless from 375px to 1440px.",
+  "bytes": 48292
+ },
+ {
+  "slug": "event-conference-online-course",
+  "name": "Momentum \u2014 Conference & Online Course Landing Page",
+  "category": "Event / Conference / Online Course Landing Page",
+  "price": 59,
+  "desc": "Momentum is a conversion-focused landing page template for virtual summits, conferences, and online courses \u2014 built around energetic kinetic typography, a vibrant five-stop gradient system, and a clean ticket-and-enroll flow. It ships complete and self-contained: animated hero with live countdown, what-you-get grid, tabbed two-day schedule, gradient speaker lineup, a three-tier pricing block with a featured plan, an interactive FAQ accordion, final CTA, and footer \u2014 fully responsive from 375px to 1440px with tasteful scroll-reveal motion and zero external dependencies beyond Google Fonts.",
+  "bytes": 43865
+ }
+]

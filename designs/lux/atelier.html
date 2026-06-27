@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FoundLocal — Atelier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600&family=Archivo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+  :root{
+    /* LIGHT — ivory editorial */
+    --paper:#f4f1ea;
+    --paper-2:#ece7dc;
+    --ink:#14110d;
+    --ink-soft:#3a352d;
+    --ink-faint:#8c8475;
+    --oxblood:#7a2e2e;
+    --hair:#d8d1c2;
+    --hair-strong:#bcb3a0;
+    --frame:#1a1611;
+  }
+  html[data-theme="dark"]{
+    /* DARK — inverted ink */
+    --paper:#100e0b;
+    --paper-2:#171410;
+    --ink:#f1ece1;
+    --ink-soft:#cdc6b8;
+    --ink-faint:#6f685a;
+    --oxblood:#b85b50;
+    --hair:#2c2820;
+    --hair-strong:#403a2e;
+    --frame:#0a0907;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+
+  html,body{background:var(--paper);}
+  body{
+    font-family:'Archivo',sans-serif;
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    transition:background-color .5s ease, color .5s ease;
+  }
+  /* SMOOTH THEME SWITCH — every theme-bound surface eases */
+  body, .nav, .hero, .panel, .frame, .rule, .num, .chip,
+  .svc, .work-card, .cta-wrap, .footer, .toggle, .seal,
+  .label, .lead, .ink-soft, .hero-side, .marker{
+    transition:background-color .5s ease, color .5s ease, border-color .5s ease, fill .5s ease, stroke .5s ease, box-shadow .5s ease;
+  }
+
+  ::selection{background:var(--oxblood);color:var(--paper);}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:0 40px;}
+
+  /* ---------- NAV ---------- */
+  .nav{
+    position:sticky;top:0;z-index:50;
+    background:color-mix(in srgb, var(--paper) 86%, transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--hair);
+  }
+  .nav-inner{
+    max-width:1180px;margin:0 auto;padding:18px 40px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .brand{
+    font-family:'Playfair Display',serif;
+    font-weight:700;font-size:23px;letter-spacing:.02em;
+    color:var(--ink);
+  }
+  .brand .dot{color:var(--oxblood);}
+  .nav-meta{
+    display:flex;align-items:center;gap:30px;
+  }
+  .nav-links{display:flex;gap:28px;}
+  .nav-links a{
+    font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--ink-soft);text-decoration:none;font-weight:500;
+    position:relative;padding-bottom:3px;
+  }
+  .nav-links a::after{
+    content:"";position:absolute;left:0;bottom:0;height:1px;width:0;
+    background:var(--oxblood);transition:width .35s ease;
+  }
+  .nav-links a:hover{color:var(--ink);}
+  .nav-links a:hover::after{width:100%;}
+
+  .toggle{
+    width:46px;height:26px;border-radius:0;
+    border:1px solid var(--hair-strong);
+    background:var(--paper-2);
+    position:relative;cursor:pointer;flex:none;
+  }
+  .toggle .knob{
+    position:absolute;top:2px;left:2px;width:20px;height:20px;
+    background:var(--oxblood);
+    transition:transform .45s cubic-bezier(.7,0,.2,1), background-color .5s ease;
+  }
+  html[data-theme="dark"] .toggle .knob{transform:translateX(20px);}
+
+  /* ---------- HERO ---------- */
+  .hero{position:relative;padding:62px 0 40px;overflow:hidden;}
+  .hero-top{
+    display:flex;justify-content:space-between;align-items:baseline;
+    border-bottom:1px solid var(--hair);padding-bottom:14px;margin-bottom:34px;
+  }
+  .label{
+    font-size:10.5px;letter-spacing:.34em;text-transform:uppercase;
+    color:var(--ink-faint);font-weight:600;
+  }
+  .label .accent{color:var(--oxblood);}
+
+  .hero-grid{
+    display:grid;grid-template-columns:1fr auto;gap:30px;align-items:end;
+  }
+  .hero-display{
+    font-family:'Playfair Display',serif;
+    color:var(--ink);
+    line-height:.9;
+    font-weight:800;
+    letter-spacing:-.01em;
+  }
+  .hero-display .l1{font-size:120px;display:block;}
+  .hero-display .l2{font-size:120px;display:block;}
+  .hero-display .l3{
+    font-size:120px;display:block;
+    font-style:italic;font-weight:500;color:var(--oxblood);
+  }
+  .hero-display .thin{font-weight:400;}
+
+  .hero-side{
+    max-width:250px;text-align:left;padding-bottom:14px;
+    border-left:1px solid var(--hair-strong);padding-left:22px;
+  }
+  .hero-side .lead{
+    font-family:'Archivo',sans-serif;font-size:15px;line-height:1.65;
+    color:var(--ink-soft);font-weight:400;
+  }
+  .hero-side .lead em{font-family:'Playfair Display',serif;font-style:italic;color:var(--ink);}
+
+  .hero-foot{
+    margin-top:42px;display:flex;justify-content:space-between;align-items:flex-end;
+    border-top:1px solid var(--hair);padding-top:18px;
+  }
+  .hero-foot .big-no{
+    font-family:'Playfair Display',serif;font-size:13px;letter-spacing:.3em;
+    text-transform:uppercase;color:var(--ink-faint);font-weight:500;
+  }
+  .scroll-cue{
+    font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-faint);
+    display:flex;align-items:center;gap:10px;font-weight:600;
+  }
+  .scroll-cue .ln{width:46px;height:1px;background:var(--hair-strong);display:inline-block;}
+
+  /* ---------- SECTION HEADERS ---------- */
+  .sec-head{
+    display:flex;align-items:baseline;gap:20px;
+    border-bottom:1px solid var(--hair);padding-bottom:16px;margin-bottom:46px;
+  }
+  .sec-head .ix{
+    font-family:'Playfair Display',serif;font-size:15px;font-style:italic;
+    color:var(--oxblood);font-weight:500;
+  }
+  .sec-head .ti{
+    font-family:'Playfair Display',serif;font-size:34px;font-weight:600;color:var(--ink);
+    letter-spacing:.005em;
+  }
+  .sec-head .meta{margin-left:auto;}
+
+  /* ---------- SERVICES ---------- */
+  .services{padding:96px 0;}
+  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);}
+  .svc{
+    padding:6px 30px 0 0;border-right:1px solid var(--hair);
+    position:relative;
+  }
+  .svc:last-child{border-right:none;padding-right:0;}
+  .svc:not(:first-child){padding-left:30px;}
+  .svc .num{
+    font-family:'Playfair Display',serif;
+    font-size:78px;font-weight:400;line-height:1;
+    color:var(--paper);
+    -webkit-text-stroke:1px var(--hair-strong);
+    margin-bottom:24px;
+  }
+  html[data-theme="dark"] .svc .num{
+    -webkit-text-stroke:1px var(--hair-strong);
+  }
+  .svc h3{
+    font-family:'Playfair Display',serif;font-size:25px;font-weight:600;
+    color:var(--ink);margin-bottom:14px;line-height:1.12;
+  }
+  .svc h3 em{font-style:italic;color:var(--oxblood);}
+  .svc p{
+    font-size:14px;line-height:1.7;color:var(--ink-soft);max-width:280px;
+  }
+  .svc .tag{
+    margin-top:22px;font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--ink-faint);font-weight:600;display:block;
+  }
+
+  /* ---------- WORK ---------- */
+  .work{padding:40px 0 96px;}
+  .work-card{margin-bottom:120px;}
+  .work-card:last-child{margin-bottom:30px;}
+  .work-row{display:grid;align-items:center;gap:48px;}
+  .work-row.left{grid-template-columns:0.92fr 1.08fr;}
+  .work-row.right{grid-template-columns:1.08fr 0.92fr;}
+  .work-row.right .work-text{order:2;}
+
+  .frame{
+    position:relative;
+    border:1px solid var(--frame);
+    padding:14px;
+    background:var(--paper-2);
+  }
+  .frame::after{
+    content:"";position:absolute;inset:7px;border:1px solid var(--hair-strong);
+    pointer-events:none;
+  }
+  .frame img{
+    display:block;width:100%;height:auto;
+    filter:saturate(.92) contrast(1.02);
+  }
+  .work-text .ix{
+    font-family:'Playfair Display',serif;font-size:64px;font-weight:400;
+    font-style:italic;color:var(--oxblood);line-height:.9;margin-bottom:14px;
+  }
+  .work-text h3{
+    font-family:'Playfair Display',serif;font-size:40px;font-weight:600;
+    color:var(--ink);line-height:1.02;margin-bottom:8px;
+  }
+  .work-text .kicker{
+    font-size:10px;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--ink-faint);font-weight:600;margin-bottom:24px;display:block;
+  }
+  .work-text p{
+    font-size:14.5px;line-height:1.75;color:var(--ink-soft);max-width:340px;margin-bottom:24px;
+  }
+  .work-text .specs{
+    display:flex;gap:0;border-top:1px solid var(--hair);padding-top:16px;
+  }
+  .work-text .specs div{
+    padding-right:28px;margin-right:28px;border-right:1px solid var(--hair);
+  }
+  .work-text .specs div:last-child{border-right:none;}
+  .work-text .specs .k{
+    font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);
+    font-weight:600;margin-bottom:5px;
+  }
+  .work-text .specs .v{
+    font-family:'Playfair Display',serif;font-size:17px;color:var(--ink);font-weight:500;
+  }
+
+  /* ---------- CTA ---------- */
+  .cta{padding:0 0 100px;}
+  .cta-wrap{
+    border-top:1px solid var(--frame);border-bottom:1px solid var(--frame);
+    padding:72px 0;text-align:center;position:relative;
+  }
+  .cta .seal{
+    font-size:10px;letter-spacing:.34em;text-transform:uppercase;
+    color:var(--oxblood);font-weight:600;margin-bottom:26px;
+  }
+  .cta h2{
+    font-family:'Playfair Display',serif;font-weight:700;
+    font-size:74px;line-height:.98;color:var(--ink);margin-bottom:8px;
+  }
+  .cta h2 .it{font-style:italic;font-weight:500;}
+  .cta .sub{
+    font-size:15px;color:var(--ink-soft);max-width:480px;margin:26px auto 40px;line-height:1.7;
+  }
+  .cta .sub strong{color:var(--ink);font-weight:600;}
+  .btn{
+    display:inline-block;
+    font-family:'Archivo',sans-serif;
+    font-size:11px;letter-spacing:.26em;text-transform:uppercase;font-weight:600;
+    color:var(--paper);background:var(--ink);
+    padding:18px 44px;text-decoration:none;
+    border:1px solid var(--ink);
+    transition:background-color .35s ease, color .35s ease;
+  }
+  .btn:hover{background:var(--oxblood);border-color:var(--oxblood);color:#f4f1ea;}
+  .cta .guarantee{
+    margin-top:24px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--ink-faint);font-weight:500;
+  }
+
+  /* ---------- FOOTER ---------- */
+  .footer{border-top:1px solid var(--hair);padding:48px 0 56px;}
+  .footer-inner{display:flex;justify-content:space-between;align-items:flex-start;gap:30px;}
+  .footer .fbrand{
+    font-family:'Playfair Display',serif;font-size:30px;font-weight:700;color:var(--ink);
+  }
+  .footer .fbrand .dot{color:var(--oxblood);}
+  .footer .tagline{font-size:12px;color:var(--ink-faint);margin-top:8px;max-width:260px;line-height:1.6;}
+  .footer .cols{display:flex;gap:64px;}
+  .footer .col h4{
+    font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--ink-faint);
+    font-weight:600;margin-bottom:14px;
+  }
+  .footer .col a{
+    display:block;font-size:13px;color:var(--ink-soft);text-decoration:none;margin-bottom:9px;
+    transition:color .3s ease;
+  }
+  .footer .col a:hover{color:var(--oxblood);}
+  .footer .langs{display:flex;gap:16px;}
+  .footer .langs a{margin-bottom:0;}
+  .footer-base{
+    margin-top:46px;padding-top:20px;border-top:1px solid var(--hair);
+    display:flex;justify-content:space-between;
+    font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);
+  }
+
+  @media(max-width:900px){
+    .hero-display .l1,.hero-display .l2,.hero-display .l3{font-size:64px;}
+    .hero-grid{grid-template-columns:1fr;}
+    .svc-grid{grid-template-columns:1fr;}
+    .svc{border-right:none;border-bottom:1px solid var(--hair);padding:24px 0!important;}
+    .work-row.left,.work-row.right{grid-template-columns:1fr;}
+    .cta h2{font-size:44px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="brand">FoundLocal<span class="dot">.</span></div>
+    <div class="nav-meta">
+      <div class="nav-links">
+        <a href="#services">Services</a>
+        <a href="#work">Work</a>
+        <a href="#cta">Enquire</a>
+      </div>
+      <button class="toggle" id="themeToggle" aria-label="Toggle theme"><span class="knob"></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <div class="label">Atelier <span class="accent">№ 01</span> — Web Design Studio</div>
+      <div class="label">Est. Kuala Lumpur</div>
+    </div>
+
+    <div class="hero-grid">
+      <h1 class="hero-display" id="heroDisplay">
+        <span class="l1">Get</span>
+        <span class="l2"><span class="thin">found</span> where</span>
+        <span class="l3">it matters.</span>
+      </h1>
+      <aside class="hero-side">
+        <p class="lead">We build <em>distinctive</em> websites for local businesses — and place them where the search begins, on <em>Google</em> and the new <em>AI</em> answers.</p>
+      </aside>
+    </div>
+
+    <div class="hero-foot">
+      <div class="big-no">A studio for the overlooked storefront</div>
+      <div class="scroll-cue"><span class="ln"></span>Scroll to view</div>
+    </div>
+  </div>
+</header>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="ix">§ 01</span>
+      <span class="ti">The Practice</span>
+      <span class="label meta">Three disciplines</span>
+    </div>
+
+    <div class="svc-grid">
+      <div class="svc reveal">
+        <div class="num">01</div>
+        <h3>A modern <em>website</em></h3>
+        <p>An editorial, fast, made-to-measure site — built to your trade, not stamped from a template. Yours alone.</p>
+        <span class="tag">Design · Build · Host</span>
+      </div>
+      <div class="svc reveal">
+        <div class="num">02</div>
+        <h3>Found on <em>Google &amp; AI</em></h3>
+        <p>Structured so search engines and AI assistants surface you first when a nearby customer asks the question.</p>
+        <span class="tag">SEO · Schema · Local</span>
+      </div>
+      <div class="svc reveal">
+        <div class="num">03</div>
+        <h3><em>WhatsApp</em> leads</h3>
+        <p>Every visitor a tap away from a real conversation — enquiries land straight in your pocket, not a void.</p>
+        <span class="tag">Capture · Convert · Chat</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORK -->
+<section class="work" id="work">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="ix">§ 02</span>
+      <span class="ti">Selected Work</span>
+      <span class="label meta">The Collection · 2026</span>
+    </div>
+
+    <!-- 01 -->
+    <article class="work-card">
+      <div class="work-row left">
+        <div class="frame reveal-frame">
+          <img src="../v2/noir.png" alt="Noir — restaurant website sample">
+        </div>
+        <div class="work-text reveal">
+          <div class="ix">01</div>
+          <h3>Noir</h3>
+          <span class="kicker">Restaurant · Fine Dining</span>
+          <p>A candlelit, reservation-first identity for an evening kitchen. Menus that breathe, a booking that never sleeps.</p>
+          <div class="specs">
+            <div><div class="k">Trade</div><div class="v">Hospitality</div></div>
+            <div><div class="k">Built in</div><div class="v">9 days</div></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- 02 -->
+    <article class="work-card">
+      <div class="work-row right">
+        <div class="work-text reveal">
+          <div class="ix">02</div>
+          <h3>Forge</h3>
+          <span class="kicker">Trades · Workshop</span>
+          <p>Industrial confidence for a metal workshop — quotes requested, jobs booked, all from a phone on the floor.</p>
+          <div class="specs">
+            <div><div class="k">Trade</div><div class="v">Fabrication</div></div>
+            <div><div class="k">Built in</div><div class="v">11 days</div></div>
+          </div>
+        </div>
+        <div class="frame reveal-frame">
+          <img src="../v2/forge.png" alt="Forge — workshop website sample">
+        </div>
+      </div>
+    </article>
+
+    <!-- 03 -->
+    <article class="work-card">
+      <div class="work-row left">
+        <div class="frame reveal-frame">
+          <img src="../v2/bloom.png" alt="Bloom — florist website sample">
+        </div>
+        <div class="work-text reveal">
+          <div class="ix">03</div>
+          <h3>Bloom</h3>
+          <span class="kicker">Florist · Retail</span>
+          <p>A soft, seasonal storefront for a neighbourhood florist — same-day orders, found by every nearby search.</p>
+          <div class="specs">
+            <div><div class="k">Trade</div><div class="v">Retail</div></div>
+            <div><div class="k">Built in</div><div class="v">7 days</div></div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="cta">
+  <div class="wrap">
+    <div class="cta-wrap reveal">
+      <div class="seal">— By Appointment —</div>
+      <h2>A <span class="it">free</span> preview,<br>before you decide.</h2>
+      <p class="sub">We build a preview of your future site at <strong>no cost</strong>. See it, feel it, then choose. The work earns the engagement — not a contract.</p>
+      <a href="#" class="btn">Request a Preview</a>
+      <div class="guarantee">First enquiry within 14 days — or you pay nothing.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-inner">
+      <div>
+        <div class="fbrand">FoundLocal<span class="dot">.</span></div>
+        <p class="tagline">An atelier building distinctive websites for local businesses, found where the search begins.</p>
+      </div>
+      <div class="cols">
+        <div class="col">
+          <h4>Languages</h4>
+          <div class="langs">
+            <a href="#">EN</a>
+            <a href="#">MS</a>
+            <a href="#">中文</a>
+          </div>
+        </div>
+        <div class="col">
+          <h4>Studio</h4>
+          <a href="#work">Sample Work</a>
+          <a href="#services">Services</a>
+          <a href="#cta">Enquire</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-base">
+      <div>FoundLocal · Kuala Lumpur</div>
+      <div>© 2026 · Atelier № 01</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // THEME — remember + ?theme= override
+  (function(){
+    const html=document.documentElement;
+    const params=new URLSearchParams(location.search);
+    let theme=params.get('theme')||localStorage.getItem('fl-theme')||'light';
+    html.setAttribute('data-theme',theme);
+    const toggle=document.getElementById('themeToggle');
+    toggle.addEventListener('click',()=>{
+      theme=html.getAttribute('data-theme')==='dark'?'light':'dark';
+      html.setAttribute('data-theme',theme);
+      localStorage.setItem('fl-theme',theme);
+    });
+  })();
+
+  // MOTION — refined slow reveals, screenshot-safe
+  window.addEventListener('load',()=>{
+    if(!window.gsap){return;}
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Hero lines — slow, staggered editorial rise
+    const heroLines=document.querySelectorAll('#heroDisplay span');
+    gsap.from(heroLines,{
+      y:46,opacity:0,duration:1.15,ease:'power3.out',stagger:.12,
+      clearProps:'all'
+    });
+
+    // Generic reveals
+    gsap.utils.toArray('.reveal').forEach(el=>{
+      gsap.from(el,{
+        y:30,opacity:0,duration:1,ease:'power2.out',
+        clearProps:'all',
+        scrollTrigger:{trigger:el,start:'top 88%'}
+      });
+    });
+
+    // Framed work — gentle scale + fade
+    gsap.utils.toArray('.reveal-frame').forEach(el=>{
+      gsap.from(el,{
+        y:40,opacity:0,scale:.985,duration:1.2,ease:'power3.out',
+        clearProps:'all',
+        scrollTrigger:{trigger:el,start:'top 86%'}
+      });
+    });
+
+    ScrollTrigger.refresh();
+  });
+
+  // SAFETY NET — force everything visible after 2.5s no matter what
+  setTimeout(()=>{
+    document.querySelectorAll('.reveal,.reveal-frame,#heroDisplay span').forEach(el=>{
+      el.style.opacity='1';
+      el.style.transform='none';
+    });
+  },2500);
+</script>
+</body>
+</html>

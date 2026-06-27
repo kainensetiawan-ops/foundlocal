@@ -1,0 +1,123 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#222}
+.cover{width:1280px;height:769px;position:relative;overflow:hidden;background:#08080b;font-family:'Inter',sans-serif;color:#f4f1ea;margin:0 0 24px}
+.aur{position:absolute;inset:-25%;z-index:0;filter:blur(85px);opacity:.55}
+.aur i{position:absolute;border-radius:50%;mix-blend-mode:screen}
+.x1{width:520px;height:520px;left:-60px;top:-80px}
+.x2{width:560px;height:560px;right:-90px;top:60px}
+.x3{width:480px;height:480px;left:28%;bottom:-160px}
+.x4{width:420px;height:420px;right:6%;bottom:-90px}
+/* accent themes */
+.amber .x1{background:radial-gradient(circle,#ff9a5a,transparent 60%)} .amber .x2{background:radial-gradient(circle,#ffd29e,transparent 60%)} .amber .x3{background:radial-gradient(circle,#ff7d5a,transparent 60%)} .amber .x4{background:radial-gradient(circle,#ffb877,transparent 62%)}
+.rose .x1{background:radial-gradient(circle,#ff5e8a,transparent 60%)} .rose .x2{background:radial-gradient(circle,#c98bff,transparent 60%)} .rose .x3{background:radial-gradient(circle,#ff7d9c,transparent 60%)} .rose .x4{background:radial-gradient(circle,#7d6bff,transparent 62%)}
+.gold .x1{background:radial-gradient(circle,#e8c074,transparent 60%)} .gold .x2{background:radial-gradient(circle,#b8902e,transparent 60%)} .gold .x3{background:radial-gradient(circle,#ffd29e,transparent 60%)} .gold .x4{background:radial-gradient(circle,#8a6a1e,transparent 62%)}
+.teal .x1{background:radial-gradient(circle,#4fd6c4,transparent 60%)} .teal .x2{background:radial-gradient(circle,#5a9bff,transparent 60%)} .teal .x3{background:radial-gradient(circle,#6fe3d2,transparent 60%)} .teal .x4{background:radial-gradient(circle,#7d6bff,transparent 62%)}
+.grain{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:2;width:100%;height:100%;display:flex;align-items:center;padding:0 72px;gap:54px}
+.brandtag{position:absolute;top:40px;left:72px;z-index:3;font-family:'Fraunces',serif;font-weight:500;font-size:24px;letter-spacing:-.01em;color:#fff}
+.brandtag b{font-style:italic;font-weight:400}
+.eyebrow{font-family:'Space Mono',monospace;font-size:15px;letter-spacing:.22em;text-transform:uppercase;color:#a8a49b;margin-bottom:18px}
+.h{font-family:'Fraunces',serif;font-weight:500;font-size:62px;line-height:1.04;letter-spacing:-.015em;color:#fff;margin-bottom:20px}
+.h em{font-style:italic}
+.amber .h em{color:#ffc596}.rose .h em{color:#ffabc2}.gold .h em{color:#f0d39a}.teal .h em{color:#8ff0e2}
+.sub{font-size:21px;color:#cfcabf;font-weight:400;max-width:430px;line-height:1.5}
+.chips{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.chip{font-family:'Space Mono',monospace;font-size:14px;color:#e7e2d8;border:1px solid rgba(244,241,234,.2);border-radius:30px;padding:8px 16px}
+.left{flex:1;min-width:0}
+.win{flex:0 0 600px;border-radius:14px;overflow:hidden;border:1px solid rgba(244,241,234,.16);background:#0d0d12;box-shadow:0 50px 110px rgba(0,0,0,.6);transform:rotate(-1.2deg)}
+.bar{height:40px;background:#15151c;display:flex;align-items:center;gap:8px;padding:0 16px;border-bottom:1px solid rgba(244,241,234,.14)}
+.d{width:11px;height:11px;border-radius:50%;background:#3a3a44}
+.u{margin-left:14px;font-family:'Space Mono',monospace;font-size:12px;color:#8a8692;background:#0d0d12;border-radius:30px;padding:5px 18px}
+.vp{width:100%;height:420px;overflow:hidden}
+.vp img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+/* google mock */
+.gmock{flex:0 0 600px;background:#fff;border-radius:16px;padding:30px 34px;color:#202124;font-family:Arial,sans-serif;box-shadow:0 50px 110px rgba(0,0,0,.5)}
+.gbar{display:flex;align-items:center;border:1px solid #dfe1e5;border-radius:30px;padding:12px 20px;font-size:18px;color:#5f6368;margin-bottom:24px;box-shadow:0 1px 6px rgba(32,33,36,.1)}
+.gbar .mag{margin-left:auto;color:#4285f4;font-weight:700}
+.gres{padding:14px 0;border-bottom:1px solid #eee}
+.gres.top{background:#f1f8f4;border:1px solid #cdebd6;border-radius:12px;padding:16px;margin-bottom:10px}
+.gpin{font-size:13px;color:#1a73e8}
+.gtitle{font-size:21px;color:#1a0dab;font-weight:500;margin:3px 0}
+.gstars{color:#fbbc05;font-size:16px}.gstars span{color:#70757a;font-size:14px}
+.gurl{font-size:14px;color:#0f9d58;margin-top:2px}
+.gfaint{height:12px;background:#eee;border-radius:6px;margin:9px 0;width:90%}
+.gfaint.s{width:60%}
+.badge{display:inline-block;background:#34a853;color:#fff;font-size:12px;font-weight:700;border-radius:6px;padding:3px 9px;margin-bottom:6px}
+</style></head><body>
+
+<!-- 1. BUSINESS WEBSITE -->
+<div class="cover amber" id="c1">
+  <div class="aur"><i class="x1"></i><i class="x2"></i><i class="x3"></i><i class="x4"></i></div><div class="grain"></div>
+  <div class="brandtag">Found<b>Local</b></div>
+  <div class="wrap">
+    <div class="left">
+      <div class="eyebrow">Web Design</div>
+      <div class="h">Modern business<br>websites that <em>convert</em></div>
+      <div class="sub">Hand-coded, lightning fast, and built around your business — not a recycled template.</div>
+      <div class="chips"><span class="chip">Hand-coded</span><span class="chip">Mobile-first</span><span class="chip">Fast loading</span></div>
+    </div>
+    <div class="win"><div class="bar"><span class="d"></span><span class="d"></span><span class="d"></span><span class="u">yourbusiness.com</span></div><div class="vp"><img src="assets/site-forge.png"></div></div>
+  </div>
+</div>
+
+<!-- 2. LANDING PAGE -->
+<div class="cover rose" id="c2">
+  <div class="aur"><i class="x1"></i><i class="x2"></i><i class="x3"></i><i class="x4"></i></div><div class="grain"></div>
+  <div class="brandtag">Found<b>Local</b></div>
+  <div class="wrap">
+    <div class="left">
+      <div class="eyebrow">Landing Pages</div>
+      <div class="h">High-converting<br>landing <em>pages</em></div>
+      <div class="sub">One page, one goal — designed to turn clicks into leads and customers.</div>
+      <div class="chips"><span class="chip">Clear CTA</span><span class="chip">Lead form</span><span class="chip">Responsive</span></div>
+    </div>
+    <div class="win"><div class="bar"><span class="d"></span><span class="d"></span><span class="d"></span><span class="u">getmoreleads.com</span></div><div class="vp"><img src="assets/site-bloom.png"></div></div>
+  </div>
+</div>
+
+<!-- 3. RESTAURANT WEBSITE -->
+<div class="cover gold" id="c3">
+  <div class="aur"><i class="x1"></i><i class="x2"></i><i class="x3"></i><i class="x4"></i></div><div class="grain"></div>
+  <div class="brandtag">Found<b>Local</b></div>
+  <div class="wrap">
+    <div class="left">
+      <div class="eyebrow">Restaurant & Cafe</div>
+      <div class="h">Restaurant sites<br>with <em>online menu</em></div>
+      <div class="sub">Menu, table booking, gallery and map — a site that fills tables.</div>
+      <div class="chips"><span class="chip">Online menu</span><span class="chip">Table booking</span><span class="chip">Mobile-first</span></div>
+    </div>
+    <div class="win"><div class="bar"><span class="d"></span><span class="d"></span><span class="d"></span><span class="u">maisonnoir.site</span></div><div class="vp"><img src="assets/site-noir.png"></div></div>
+  </div>
+</div>
+
+<!-- 4. GET FOUND ON GOOGLE -->
+<div class="cover teal" id="c4">
+  <div class="aur"><i class="x1"></i><i class="x2"></i><i class="x3"></i><i class="x4"></i></div><div class="grain"></div>
+  <div class="brandtag">Found<b>Local</b></div>
+  <div class="wrap">
+    <div class="left">
+      <div class="eyebrow">Get Found</div>
+      <div class="h">Get found on<br>Google <em>locally</em></div>
+      <div class="sub">Show up when customers near you search — and turn searches into walk-ins.</div>
+      <div class="chips"><span class="chip">Local SEO</span><span class="chip">Google Maps</span><span class="chip">More calls</span></div>
+    </div>
+    <div class="gmock">
+      <div class="gbar">plumber near me<span class="mag">🔍</span></div>
+      <div class="gres top">
+        <span class="badge">★ Top result</span>
+        <div class="gpin">📍 Your Business · 0.4 mi · Open now</div>
+        <div class="gtitle">Your Local Business</div>
+        <div class="gstars">★★★★★ <span>(128 reviews)</span></div>
+        <div class="gurl">yourbusiness.com</div>
+      </div>
+      <div class="gres"><div class="gtitle" style="font-size:17px">A competitor</div><div class="gfaint"></div><div class="gfaint s"></div></div>
+      <div class="gres"><div class="gtitle" style="font-size:17px">Another competitor</div><div class="gfaint"></div><div class="gfaint s"></div></div>
+    </div>
+  </div>
+</div>
+
+</body></html>

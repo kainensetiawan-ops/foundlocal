@@ -1,0 +1,11 @@
+import fs from 'fs';
+import {chromium} from 'playwright';
+const L=m=>fs.appendFileSync('/tmp/tr.txt',m+' @'+Date.now()+'\n');
+fs.writeFileSync('/tmp/tr.txt','');
+const b=await chromium.launch(); L('launched');
+const p=await(await b.newContext({viewport:{width:1920,height:1080}})).newPage();
+await p.goto('file:///Users/kynansetiawan/foundlocal-portfolio/promo.html#cap',{waitUntil:'load'}); L('loaded');
+await p.screenshot({path:'/tmp/sc1.png'}); L('shotA-no-time OK');
+await p.evaluate(t=>window.__tl.time(t,true),3.5); L('timed OK');
+await p.screenshot({path:'/tmp/sc2.png'}); L('shotB-after-time OK');
+await b.close(); L('done');

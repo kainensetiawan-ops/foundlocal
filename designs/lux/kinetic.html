@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FoundLocal — Get Found. Locally.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;700&family=Archivo:wght@800;900&display=swap" rel="stylesheet">
+<style>
+/* ============ KINETIC — bold typographic statement ============
+   Acid-lime signature. The type IS the design. Brutalist-luxe.
+   LIGHT = off-white #f7f6f2 / black type / lime accent
+   DARK  = true black #000 / off-white type / lime GLOWS
+   ============================================================ */
+
+:root[data-theme="light"]{
+  --bg:#f7f6f2;
+  --ink:#0a0a0a;
+  --ink-soft:#42413c;
+  --line:#0a0a0a;
+  --line-soft:rgba(10,10,10,.14);
+  --acid:#c6f000;          /* electric chartreuse */
+  --acid-ink:#0a0a0a;      /* text on acid */
+  --panel:#ffffff;
+  --panel-ink:#0a0a0a;
+  --inverse-bg:#0a0a0a;
+  --inverse-ink:#f7f6f2;
+  --glow:none;
+  --frame:#0a0a0a;
+  --noise-op:.05;
+}
+:root[data-theme="dark"]{
+  --bg:#000000;
+  --ink:#f4f3ee;
+  --ink-soft:#9c9b94;
+  --line:#f4f3ee;
+  --line-soft:rgba(244,243,238,.18);
+  --acid:#d4ff00;          /* glowing acid */
+  --acid-ink:#000000;
+  --panel:#0c0c0c;
+  --panel-ink:#f4f3ee;
+  --inverse-bg:#d4ff00;
+  --inverse-ink:#000000;
+  --glow:0 0 38px rgba(212,255,0,.45);
+  --frame:#2a2a2a;
+  --noise-op:.07;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Space Grotesk',sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  transition:background-color .55s ease, color .55s ease;
+}
+/* every theme-aware surface eases */
+.themed{transition:background-color .55s ease, color .55s ease, border-color .55s ease, box-shadow .55s ease;}
+
+::selection{background:var(--acid);color:var(--acid-ink);}
+
+/* grain overlay */
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;
+  opacity:var(--noise-op);mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  transition:opacity .55s ease;
+}
+:root[data-theme="dark"] body::after{mix-blend-mode:screen;}
+
+/* ---------- type ---------- */
+.anton{font-family:'Anton',sans-serif;font-weight:400;text-transform:uppercase;line-height:.82;letter-spacing:-.01em;}
+.archivo{font-family:'Archivo',sans-serif;font-weight:900;}
+.mono-label{font-family:'Space Grotesk',sans-serif;font-weight:500;text-transform:uppercase;letter-spacing:.34em;font-size:11px;}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+.fullbleed{width:100%;padding:0 32px;}
+
+/* ---------- NAV ---------- */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 32px;
+  background:color-mix(in srgb, var(--bg) 80%, transparent);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line-soft);
+}
+.brand{font-family:'Anton',sans-serif;text-transform:uppercase;font-size:21px;letter-spacing:.02em;display:flex;align-items:center;gap:9px;}
+.brand .dot{width:11px;height:11px;background:var(--acid);border-radius:50%;box-shadow:var(--glow);transition:background-color .55s ease, box-shadow .55s ease;}
+.nav-right{display:flex;align-items:center;gap:26px;}
+.nav-links{display:flex;gap:26px;}
+.nav-links a{color:var(--ink);text-decoration:none;font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:.16em;position:relative;padding-bottom:3px;}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1.5px;background:var(--acid);transition:width .3s ease;}
+.nav-links a:hover::after{width:100%;}
+
+.toggle{
+  position:relative;width:60px;height:30px;border:1.5px solid var(--line);
+  border-radius:30px;background:transparent;cursor:pointer;flex:none;
+  transition:border-color .55s ease;
+}
+.toggle .knob{
+  position:absolute;top:2.5px;left:2.5px;width:23px;height:23px;border-radius:50%;
+  background:var(--acid);box-shadow:var(--glow);
+  display:grid;place-items:center;font-size:11px;color:var(--acid-ink);
+  transition:transform .4s cubic-bezier(.7,0,.2,1), background-color .55s ease, box-shadow .55s ease;
+}
+:root[data-theme="dark"] .toggle .knob{transform:translateX(30px);}
+.toggle .knob::before{content:"☀";}
+:root[data-theme="dark"] .toggle .knob::before{content:"☾";}
+
+@media(max-width:760px){.nav-links{display:none}}
+
+/* ---------- HERO ---------- */
+.hero{padding:170px 0 70px;position:relative;}
+.hero-meta{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid var(--line-soft);padding-bottom:18px;margin-bottom:46px;}
+.hero-meta .loc{color:var(--ink-soft);}
+.hero-stack{position:relative;}
+.hero-line{display:block;}
+.h-mega{font-size:clamp(72px,15.2vw,210px);}
+.hero-found{position:relative;display:inline-block;}
+.hero-found .bar{position:absolute;left:-2%;right:-2%;top:42%;height:16%;background:var(--acid);z-index:-1;transform:skewY(-1.5deg);transition:background-color .55s ease;}
+.hero-found2{color:var(--ink);}
+.hero-row2{display:flex;align-items:flex-end;gap:28px;flex-wrap:wrap;}
+
+.hero-bottom{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;margin-top:54px;align-items:end;}
+.hero-sub{font-size:clamp(17px,2vw,21px);line-height:1.5;max-width:30ch;color:var(--ink-soft);}
+.hero-sub b{color:var(--ink);font-weight:700;}
+.hero-cta-wrap{display:flex;flex-direction:column;align-items:flex-start;gap:16px;}
+.btn-acid{
+  display:inline-flex;align-items:center;gap:14px;
+  background:var(--acid);color:var(--acid-ink);
+  font-family:'Archivo',sans-serif;font-weight:900;text-transform:uppercase;
+  font-size:15px;letter-spacing:.04em;
+  padding:19px 30px;border:none;cursor:pointer;text-decoration:none;
+  box-shadow:var(--glow);
+  transition:transform .25s cubic-bezier(.7,0,.2,1), background-color .55s ease, box-shadow .55s ease;
+}
+.btn-acid:hover{transform:translate(-3px,-3px);}
+.btn-acid .arr{font-size:18px;}
+.hero-note{font-size:12px;color:var(--ink-soft);letter-spacing:.04em;}
+
+@media(max-width:760px){.hero-bottom{grid-template-columns:1fr;gap:28px}}
+
+/* ---------- TICKER (static, NO marquee) ---------- */
+.statband{
+  background:var(--inverse-bg);color:var(--inverse-ink);
+  margin-top:74px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+}
+.statband .wrap{display:grid;grid-template-columns:repeat(3,1fr);}
+.stat{padding:42px 26px;border-right:1px solid var(--line-soft);}
+.stat:last-child{border-right:none;}
+.stat .num{font-family:'Anton',sans-serif;font-size:clamp(44px,6vw,76px);line-height:.9;color:var(--acid);text-shadow:var(--glow);}
+.stat .cap{margin-top:10px;font-size:12px;text-transform:uppercase;letter-spacing:.2em;opacity:.75;}
+@media(max-width:760px){.statband .wrap{grid-template-columns:1fr}.stat{border-right:none;border-bottom:1px solid var(--line-soft)}}
+
+/* ---------- SECTION HEAD ---------- */
+.sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:50px;}
+.sec-idx{font-family:'Archivo',sans-serif;font-weight:900;font-size:14px;color:var(--acid);}
+.sec-title{font-size:clamp(40px,7vw,92px);}
+
+/* ---------- SERVICES ---------- */
+.services{padding:110px 0 30px;}
+.svc-list{border-top:1px solid var(--line);}
+.svc{
+  display:grid;grid-template-columns:90px 1fr auto;gap:30px;align-items:center;
+  padding:38px 8px;border-bottom:1px solid var(--line-soft);position:relative;cursor:default;
+  transition:padding-left .35s cubic-bezier(.7,0,.2,1), background-color .55s ease, border-color .55s ease;
+}
+.svc::before{content:"";position:absolute;left:0;top:0;bottom:0;width:0;background:var(--acid);transition:width .35s cubic-bezier(.7,0,.2,1);}
+.svc:hover{padding-left:34px;}
+.svc:hover::before{width:7px;}
+.svc-no{font-family:'Archivo',sans-serif;font-weight:900;font-size:15px;color:var(--ink-soft);}
+.svc-name{font-family:'Anton',sans-serif;text-transform:uppercase;font-size:clamp(28px,4.4vw,52px);line-height:.92;}
+.svc-name .acc{color:var(--acid);-webkit-text-stroke:0;}
+:root[data-theme="dark"] .svc-name .acc{text-shadow:var(--glow);}
+.svc-desc{font-size:15px;color:var(--ink-soft);max-width:34ch;line-height:1.45;justify-self:end;text-align:right;}
+@media(max-width:760px){.svc{grid-template-columns:1fr;gap:12px;text-align:left}.svc-desc{justify-self:start;text-align:left}}
+
+/* ---------- WORK ---------- */
+.work{padding:120px 0 60px;}
+.work-grid{display:flex;flex-direction:column;gap:120px;}
+.piece{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center;}
+.piece:nth-child(even){direction:rtl;}
+.piece:nth-child(even) > *{direction:ltr;}
+.piece-frame{
+  position:relative;background:var(--panel);border:1px solid var(--frame);
+  padding:18px;overflow:hidden;
+  box-shadow:0 30px 60px -30px rgba(0,0,0,.35);
+  transition:background-color .55s ease, border-color .55s ease;
+}
+.piece-frame .shot{
+  width:100%;display:block;height:430px;object-fit:cover;object-position:top center;
+  border:1px solid var(--line-soft);
+}
+.piece-tag{
+  position:absolute;top:18px;left:18px;z-index:3;
+  background:var(--acid);color:var(--acid-ink);
+  font-family:'Archivo',sans-serif;font-weight:900;font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;padding:7px 13px;box-shadow:var(--glow);
+}
+.piece-info .pidx{font-family:'Archivo',sans-serif;font-weight:900;color:var(--acid);font-size:14px;margin-bottom:14px;}
+.piece-info h3{font-family:'Anton',sans-serif;text-transform:uppercase;font-size:clamp(40px,6.4vw,82px);line-height:.86;margin-bottom:20px;}
+.piece-info p{font-size:16px;line-height:1.55;color:var(--ink-soft);max-width:38ch;margin-bottom:24px;}
+.piece-meta{display:flex;gap:22px;flex-wrap:wrap;border-top:1px solid var(--line-soft);padding-top:18px;}
+.piece-meta span{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--ink-soft);}
+.piece-meta b{color:var(--ink);font-weight:700;}
+@media(max-width:860px){.piece,.piece:nth-child(even){grid-template-columns:1fr;direction:ltr;gap:26px}.piece-frame .shot{height:300px}}
+
+/* ---------- CTA ---------- */
+.cta{
+  margin:130px 0 0;background:var(--inverse-bg);color:var(--inverse-ink);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  padding:100px 0;position:relative;overflow:hidden;
+  transition:background-color .55s ease, color .55s ease, border-color .55s ease;
+}
+.cta .wrap{position:relative;z-index:2;}
+.cta-kicker{color:var(--acid);text-shadow:var(--glow);margin-bottom:26px;}
+.cta h2{font-family:'Anton',sans-serif;text-transform:uppercase;font-size:clamp(50px,10vw,150px);line-height:.84;margin-bottom:14px;}
+.cta h2 .pay{color:var(--acid);text-shadow:var(--glow);}
+.cta-sub{font-size:clamp(17px,2vw,22px);max-width:44ch;margin:30px 0 40px;opacity:.86;line-height:1.5;}
+.cta-row{display:flex;gap:18px;align-items:center;flex-wrap:wrap;}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:12px;
+  border:1.5px solid var(--inverse-ink);color:var(--inverse-ink);background:transparent;
+  font-family:'Archivo',sans-serif;font-weight:900;text-transform:uppercase;font-size:14px;letter-spacing:.04em;
+  padding:18px 28px;text-decoration:none;cursor:pointer;
+  transition:background-color .25s ease, color .25s ease;
+}
+.btn-ghost:hover{background:var(--inverse-ink);color:var(--inverse-bg);}
+/* giant ghost word behind CTA */
+.cta-bgword{
+  position:absolute;right:-3%;bottom:-12%;font-family:'Anton',sans-serif;text-transform:uppercase;
+  font-size:clamp(160px,30vw,440px);line-height:.7;color:transparent;
+  -webkit-text-stroke:1.5px var(--line-soft);z-index:1;pointer-events:none;user-select:none;
+}
+
+/* ---------- FOOTER ---------- */
+footer{padding:70px 0 40px;}
+.foot-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:40px;border-bottom:1px solid var(--line-soft);padding-bottom:40px;}
+.foot-brand{font-family:'Anton',sans-serif;text-transform:uppercase;font-size:clamp(46px,9vw,118px);line-height:.84;}
+.foot-brand .dot{color:var(--acid);text-shadow:var(--glow);}
+.foot-cols{display:flex;gap:60px;flex-wrap:wrap;}
+.foot-col h5{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--ink-soft);margin-bottom:16px;}
+.foot-col a{display:block;color:var(--ink);text-decoration:none;font-size:15px;margin-bottom:10px;transition:color .2s ease;}
+.foot-col a:hover{color:var(--acid);}
+.langs{display:flex;gap:12px;}
+.langs a{padding:6px 12px;border:1px solid var(--line-soft);font-size:12px;letter-spacing:.06em;transition:border-color .2s,color .2s;}
+.langs a:hover{border-color:var(--acid);color:var(--acid);}
+.foot-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;padding-top:30px;}
+.foot-bottom span{font-size:12px;color:var(--ink-soft);letter-spacing:.04em;}
+
+/* reveal helpers — visible by default (screenshot-safe) */
+.reveal{opacity:1;}
+.split-line{display:block;overflow:hidden;}
+</style>
+</head>
+<body class="themed">
+
+<!-- NAV -->
+<nav class="themed">
+  <div class="brand">FoundLocal<span class="dot"></span></div>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="#services">Services</a>
+      <a href="#work">Work</a>
+      <a href="#start">Start</a>
+    </div>
+    <button class="toggle" id="themeToggle" aria-label="Toggle theme"><span class="knob"></span></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-meta mono-label reveal">
+      <span>FoundLocal — Studio №01</span>
+      <span class="loc">Built local · Found global</span>
+    </div>
+
+    <div class="hero-stack">
+      <span class="hero-line anton h-mega reveal" data-rv>GET</span>
+      <span class="hero-line anton h-mega reveal" data-rv>
+        <span class="hero-found"><span class="bar"></span>FOUND.</span>
+      </span>
+      <div class="hero-row2">
+        <span class="hero-line anton h-mega hero-found2 reveal" data-rv>LOCALLY</span>
+      </div>
+    </div>
+
+    <div class="hero-bottom">
+      <p class="hero-sub reveal" data-rv>
+        We build the kind of website a local business is <b>proud</b> to share —
+        and we make sure it gets <b>found on Google and AI search</b> when people nearby are looking.
+      </p>
+      <div class="hero-cta-wrap reveal" data-rv>
+        <a href="#start" class="btn-acid">Get a free preview <span class="arr">↗</span></a>
+        <span class="hero-note">No upfront fee · See it before you decide</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- stat band -->
+  <div class="statband themed">
+    <div class="wrap">
+      <div class="stat reveal" data-rv><div class="num">14</div><div class="cap">Day first enquiry — or free</div></div>
+      <div class="stat reveal" data-rv><div class="num">1×</div><div class="cap">Found on Google + AI</div></div>
+      <div class="stat reveal" data-rv><div class="num">∞</div><div class="cap">WhatsApp leads, your phone</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="wrap">
+    <div class="sec-head reveal" data-rv>
+      <span class="sec-idx">(01)</span>
+      <h2 class="sec-title anton">What we do</h2>
+    </div>
+
+    <div class="svc-list">
+      <div class="svc themed reveal" data-rv>
+        <div class="svc-no">001</div>
+        <div class="svc-name">A modern <span class="acc">website</span></div>
+        <div class="svc-desc">Fast, beautiful, mobile-first. Designed so first-time visitors trust you in five seconds.</div>
+      </div>
+      <div class="svc themed reveal" data-rv>
+        <div class="svc-no">002</div>
+        <div class="svc-name">Found on <span class="acc">Google + AI</span></div>
+        <div class="svc-desc">Built to be discovered — in Maps, in search, and in the AI answers people now ask first.</div>
+      </div>
+      <div class="svc themed reveal" data-rv>
+        <div class="svc-no">003</div>
+        <div class="svc-name">Leads to <span class="acc">WhatsApp</span></div>
+        <div class="svc-desc">Every enquiry lands straight in your phone. One tap to reply, no inbox to babysit.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORK -->
+<section class="work" id="work">
+  <div class="wrap">
+    <div class="sec-head reveal" data-rv>
+      <span class="sec-idx">(02)</span>
+      <h2 class="sec-title anton">Selected work</h2>
+    </div>
+
+    <div class="work-grid">
+
+      <!-- NOIR -->
+      <article class="piece">
+        <div class="piece-frame themed reveal" data-rv>
+          <span class="piece-tag">Hospitality</span>
+          <img class="shot" src="../v2/noir.png" alt="Noir — restaurant website sample">
+        </div>
+        <div class="piece-info reveal" data-rv>
+          <div class="pidx">Piece 001 — NOIR</div>
+          <h3>Noir</h3>
+          <p>A late-night restaurant given a cinematic black-and-gold identity. Reservations, menu and story — all engineered to rank for "best dinner near me."</p>
+          <div class="piece-meta">
+            <span>Type / <b>Restaurant</b></span>
+            <span>Build / <b>Site + SEO</b></span>
+            <span>Found / <b>Maps + AI</b></span>
+          </div>
+        </div>
+      </article>
+
+      <!-- FORGE -->
+      <article class="piece">
+        <div class="piece-frame themed reveal" data-rv>
+          <span class="piece-tag">Trade</span>
+          <img class="shot" src="../v2/forge.png" alt="Forge — trade & services website sample">
+        </div>
+        <div class="piece-info reveal" data-rv>
+          <div class="pidx">Piece 002 — FORGE</div>
+          <h3>Forge</h3>
+          <p>An industrial workshop with a bold, no-nonsense presence. Built so local customers find them first — and message in seconds.</p>
+          <div class="piece-meta">
+            <span>Type / <b>Workshop</b></span>
+            <span>Build / <b>Site + Leads</b></span>
+            <span>Found / <b>Google #1</b></span>
+          </div>
+        </div>
+      </article>
+
+      <!-- BLOOM -->
+      <article class="piece">
+        <div class="piece-frame themed reveal" data-rv>
+          <span class="piece-tag">Wellness</span>
+          <img class="shot" src="../v2/bloom.png" alt="Bloom — wellness & beauty website sample">
+        </div>
+        <div class="piece-info reveal" data-rv>
+          <div class="pidx">Piece 003 — BLOOM</div>
+          <h3>Bloom</h3>
+          <p>A florist & wellness studio with a soft, editorial feel. Online bookings flow straight to WhatsApp, with full visibility across AI search.</p>
+          <div class="piece-meta">
+            <span>Type / <b>Wellness</b></span>
+            <span>Build / <b>Site + Booking</b></span>
+            <span>Found / <b>AI + Maps</b></span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta themed" id="start">
+  <div class="cta-bgword">FOUND</div>
+  <div class="wrap">
+    <div class="mono-label cta-kicker reveal" data-rv>(03) — The offer</div>
+    <h2 class="reveal" data-rv>Free preview.<br>First enquiry in 14 days<br>or you <span class="pay">pay nothing.</span></h2>
+    <p class="cta-sub reveal" data-rv>We design your new site, get you found, and show you the real thing — before any money changes hands. If it doesn't bring an enquiry in two weeks, it's on us.</p>
+    <div class="cta-row reveal" data-rv>
+      <a href="#" class="btn-acid">Claim my free preview <span class="arr">↗</span></a>
+      <a href="#work" class="btn-ghost">See sample work</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand reveal" data-rv>Found<br>Local<span class="dot">.</span></div>
+      <div class="foot-cols">
+        <div class="foot-col">
+          <h5>Studio</h5>
+          <a href="#services">Services</a>
+          <a href="#work">Sample work</a>
+          <a href="#start">Free preview</a>
+        </div>
+        <div class="foot-col">
+          <h5>Languages</h5>
+          <div class="langs">
+            <a href="#">EN</a>
+            <a href="#">MS</a>
+            <a href="#">中文</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 FoundLocal — Built local. Found global.</span>
+      <span>Get found on Google &amp; AI · Leads to WhatsApp</span>
+    </div>
+  </div>
+</footer>
+
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+/* ---------- THEME ---------- */
+(function(){
+  const root=document.documentElement;
+  const params=new URLSearchParams(location.search);
+  let saved=null; try{saved=localStorage.getItem('fl-theme');}catch(e){}
+  const initial = params.get('theme') || saved || 'light';
+  root.setAttribute('data-theme', initial==='dark'?'dark':'light');
+  const btn=document.getElementById('themeToggle');
+  btn.addEventListener('click',()=>{
+    const next = root.getAttribute('data-theme')==='dark'?'light':'dark';
+    root.setAttribute('data-theme',next);
+    try{localStorage.setItem('fl-theme',next);}catch(e){}
+  });
+})();
+
+/* ---------- MOTION (screenshot-safe) ---------- */
+(function(){
+  if(!window.gsap){return;}
+  gsap.registerPlugin(ScrollTrigger);
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){return;}
+
+  // Hero mega lines — kinetic clip-up reveal
+  gsap.set('[data-rv]',{willChange:'transform,opacity'});
+
+  const heroLines=gsap.utils.toArray('.hero-stack [data-rv]');
+  gsap.from(heroLines,{
+    yPercent:115, opacity:0, duration:1.05, ease:'power4.out', stagger:0.09,
+    onComplete:()=>gsap.set(heroLines,{clearProps:'all'})
+  });
+
+  // hero secondary
+  gsap.from('.hero-bottom [data-rv]',{
+    y:34, opacity:0, duration:.9, ease:'power3.out', stagger:.12, delay:.45,
+    onComplete:function(){gsap.set('.hero-bottom [data-rv]',{clearProps:'all'});}
+  });
+  gsap.from('.hero-meta',{opacity:0,duration:.8,ease:'power2.out',
+    onComplete:function(){gsap.set('.hero-meta',{clearProps:'all'});}});
+
+  // stat numbers count-ish pop
+  gsap.utils.toArray('.stat[data-rv]').forEach(function(el){
+    gsap.from(el,{
+      y:40,opacity:0,duration:.8,ease:'power3.out',
+      scrollTrigger:{trigger:el,start:'top 88%'},
+      onComplete:function(){gsap.set(el,{clearProps:'all'});}
+    });
+  });
+
+  // scroll reveals (generic)
+  function scrollReveal(sel,opts){
+    gsap.utils.toArray(sel).forEach(function(el){
+      gsap.from(el,Object.assign({
+        y:48,opacity:0,duration:.9,ease:'power3.out',
+        scrollTrigger:{trigger:el,start:'top 86%'},
+        onComplete:function(){gsap.set(el,{clearProps:'all'});}
+      },opts||{}));
+    });
+  }
+
+  scrollReveal('.sec-head[data-rv]');
+  scrollReveal('.svc[data-rv]',{x:-40,y:0,stagger:0});
+  scrollReveal('.piece-frame[data-rv]',{y:64,scale:.98});
+  scrollReveal('.piece-info[data-rv]',{y:50});
+  scrollReveal('.cta-kicker[data-rv]');
+  scrollReveal('.cta h2[data-rv]',{y:60});
+  scrollReveal('.cta-sub[data-rv]');
+  scrollReveal('.cta-row[data-rv]');
+  scrollReveal('.foot-brand[data-rv]',{y:60});
+
+  // parallax on the giant ghost word
+  gsap.to('.cta-bgword',{yPercent:-18,ease:'none',
+    scrollTrigger:{trigger:'.cta',start:'top bottom',end:'bottom top',scrub:.6}});
+
+  // SAFETY NET — guarantee everything visible after 2.5s
+  setTimeout(function(){
+    gsap.set('[data-rv]',{clearProps:'all',opacity:1,x:0,y:0,yPercent:0,scale:1});
+  },2500);
+
+  ScrollTrigger.refresh();
+})();
+</script>
+</body>
+</html>

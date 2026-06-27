@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en" data-theme="foundlocal">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FoundLocal — Websites that get local businesses found</title>
+  <meta name="description" content="FoundLocal builds modern websites for local businesses and gets them found on Google & AI search. Free preview — first enquiry in 14 days or you pay nothing." />
+
+  <!-- Fonts: Inter (body/UI) + Playfair Display (display serif) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
+
+  <!-- Tailwind + DaisyUI (CDN, no build step) -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['"Playfair Display"', 'Georgia', 'serif'],
+          },
+          colors: {
+            ink:    '#14110f',
+            ivory:  '#f6f1e9',
+            amber:  '#c8772e',
+            stone:  '#8a8178',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- GSAP + ScrollTrigger + Lenis -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+  <style>
+    :root { color-scheme: dark; }
+    html { scroll-behavior: auto; }
+    body {
+      background-color: #14110f;
+      color: #f6f1e9;
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    .font-display { font-family: 'Playfair Display', Georgia, serif; }
+
+    /* The ONE wow moment: a soft warm mesh behind the hero */
+    .hero-mesh {
+      background:
+        radial-gradient(60% 50% at 18% 12%, rgba(200,119,46,0.28) 0%, transparent 60%),
+        radial-gradient(50% 45% at 88% 8%, rgba(200,119,46,0.16) 0%, transparent 55%),
+        radial-gradient(80% 70% at 50% 110%, rgba(120,90,60,0.20) 0%, transparent 60%);
+    }
+    .grain {
+      position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.05;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* Reveal: content is VISIBLE by default. GSAP only nudges from a subtle offset.
+       If JS never runs (or a screenshot fires early), everything still shows. */
+    .reveal { opacity: 1; }
+
+    .eyebrow {
+      font-size: 0.72rem; letter-spacing: 0.32em; text-transform: uppercase;
+      color: #c8772e; font-weight: 600;
+    }
+    .hairline { border-color: rgba(246,241,233,0.10); }
+    .card-img { filter: saturate(1.02) contrast(1.02); }
+    .work-card { transition: transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .5s ease; }
+    .work-card:hover { transform: translateY(-6px); box-shadow: 0 30px 60px -30px rgba(0,0,0,.7); }
+    .btn-amber {
+      background: #c8772e; color: #14110f; border: none;
+      transition: transform .25s ease, box-shadow .25s ease, filter .25s ease;
+    }
+    .btn-amber:hover { filter: brightness(1.06); transform: translateY(-2px); box-shadow: 0 14px 34px -14px rgba(200,119,46,.7); }
+    .btn-ghost-ivory { border: 1px solid rgba(246,241,233,0.22); color: #f6f1e9; transition: border-color .25s ease, background .25s ease; }
+    .btn-ghost-ivory:hover { border-color: rgba(246,241,233,0.5); background: rgba(246,241,233,0.04); }
+    ::selection { background: #c8772e; color: #14110f; }
+  </style>
+</head>
+
+<body class="font-sans antialiased">
+  <div class="grain"></div>
+
+  <!-- NAV -->
+  <header class="fixed top-0 inset-x-0 z-40">
+    <div class="mx-auto max-w-6xl px-6 md:px-8">
+      <nav class="mt-4 flex items-center justify-between rounded-full border hairline bg-ink/60 backdrop-blur-md px-5 py-3">
+        <a href="#top" class="font-display text-lg tracking-tight text-ivory">Found<span class="text-amber">Local</span></a>
+        <div class="hidden md:flex items-center gap-8 text-sm text-ivory/70">
+          <a href="#services" class="hover:text-ivory transition">Services</a>
+          <a href="#work" class="hover:text-ivory transition">Work</a>
+          <a href="#cta" class="hover:text-ivory transition">Get found</a>
+        </div>
+        <a href="#cta" class="btn-amber btn btn-sm rounded-full px-5 font-semibold normal-case">Free preview</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section id="top" class="relative overflow-hidden">
+    <div class="hero-mesh absolute inset-0"></div>
+    <div class="relative z-10 mx-auto max-w-6xl px-6 md:px-8 pt-44 pb-28 md:pt-52 md:pb-36">
+      <p class="eyebrow reveal" data-reveal>Web design for local business</p>
+      <h1 class="reveal mt-6 font-display text-[2.7rem] leading-[1.05] sm:text-6xl md:text-[5.2rem] md:leading-[0.98] text-ivory">
+        <span class="block" data-hero-line>Get found by the</span>
+        <span class="block" data-hero-line>customers <span class="italic text-amber">already</span></span>
+        <span class="block" data-hero-line>searching for you.</span>
+      </h1>
+      <p class="reveal mt-8 max-w-xl text-lg leading-relaxed text-ivory/70" data-reveal>
+        We build beautiful, fast websites for local businesses — then get you ranked on Google
+        and surfaced by AI search, so the right people find you first.
+      </p>
+      <div class="reveal mt-10 flex flex-wrap items-center gap-4" data-reveal>
+        <a href="#cta" class="btn-amber btn rounded-full px-7 font-semibold normal-case text-base">Get a free preview</a>
+        <a href="#work" class="btn-ghost-ivory btn btn-outline rounded-full px-7 normal-case text-base bg-transparent">See the work</a>
+      </div>
+      <div class="reveal mt-14 flex flex-wrap items-center gap-x-10 gap-y-4 text-sm text-ivory/55" data-reveal>
+        <span>Built for Google + AI search</span>
+        <span class="hidden sm:inline text-ivory/20">/</span>
+        <span>WhatsApp lead capture</span>
+        <span class="hidden sm:inline text-ivory/20">/</span>
+        <span>English · Malay · 中文</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" class="relative z-10 mx-auto max-w-6xl px-6 md:px-8 py-24 md:py-32">
+    <div class="reveal flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14" data-reveal>
+      <div>
+        <p class="eyebrow">What I do</p>
+        <h2 class="mt-4 font-display text-4xl md:text-5xl text-ivory leading-tight">Three things, done properly.</h2>
+      </div>
+      <p class="max-w-sm text-ivory/60 leading-relaxed">No bloated templates. A site that loads fast, looks expensive, and turns searches into enquiries.</p>
+    </div>
+
+    <div class="grid gap-px overflow-hidden rounded-3xl border hairline md:grid-cols-3 bg-white/[0.02]">
+      <!-- 1 -->
+      <article class="reveal p-9 md:p-10 hover:bg-white/[0.025] transition" data-reveal>
+        <div class="text-amber text-sm font-semibold tracking-wider">01</div>
+        <h3 class="mt-5 font-display text-2xl text-ivory">A modern website</h3>
+        <p class="mt-4 text-ivory/65 leading-relaxed">Custom-designed, mobile-first, and quick to load. The kind of site that makes a small business look like the obvious choice.</p>
+      </article>
+      <!-- 2 -->
+      <article class="reveal p-9 md:p-10 hover:bg-white/[0.025] transition border-t md:border-t-0 md:border-l hairline" data-reveal>
+        <div class="text-amber text-sm font-semibold tracking-wider">02</div>
+        <h3 class="mt-5 font-display text-2xl text-ivory">Found on Google &amp; AI</h3>
+        <p class="mt-4 text-ivory/65 leading-relaxed">Proper SEO and structured data so you rank on Google Maps and get surfaced by AI assistants when people ask for what you sell.</p>
+      </article>
+      <!-- 3 -->
+      <article class="reveal p-9 md:p-10 hover:bg-white/[0.025] transition border-t md:border-t-0 md:border-l hairline" data-reveal>
+        <div class="text-amber text-sm font-semibold tracking-wider">03</div>
+        <h3 class="mt-5 font-display text-2xl text-ivory">WhatsApp lead capture</h3>
+        <p class="mt-4 text-ivory/65 leading-relaxed">One tap from your site straight into WhatsApp — so an interested visitor becomes a real conversation before they cool off.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section id="work" class="relative z-10 mx-auto max-w-6xl px-6 md:px-8 py-24 md:py-32">
+    <div class="reveal flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14" data-reveal>
+      <div>
+        <p class="eyebrow">Selected work</p>
+        <h2 class="mt-4 font-display text-4xl md:text-5xl text-ivory leading-tight">Sample designs.</h2>
+      </div>
+      <p class="max-w-sm text-ivory/60 leading-relaxed">A taste of the range — fine dining, fitness, and family care. Each built to get the phone ringing.</p>
+    </div>
+
+    <div class="grid gap-7 md:grid-cols-3">
+      <!-- noir -->
+      <figure class="reveal work-card group overflow-hidden rounded-2xl border hairline bg-white/[0.02]" data-reveal>
+        <div class="aspect-[4/5] overflow-hidden">
+          <img src="designs/v2/noir.png" alt="Noir — fine-dining restaurant website design" loading="lazy"
+               class="card-img h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.04]" />
+        </div>
+        <figcaption class="flex items-center justify-between p-6">
+          <div>
+            <h3 class="font-display text-xl text-ivory">Noir</h3>
+            <p class="text-sm text-ivory/55">Fine-dining restaurant</p>
+          </div>
+          <span class="text-amber text-xs tracking-widest uppercase">Sample</span>
+        </figcaption>
+      </figure>
+
+      <!-- forge -->
+      <figure class="reveal work-card group overflow-hidden rounded-2xl border hairline bg-white/[0.02]" data-reveal>
+        <div class="aspect-[4/5] overflow-hidden">
+          <img src="designs/v2/forge.png" alt="Forge — gym and fitness studio website design" loading="lazy"
+               class="card-img h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.04]" />
+        </div>
+        <figcaption class="flex items-center justify-between p-6">
+          <div>
+            <h3 class="font-display text-xl text-ivory">Forge</h3>
+            <p class="text-sm text-ivory/55">Strength &amp; fitness gym</p>
+          </div>
+          <span class="text-amber text-xs tracking-widest uppercase">Sample</span>
+        </figcaption>
+      </figure>
+
+      <!-- bloom -->
+      <figure class="reveal work-card group overflow-hidden rounded-2xl border hairline bg-white/[0.02]" data-reveal>
+        <div class="aspect-[4/5] overflow-hidden">
+          <img src="designs/v2/bloom.png" alt="Bloom — kids' dental clinic website design" loading="lazy"
+               class="card-img h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.04]" />
+        </div>
+        <figcaption class="flex items-center justify-between p-6">
+          <div>
+            <h3 class="font-display text-xl text-ivory">Bloom</h3>
+            <p class="text-sm text-ivory/55">Kids' dental clinic</p>
+          </div>
+          <span class="text-amber text-xs tracking-widest uppercase">Sample</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="cta" class="relative z-10 mx-auto max-w-6xl px-6 md:px-8 pb-28">
+    <div class="reveal relative overflow-hidden rounded-[2rem] border hairline px-8 py-16 md:px-16 md:py-24 text-center" data-reveal
+         style="background:
+           radial-gradient(80% 120% at 50% -20%, rgba(200,119,46,0.22) 0%, transparent 60%),
+           rgba(255,255,255,0.02);">
+      <p class="eyebrow">Free preview</p>
+      <h2 class="mx-auto mt-6 max-w-3xl font-display text-4xl leading-tight text-ivory md:text-6xl md:leading-[1.05]">
+        Your first enquiry within <span class="italic text-amber">14 days</span> — or you pay nothing.
+      </h2>
+      <p class="mx-auto mt-7 max-w-xl text-lg text-ivory/65 leading-relaxed">
+        I'll design a preview of your new site for free. If it doesn't bring you an enquiry in the first two weeks, it costs you nothing. Simple as that.
+      </p>
+      <div class="mt-10 flex flex-wrap justify-center gap-4">
+        <a href="#top" class="btn-amber btn rounded-full px-8 font-semibold normal-case text-base">Claim my free preview</a>
+        <a href="#work" class="btn-ghost-ivory btn btn-outline rounded-full px-8 normal-case text-base bg-transparent">View samples</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="relative z-10 border-t hairline">
+    <div class="mx-auto max-w-6xl px-6 md:px-8 py-12 flex flex-col md:flex-row items-center justify-between gap-6">
+      <a href="#top" class="font-display text-lg text-ivory">Found<span class="text-amber">Local</span></a>
+      <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-ivory/55">
+        <span>English</span><span class="text-ivory/20">·</span>
+        <span>Malay</span><span class="text-ivory/20">·</span>
+        <span>中文</span>
+      </div>
+      <p class="text-xs text-ivory/40">© 2026 FoundLocal · Sample work shown</p>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var hasGSAP = (typeof gsap !== 'undefined') && (typeof ScrollTrigger !== 'undefined');
+
+      // Lenis smooth scroll (buttery momentum) — degrades to native if absent.
+      if (typeof Lenis !== 'undefined' && !reduce) {
+        var lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+        function raf(t){ lenis.raf(t); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+        if (hasGSAP) {
+          lenis.on('scroll', ScrollTrigger.update);
+          gsap.ticker.add(function(time){ lenis.raf(time * 1000); });
+          gsap.ticker.lagSmoothing(0);
+        }
+        // Anchor links through Lenis
+        document.querySelectorAll('a[href^="#"]').forEach(function(a){
+          a.addEventListener('click', function(e){
+            var el = document.querySelector(a.getAttribute('href'));
+            if (el){ e.preventDefault(); lenis.scrollTo(el, { offset: -20 }); }
+          });
+        });
+      }
+
+      if (!hasGSAP || reduce) return; // content already visible; no-op.
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      // HERO headline reveal (SplitText-style, but manual line stagger — enhance only).
+      gsap.from('[data-hero-line]', {
+        yPercent: 110, opacity: 0, duration: 1.0, ease: 'power4.out',
+        stagger: 0.12, delay: 0.15, clearProps: 'all'
+      });
+
+      // Scroll reveals: animate FROM a subtle offset TO the visible resting state.
+      // immediateRender:false + an explicit reset means nothing is parked at opacity:0
+      // before its trigger; clearProps wipes inline styles after, so a late screenshot is safe.
+      gsap.utils.toArray('[data-reveal]').forEach(function(el){
+        gsap.from(el, {
+          y: 26, opacity: 0, duration: 0.9, ease: 'power3.out',
+          clearProps: 'all',
+          scrollTrigger: { trigger: el, start: 'top 88%', once: true }
+        });
+      });
+
+      // Safety net: after libs settle, force everything fully visible regardless of state.
+      setTimeout(function(){
+        document.querySelectorAll('.reveal,[data-reveal],[data-hero-line]').forEach(function(el){
+          el.style.opacity = '1';
+          el.style.transform = 'none';
+        });
+        ScrollTrigger.refresh();
+      }, 2600);
+    });
+  </script>
+</body>
+</html>

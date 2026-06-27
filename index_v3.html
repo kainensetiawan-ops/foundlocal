@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FoundLocal — Get your local business found on Google &amp; AI</title>
+  <meta name="description" content="I build beautiful, fast websites for local businesses and get them found on Google and AI search like ChatGPT. Done-for-you, mobile-first, with WhatsApp lead capture." />
+
+  <!-- Fonts: Sora + Plus Jakarta Sans (headings, rounded/modern) + Inter (body). No serif. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind + DaisyUI (CDN, no build step) -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      corePlugins: { preflight: false },   // let DaisyUI/our CSS own resets; keep utilities
+      theme: {
+        extend: {
+          fontFamily: {
+            sans:    ['Inter', 'system-ui', 'sans-serif'],
+            heading: ['Sora', '"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+          },
+          maxWidth: { content: '1080px' },
+        }
+      }
+    }
+  </script>
+
+  <!-- GSAP + ScrollTrigger + Lenis (enhance-only) -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+  <style>
+    /* ---------- THEME TOKENS (purple is the through-line in both modes) ---------- */
+    :root{
+      --bg:#ffffff; --bg2:#faf9ff; --text:#1d2233; --muted:#697292; --line:#ece9f6;
+      --card:#ffffff; --card-bd:#ece9f6; --card-sh:0 18px 44px rgba(80,60,160,.10);
+      --nav:rgba(255,255,255,.72); --nav-bd:#ece9f6;
+      /* signature purple gradient + warm peach secondary */
+      --grad:linear-gradient(100deg,#7c5cff 0%,#a78bff 40%,#ff8d6b 100%);
+      --btn:linear-gradient(100deg,#7c5cff,#9a6bff 55%,#ff8d6b);
+      --btn-tx:#fff; --btn-sh:0 14px 30px rgba(124,92,255,.32);
+      --chip:#f3f0ff; --chip-tx:#6d4bff;
+      /* gradient-mesh blobs: lavender + violet + peach */
+      --b1:#e7ddff; --b2:#d9ccff; --b3:#ffd9c6; --b-op:.85; --b-blur:80px;
+      color-scheme: light;
+    }
+    [data-theme="dark"]{
+      --bg:#06070d; --bg2:#080912; --text:#eef1fb; --muted:#9aa3c0; --line:rgba(255,255,255,.08);
+      --card:rgba(255,255,255,.045); --card-bd:rgba(255,255,255,.09); --card-sh:0 22px 60px rgba(0,0,0,.6);
+      --nav:rgba(10,11,22,.55); --nav-bd:rgba(255,255,255,.08);
+      /* premium aurora: violet -> magenta, same purple as the through-line */
+      --grad:linear-gradient(100deg,#8a6bff 0%,#b06bff 50%,#ff6bd0 100%);
+      --btn:linear-gradient(100deg,#7c5cff,#a24dff 55%,#ff5fc0);
+      --btn-tx:#fff; --btn-sh:0 0 34px rgba(140,107,255,.55);
+      --chip:rgba(140,120,255,.14); --chip-tx:#b6a6ff;
+      --b1:#5b3cff; --b2:#9a3cff; --b3:#ff3ca0; --b-op:.40; --b-blur:100px;
+      color-scheme: dark;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0; font-family:'Inter',system-ui,sans-serif;
+      background:var(--bg); color:var(--text); line-height:1.6;
+      overflow-x:hidden; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      transition:background .45s ease, color .45s ease;
+    }
+    .font-heading{font-family:'Sora','Plus Jakarta Sans',system-ui,sans-serif}
+
+    /* ---------- THE ONE WOW MOMENT: gradient-mesh / aurora behind everything ---------- */
+    .bg{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+    .bg span{position:absolute;border-radius:50%;filter:blur(var(--b-blur));opacity:var(--b-op);transition:opacity .45s ease,background .45s ease}
+    .bg .a{width:560px;height:560px;background:var(--b1);top:-140px;left:-120px;animation:float 20s ease-in-out infinite}
+    .bg .b{width:600px;height:600px;background:var(--b2);top:120px;right:-180px;animation:float 24s ease-in-out infinite reverse}
+    .bg .c{width:520px;height:520px;background:var(--b3);bottom:-180px;left:34%;animation:float 28s ease-in-out infinite}
+    @keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(34px,-44px)}}
+    @media (prefers-reduced-motion: reduce){ .bg span{animation:none} }
+
+    /* gradient text helper (signature) */
+    .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+    /* ---------- COMPONENTS (tokens drive theming; Tailwind drives layout) ---------- */
+    .nav-wrap{position:sticky;top:0;z-index:30;backdrop-filter:blur(16px);background:var(--nav);border-bottom:1px solid var(--nav-bd)}
+    .logo{font-weight:800;font-size:21px;letter-spacing:-.4px}
+    .toggle{cursor:pointer;border:1px solid var(--card-bd);background:var(--card);width:48px;height:32px;border-radius:32px;font-size:15px;display:flex;align-items:center;justify-content:center;transition:transform .2s ease}
+    .toggle:hover{transform:translateY(-1px)}
+    .nbtn{background:var(--btn);color:var(--btn-tx);padding:10px 20px;border-radius:32px;text-decoration:none;font-weight:700;font-size:14px;box-shadow:var(--btn-sh);transition:transform .2s ease}
+    .nbtn:hover{transform:translateY(-2px)}
+
+    .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);border:1px solid var(--card-bd);background:var(--card);padding:7px 15px;border-radius:32px}
+
+    .btn-p{background:var(--btn);color:var(--btn-tx);box-shadow:var(--btn-sh)}
+    .btn-s{background:var(--card);color:var(--text);border:1px solid var(--card-bd)}
+    .btn-pill{padding:15px 30px;border-radius:34px;text-decoration:none;font-weight:700;font-size:15px;display:inline-block;transition:transform .18s ease}
+    .btn-pill:hover{transform:translateY(-2px)}
+
+    .card{background:var(--card);border:1px solid var(--card-bd);border-radius:22px;box-shadow:var(--card-sh);backdrop-filter:blur(8px)}
+    .ic{width:48px;height:48px;border-radius:14px;background:var(--chip);color:var(--chip-tx);display:flex;align-items:center;justify-content:center;font-size:23px}
+    .chip{display:inline-block;font-size:11px;font-weight:700;color:var(--chip-tx);background:var(--chip);padding:5px 12px;border-radius:22px}
+
+    .work-card{transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s ease}
+    .work-card:hover{transform:translateY(-6px)}
+    .work-card .shot img{transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+    .work-card:hover .shot img{transform:scale(1.04)}
+
+    .cta-card{background:var(--grad);box-shadow:var(--btn-sh)}
+    .muted{color:var(--muted)}
+    .ln{border-color:var(--line)}
+    ::selection{background:rgba(124,92,255,.25)}
+
+    /* Reveal: VISIBLE by default. GSAP only nudges FROM an offset; if JS never runs, all shows. */
+    .reveal{opacity:1}
+  </style>
+</head>
+
+<body>
+  <!-- gradient-mesh blobs / aurora (the single wow moment per mode) -->
+  <div class="bg"><span class="a"></span><span class="b"></span><span class="c"></span></div>
+
+  <!-- NAV -->
+  <header class="nav-wrap">
+    <div class="mx-auto max-w-content px-6">
+      <nav class="flex items-center justify-between" style="height:68px">
+        <a href="#top" class="logo font-heading">Found<span class="g">Local</span></a>
+        <div class="flex items-center gap-3">
+          <a href="#services" class="hidden md:inline text-sm muted mr-2 hover:opacity-70 transition">Services</a>
+          <a href="#work" class="hidden md:inline text-sm muted mr-2 hover:opacity-70 transition">Work</a>
+          <div class="toggle" id="tg" title="Toggle dark mode" aria-label="Toggle dark mode">🌙</div>
+          <a class="nbtn" href="#cta">Free preview</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section id="top" class="relative">
+    <div class="mx-auto max-w-content px-6 pt-20 pb-16 md:pt-28 md:pb-24 text-center">
+      <span class="eyebrow reveal" data-reveal>Websites · Local search · AI visibility</span>
+      <h1 class="reveal font-heading mx-auto mt-7 max-w-4xl text-[2.3rem] sm:text-5xl md:text-[3.7rem]"
+          style="font-weight:800;line-height:1.07;letter-spacing:-1.5px" data-reveal>
+        Get your local business <span class="g">found</span> — on Google and AI.
+      </h1>
+      <p class="reveal muted mx-auto mt-6 max-w-xl text-lg leading-relaxed" data-reveal>
+        I build beautiful, fast websites for local businesses and make sure customers actually find you —
+        on Google, Maps, and AI search like ChatGPT. Done-for-you, with a one-tap WhatsApp button that turns
+        visitors into real enquiries.
+      </p>
+      <div class="reveal mt-9 flex flex-wrap items-center justify-center gap-4" data-reveal>
+        <a href="#work" class="btn-pill btn-p">See my work</a>
+        <a href="#cta" class="btn-pill btn-s">Get a free preview</a>
+      </div>
+      <div class="reveal muted mt-12 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm" data-reveal>
+        <span>Built for Google + AI search</span>
+        <span class="opacity-30">·</span>
+        <span>WhatsApp lead capture</span>
+        <span class="opacity-30">·</span>
+        <span>English · Malay · 中文</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" class="mx-auto max-w-content px-6 py-16 md:py-24">
+    <div class="text-center mb-12">
+      <h2 class="reveal font-heading text-3xl md:text-4xl" style="font-weight:800;letter-spacing:-.8px" data-reveal>
+        Three things that turn <span class="g">clicks into customers</span>
+      </h2>
+      <p class="reveal muted mx-auto mt-3 max-w-lg" data-reveal>Everything handled for you — no tech stress, no jargon.</p>
+    </div>
+
+    <div class="grid gap-6 md:grid-cols-3">
+      <article class="reveal card p-8" data-reveal>
+        <div class="ic">🌐</div>
+        <h3 class="font-heading mt-5 text-xl" style="font-weight:700">A beautiful website</h3>
+        <p class="muted mt-3 text-[15px] leading-relaxed">Modern, fast, and flawless on phone and desktop — designed around your business and your customers.</p>
+      </article>
+      <article class="reveal card p-8" data-reveal>
+        <div class="ic">🔎</div>
+        <h3 class="font-heading mt-5 text-xl" style="font-weight:700">Found on Google &amp; AI</h3>
+        <p class="muted mt-3 text-[15px] leading-relaxed">Google Business setup, on-page SEO, and visibility in AI search — so you show up when people are looking.</p>
+      </article>
+      <article class="reveal card p-8" data-reveal>
+        <div class="ic">💬</div>
+        <h3 class="font-heading mt-5 text-xl" style="font-weight:700">One-tap WhatsApp</h3>
+        <p class="muted mt-3 text-[15px] leading-relaxed">A WhatsApp button and clear calls-to-action that turn curious visitors into real conversations.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section id="work" class="mx-auto max-w-content px-6 py-16 md:py-24">
+    <div class="text-center mb-12">
+      <h2 class="reveal font-heading text-3xl md:text-4xl" style="font-weight:800;letter-spacing:-.8px" data-reveal>
+        A look at <span class="g">what I make</span>
+      </h2>
+      <p class="reveal muted mx-auto mt-3 max-w-lg" data-reveal>Sample designs across fine dining, fitness, and family care — each built to get the phone ringing.</p>
+    </div>
+
+    <div class="grid gap-6 md:grid-cols-3">
+      <!-- noir -->
+      <figure class="reveal work-card card overflow-hidden" data-reveal>
+        <div class="shot overflow-hidden" style="aspect-ratio:4/5;border-bottom:1px solid var(--card-bd)">
+          <img src="designs/v2/noir.png" alt="Noir — fine-dining restaurant website design" class="h-full w-full object-cover object-top" />
+        </div>
+        <figcaption class="p-6">
+          <span class="chip">Fine dining</span>
+          <h3 class="font-heading mt-3 text-lg" style="font-weight:700">Noir</h3>
+          <p class="muted mt-1 text-sm">An elegant restaurant site — menu, reservations, and a WhatsApp booking button.</p>
+        </figcaption>
+      </figure>
+
+      <!-- forge -->
+      <figure class="reveal work-card card overflow-hidden" data-reveal>
+        <div class="shot overflow-hidden" style="aspect-ratio:4/5;border-bottom:1px solid var(--card-bd)">
+          <img src="designs/v2/forge.png" alt="Forge — gym and fitness studio website design" class="h-full w-full object-cover object-top" />
+        </div>
+        <figcaption class="p-6">
+          <span class="chip">Gym &amp; fitness</span>
+          <h3 class="font-heading mt-3 text-lg" style="font-weight:700">Forge</h3>
+          <p class="muted mt-1 text-sm">A bold strength-gym site — classes, trainers, and a one-tap free-trial enquiry.</p>
+        </figcaption>
+      </figure>
+
+      <!-- bloom -->
+      <figure class="reveal work-card card overflow-hidden" data-reveal>
+        <div class="shot overflow-hidden" style="aspect-ratio:4/5;border-bottom:1px solid var(--card-bd)">
+          <img src="designs/v2/bloom.png" alt="Bloom — kids' dental clinic website design" class="h-full w-full object-cover object-top" />
+        </div>
+        <figcaption class="p-6">
+          <span class="chip">Kids dental</span>
+          <h3 class="font-heading mt-3 text-lg" style="font-weight:700">Bloom</h3>
+          <p class="muted mt-1 text-sm">A friendly kids' dental clinic — services, gentle vibe, and easy WhatsApp bookings.</p>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="cta" class="mx-auto max-w-content px-6 pb-20 md:pb-28">
+    <div class="reveal cta-card text-center text-white" style="border-radius:28px;padding:56px 28px" data-reveal>
+      <p class="eyebrow" style="color:#fff;background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.28)">Free preview</p>
+      <h2 class="font-heading mx-auto mt-6 max-w-3xl text-3xl md:text-5xl" style="font-weight:800;letter-spacing:-.6px;line-height:1.08">
+        Your first enquiry within 14 days — or you pay nothing.
+      </h2>
+      <p class="mx-auto mt-5 max-w-xl text-lg" style="opacity:.95">
+        I'll design a preview of your new site for free. If it doesn't bring you an enquiry in the first two weeks,
+        it costs you nothing. Simple as that.
+      </p>
+      <div class="mt-9 flex flex-wrap justify-center gap-4">
+        <a href="#top" class="btn-pill" style="background:#fff;color:#5b3cff">Claim my free preview</a>
+        <a href="#work" class="btn-pill" style="background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.35)">View samples</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t ln">
+    <div class="mx-auto max-w-content px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-5">
+      <a href="#top" class="logo font-heading">Found<span class="g">Local</span></a>
+      <div class="muted flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm">
+        <span>English</span><span class="opacity-30">·</span>
+        <span>Malay</span><span class="opacity-30">·</span>
+        <span>中文</span>
+      </div>
+      <p class="muted text-xs">© 2026 FoundLocal · Sample work shown</p>
+    </div>
+  </footer>
+
+  <!-- ---------- THEME TOGGLE (remembers choice + ?theme=dark for screenshots) ---------- -->
+  <script>
+    (function(){
+      var root=document.documentElement, tg=document.getElementById('tg');
+      function set(t){ root.setAttribute('data-theme',t); tg.textContent = (t==='dark') ? '☀️' : '🌙'; try{ localStorage.setItem('flt',t); }catch(e){} }
+      var p=new URLSearchParams(location.search).get('theme');
+      var saved; try{ saved=localStorage.getItem('flt'); }catch(e){}
+      set(p || saved || 'light');
+      tg.addEventListener('click', function(){ set(root.getAttribute('data-theme')==='dark' ? 'light' : 'dark'); });
+    })();
+  </script>
+
+  <!-- ---------- ENHANCE-ONLY MOTION (GSAP + ScrollTrigger + Lenis), screenshot-safe ---------- -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var hasGSAP = (typeof gsap !== 'undefined') && (typeof ScrollTrigger !== 'undefined');
+
+      // Lenis buttery smooth scroll — degrades to native if absent or reduced-motion.
+      if (typeof Lenis !== 'undefined' && !reduce) {
+        var lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+        function raf(t){ lenis.raf(t); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+        if (hasGSAP) {
+          lenis.on('scroll', ScrollTrigger.update);
+          gsap.ticker.add(function(time){ lenis.raf(time * 1000); });
+          gsap.ticker.lagSmoothing(0);
+        }
+        document.querySelectorAll('a[href^="#"]').forEach(function(a){
+          a.addEventListener('click', function(e){
+            var el = document.querySelector(a.getAttribute('href'));
+            if (el){ e.preventDefault(); lenis.scrollTo(el, { offset: -20 }); }
+          });
+        });
+      }
+
+      if (!hasGSAP || reduce) return; // content already visible; no-op.
+      gsap.registerPlugin(ScrollTrigger);
+
+      // ONE subtle hero reveal: eyebrow + headline + subline + buttons rise from a small offset.
+      gsap.from('#top [data-reveal]', {
+        y: 24, opacity: 0, duration: 0.9, ease: 'power3.out',
+        stagger: 0.10, delay: 0.1, clearProps: 'all'
+      });
+
+      // Tasteful scroll reveals everywhere else: animate FROM a subtle offset, clearProps after.
+      // once:true + clearProps means nothing is ever parked at opacity:0 awaiting scroll.
+      gsap.utils.toArray('[data-reveal]').forEach(function(el){
+        if (el.closest('#top')) return; // hero handled above
+        gsap.from(el, {
+          y: 26, opacity: 0, duration: 0.85, ease: 'power3.out',
+          clearProps: 'all',
+          scrollTrigger: { trigger: el, start: 'top 90%', once: true }
+        });
+      });
+
+      // Safety net: after libs settle, force everything fully visible — a late screenshot is safe.
+      setTimeout(function(){
+        document.querySelectorAll('.reveal,[data-reveal]').forEach(function(el){
+          el.style.opacity = '1'; el.style.transform = 'none';
+        });
+        ScrollTrigger.refresh();
+      }, 2400);
+    });
+  </script>
+</body>
+</html>

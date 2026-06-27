@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FoundLocal — Maison</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ============ MAISON — cinematic luxe, champagne gold ============ */
+:root{
+  /* DARK is the house default — deep cinematic near-black + champagne gold */
+  --bg:#0b0a09;
+  --bg-2:#100e0c;
+  --panel:#13110e;
+  --ink:#ece5d8;          /* soft cream text */
+  --ink-soft:#a89d8b;
+  --ink-faint:#6e6457;
+  --gold:#c9a86a;         /* champagne gold signature */
+  --gold-soft:#d9c191;
+  --gold-deep:#a8884c;
+  --line:rgba(201,168,106,.20);
+  --line-soft:rgba(236,229,216,.10);
+  --frame:rgba(236,229,216,.07);
+  --shadow:0 50px 120px -40px rgba(0,0,0,.85);
+  --hair:rgba(201,168,106,.28);
+}
+html[data-theme="light"]{
+  /* LIGHT — warm cream / bone + ink + the same champagne gold */
+  --bg:#efe9df;
+  --bg-2:#e8e0d3;
+  --panel:#f5f0e7;
+  --ink:#1c1812;
+  --ink-soft:#6a5f4d;
+  --ink-faint:#9c907a;
+  --gold:#9c7a39;         /* gold reads darker on cream so it stays legible */
+  --gold-soft:#b9954c;
+  --gold-deep:#7e6026;
+  --line:rgba(124,98,46,.24);
+  --line-soft:rgba(28,24,18,.10);
+  --frame:rgba(28,24,18,.06);
+  --shadow:0 50px 110px -45px rgba(60,48,28,.45);
+  --hair:rgba(124,98,46,.34);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:var(--bg);}
+body{
+  font-family:'Jost',sans-serif;
+  color:var(--ink);
+  background:var(--bg);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  line-height:1.7;
+  letter-spacing:.01em;
+  /* the SMOOTH theme transition */
+  transition:background-color .55s ease, color .55s ease;
+}
+/* every theme-bound surface eases together */
+.maison-bg,.panel,.frame,nav,footer,.rule,.tline,.svc,.cta-wrap,.workframe,
+.toggle,.badge,.numb,.hero-bg,.veil{
+  transition:background-color .55s ease, color .55s ease, border-color .55s ease, box-shadow .55s ease;
+}
+::selection{background:var(--gold);color:var(--bg);}
+
+.serif{font-family:'Cormorant Garamond',serif;font-weight:400;}
+.over{font-family:'Jost',sans-serif;text-transform:uppercase;letter-spacing:.42em;font-size:.62rem;font-weight:400;}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 48px;}
+.gold{color:var(--gold);}
+
+/* hairline gold rule with center diamond */
+.rule{display:flex;align-items:center;gap:18px;width:100%;}
+.rule:before,.rule:after{content:"";height:1px;flex:1;background:var(--line);}
+.rule .dia{width:5px;height:5px;background:var(--gold);transform:rotate(45deg);flex:none;}
+
+/* ===================== NAV ===================== */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:60;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 48px;
+  background:color-mix(in srgb, var(--bg) 78%, transparent);
+  backdrop-filter:blur(14px) saturate(120%);
+  border-bottom:1px solid var(--line-soft);
+}
+.brand{display:flex;align-items:baseline;gap:14px;}
+.brand .mark{font-family:'Cormorant Garamond',serif;font-size:1.5rem;letter-spacing:.14em;color:var(--ink);}
+.brand .est{font-size:.55rem;letter-spacing:.34em;text-transform:uppercase;color:var(--ink-faint);}
+.navlinks{display:flex;gap:38px;align-items:center;}
+.navlinks a{font-size:.66rem;letter-spacing:.26em;text-transform:uppercase;color:var(--ink-soft);text-decoration:none;position:relative;padding-bottom:3px;}
+.navlinks a:after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--gold);transition:width .4s ease;}
+.navlinks a:hover{color:var(--ink);}
+.navlinks a:hover:after{width:100%;}
+
+.toggle{
+  width:62px;height:30px;border:1px solid var(--hair);border-radius:30px;
+  background:transparent;cursor:pointer;position:relative;display:flex;align-items:center;flex:none;
+}
+.toggle .knob{
+  position:absolute;top:50%;left:4px;transform:translateY(-50%);
+  width:20px;height:20px;border-radius:50%;background:var(--gold);
+  display:grid;place-items:center;color:var(--bg);font-size:.6rem;
+  transition:left .5s cubic-bezier(.7,0,.2,1), background-color .5s ease;
+}
+html[data-theme="light"] .toggle .knob{left:38px;}
+.toggle .ic{line-height:1;}
+
+/* ===================== HERO ===================== */
+.hero{position:relative;min-height:760px;height:100vh;max-height:920px;display:flex;align-items:center;overflow:hidden;}
+.hero-bg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(120% 90% at 78% 8%, color-mix(in srgb,var(--gold) 14%, transparent), transparent 55%),
+    radial-gradient(90% 80% at 12% 100%, color-mix(in srgb,var(--gold) 7%, transparent), transparent 50%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+}
+/* faint engraved monogram watermark */
+.monogram{
+  position:absolute;right:-4%;top:50%;transform:translateY(-50%);
+  font-family:'Cormorant Garamond',serif;font-weight:300;
+  font-size:42vw;line-height:.8;color:var(--gold);opacity:.045;
+  user-select:none;pointer-events:none;letter-spacing:-.04em;
+}
+html[data-theme="light"] .monogram{opacity:.06;}
+.hero-inner{position:relative;z-index:5;width:100%;}
+.hero-kick{display:flex;align-items:center;gap:16px;color:var(--gold);margin-bottom:34px;}
+.hero-kick .dia{width:5px;height:5px;background:var(--gold);transform:rotate(45deg);}
+.hero h1{
+  font-family:'Cormorant Garamond',serif;font-weight:300;
+  font-size:clamp(3.4rem,9.2vw,8.8rem);line-height:.96;letter-spacing:-.01em;
+  color:var(--ink);
+}
+.hero h1 em{font-style:italic;color:var(--gold);font-weight:400;}
+.hero h1 .ln{display:block;overflow:hidden;}
+.hero-sub{
+  max-width:560px;margin-top:38px;color:var(--ink-soft);
+  font-size:1.02rem;font-weight:300;line-height:1.85;letter-spacing:.02em;
+}
+.hero-meta{display:flex;gap:54px;margin-top:56px;flex-wrap:wrap;}
+.hero-meta .item .k{font-family:'Cormorant Garamond',serif;font-size:2.2rem;color:var(--gold);line-height:1;}
+.hero-meta .item .l{font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:var(--ink-faint);margin-top:10px;}
+.scrollhint{
+  position:absolute;left:48px;bottom:34px;z-index:5;display:flex;align-items:center;gap:14px;
+  font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-faint);
+}
+.scrollhint .bar{width:46px;height:1px;background:var(--gold);position:relative;overflow:hidden;}
+.scrollhint .bar:after{content:"";position:absolute;inset:0;background:var(--bg);animation:sweep 2.6s ease-in-out infinite;}
+@keyframes sweep{0%{transform:translateX(-100%)}55%,100%{transform:translateX(100%)}}
+
+/* ===================== SECTION SCAFFOLD ===================== */
+section{position:relative;}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:30px;margin-bottom:64px;}
+.sec-head .lab{display:flex;align-items:center;gap:14px;color:var(--gold);}
+.sec-head .lab .no{font-family:'Cormorant Garamond',serif;font-size:1.1rem;}
+.sec-title{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(2.2rem,5vw,4rem);line-height:1.02;color:var(--ink);letter-spacing:-.005em;}
+.sec-title em{font-style:italic;color:var(--gold);}
+
+/* ===================== MANIFESTO ===================== */
+.manifesto{padding:170px 0 130px;}
+.manifesto .big{
+  font-family:'Cormorant Garamond',serif;font-weight:300;
+  font-size:clamp(1.7rem,3.6vw,2.9rem);line-height:1.42;color:var(--ink);letter-spacing:.005em;
+  max-width:980px;
+}
+.manifesto .big em{font-style:italic;color:var(--gold);}
+.manifesto .big .dim{color:var(--ink-faint);}
+
+/* ===================== SERVICES ===================== */
+.services{padding:120px 0 130px;background:var(--bg-2);}
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--line);}
+.svc{
+  padding:54px 38px 50px;border-left:1px solid var(--line);position:relative;
+}
+.svc:first-child{border-left:none;}
+.svc .numb{
+  font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--gold);
+  display:inline-flex;align-items:center;gap:10px;letter-spacing:.1em;
+}
+.svc .numb:before{content:"";width:22px;height:1px;background:var(--gold);}
+.svc h3{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:2rem;line-height:1.1;color:var(--ink);margin:26px 0 18px;}
+.svc h3 em{font-style:italic;color:var(--gold);}
+.svc p{color:var(--ink-soft);font-size:.92rem;font-weight:300;line-height:1.85;}
+.svc .tag{margin-top:30px;font-size:.58rem;letter-spacing:.26em;text-transform:uppercase;color:var(--ink-faint);}
+
+/* ===================== WORK / GALLERY ===================== */
+.work{padding:150px 0 120px;}
+.piece{margin-bottom:120px;}
+.piece:last-child{margin-bottom:0;}
+.workframe{
+  position:relative;background:var(--panel);
+  border:1px solid var(--line);
+  padding:26px;box-shadow:var(--shadow);
+}
+/* inner gold hairline — the "gallery frame" */
+.workframe:before{
+  content:"";position:absolute;inset:14px;border:1px solid var(--hair);pointer-events:none;z-index:3;
+}
+.workframe .matte{position:relative;overflow:hidden;background:var(--bg);}
+.workframe img{display:block;width:100%;height:auto;filter:saturate(1.02) contrast(1.02);}
+.piece-cap{display:flex;align-items:flex-start;justify-content:space-between;gap:30px;margin-top:34px;padding:0 6px;}
+.piece-cap .lhs{max-width:560px;}
+.piece-cap .plate{display:flex;align-items:center;gap:14px;color:var(--gold);margin-bottom:16px;}
+.piece-cap .plate .pn{font-family:'Cormorant Garamond',serif;font-size:1rem;letter-spacing:.1em;}
+.piece-cap .plate .ln{width:30px;height:1px;background:var(--gold);}
+.piece-cap h4{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:2.4rem;line-height:1.05;color:var(--ink);}
+.piece-cap h4 em{font-style:italic;color:var(--gold);}
+.piece-cap p{color:var(--ink-soft);font-size:.92rem;font-weight:300;margin-top:14px;line-height:1.8;}
+.piece-cap .rhs{text-align:right;flex:none;padding-top:6px;}
+.piece-cap .rhs .spec{font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:12px;}
+.piece-cap .rhs .spec b{display:block;font-family:'Cormorant Garamond',serif;font-size:1.15rem;letter-spacing:.04em;color:var(--ink);font-weight:400;margin-top:4px;text-transform:none;}
+
+/* ===================== CTA ===================== */
+.cta{padding:170px 0 160px;background:var(--bg-2);position:relative;overflow:hidden;}
+.cta .glow{
+  position:absolute;left:50%;top:0;transform:translateX(-50%);width:120%;height:100%;
+  background:radial-gradient(60% 70% at 50% 0%, color-mix(in srgb,var(--gold) 15%, transparent), transparent 60%);
+  pointer-events:none;
+}
+.cta-wrap{position:relative;text-align:center;z-index:4;}
+.cta .over{color:var(--gold);display:block;margin-bottom:30px;}
+.cta h2{
+  font-family:'Cormorant Garamond',serif;font-weight:300;
+  font-size:clamp(2.6rem,6.4vw,5.6rem);line-height:1.02;color:var(--ink);letter-spacing:-.01em;
+}
+.cta h2 em{font-style:italic;color:var(--gold);font-weight:400;}
+.cta .promise{
+  max-width:600px;margin:34px auto 0;color:var(--ink-soft);font-size:1.02rem;font-weight:300;line-height:1.85;
+}
+.cta-btn{
+  display:inline-flex;align-items:center;gap:16px;margin-top:54px;
+  padding:20px 46px;border:1px solid var(--gold);color:var(--ink);
+  background:transparent;text-decoration:none;cursor:pointer;
+  font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;position:relative;overflow:hidden;
+  transition:color .5s ease;
+}
+.cta-btn .lbl{position:relative;z-index:3;transition:color .5s ease;}
+.cta-btn .ar{position:relative;z-index:3;transition:transform .5s ease,color .5s ease;}
+.cta-btn:before{content:"";position:absolute;inset:0;background:var(--gold);transform:translateY(101%);transition:transform .55s cubic-bezier(.7,0,.2,1);z-index:1;}
+.cta-btn:hover:before{transform:translateY(0);}
+.cta-btn:hover .lbl,.cta-btn:hover .ar{color:var(--bg);}
+.cta-btn:hover .ar{transform:translateX(6px);}
+.cta-fine{margin-top:30px;font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-faint);}
+
+/* ===================== FOOTER ===================== */
+footer{padding:80px 0 56px;border-top:1px solid var(--line);background:var(--bg);}
+.foot-top{display:flex;align-items:flex-start;justify-content:space-between;gap:40px;flex-wrap:wrap;}
+.foot-brand .mark{font-family:'Cormorant Garamond',serif;font-size:2.4rem;letter-spacing:.1em;color:var(--ink);}
+.foot-brand .tl{font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-faint);margin-top:14px;}
+.foot-cols{display:flex;gap:64px;flex-wrap:wrap;}
+.foot-col .ttl{font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:18px;}
+.foot-col a{display:block;font-size:.86rem;color:var(--ink-soft);text-decoration:none;margin-bottom:11px;font-weight:300;letter-spacing:.04em;transition:color .3s ease;}
+.foot-col a:hover{color:var(--gold);}
+.foot-langs{display:flex;gap:22px;}
+.foot-langs span{font-size:.78rem;color:var(--ink-soft);letter-spacing:.08em;font-weight:300;}
+.foot-langs span.act{color:var(--gold);}
+.foot-bottom{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:60px;padding-top:28px;border-top:1px solid var(--line-soft);flex-wrap:wrap;}
+.foot-bottom .c{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);}
+
+/* ===================== RESPONSIVE ===================== */
+@media(max-width:880px){
+  .wrap{padding:0 26px;}
+  nav{padding:18px 26px;}
+  .navlinks .lk{display:none;}
+  .svc-grid{grid-template-columns:1fr;}
+  .svc{border-left:none;border-top:1px solid var(--line);}
+  .svc:first-child{border-top:none;}
+  .piece-cap{flex-direction:column;}
+  .piece-cap .rhs{text-align:left;}
+  .scrollhint{display:none;}
+  .monogram{font-size:80vw;}
+}
+
+/* screenshot safety: everything visible by default; GSAP animates from offsets */
+.reveal{opacity:1;}
+</style>
+</head>
+<body class="maison-bg">
+
+<!-- ===================== NAV ===================== -->
+<nav>
+  <div class="brand">
+    <span class="mark">FoundLocal</span>
+    <span class="est">Maison · Est. 2026</span>
+  </div>
+  <div class="navlinks">
+    <a href="#manifesto" class="lk">Maison</a>
+    <a href="#services" class="lk">Services</a>
+    <a href="#work" class="lk">Work</a>
+    <a href="#enquire" class="lk">Enquire</a>
+    <button class="toggle" id="themeToggle" aria-label="Toggle theme">
+      <span class="knob"><span class="ic" id="knobIc">☾</span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="monogram">F</div>
+  <div class="wrap hero-inner">
+    <div class="hero-kick reveal" data-anim="up">
+      <span class="dia"></span>
+      <span class="over">Web Atelier · Found on Google &amp; AI</span>
+    </div>
+    <h1>
+      <span class="ln reveal" data-anim="rise">Your shop,</span>
+      <span class="ln reveal" data-anim="rise"><em>found</em> first.</span>
+    </h1>
+    <p class="hero-sub reveal" data-anim="up">
+      A couture website for your local business — composed by hand, then placed
+      where the world is already looking. On Google. In the answers AI gives.
+      So the next customer finds <span class="gold">you</span>, not the shop next door.
+    </p>
+    <div class="hero-meta reveal" data-anim="up">
+      <div class="item"><div class="k">14</div><div class="l">Days to live</div></div>
+      <div class="item"><div class="k">3</div><div class="l">Languages built-in</div></div>
+      <div class="item"><div class="k">∞</div><div class="l">Found, day &amp; night</div></div>
+    </div>
+  </div>
+  <div class="scrollhint"><span class="bar"></span><span>Scroll</span></div>
+</header>
+
+<!-- ===================== MANIFESTO ===================== -->
+<section class="manifesto" id="manifesto">
+  <div class="wrap">
+    <div class="sec-head reveal" data-anim="up">
+      <div class="lab"><span class="no">01</span><span class="over">The Maison</span></div>
+    </div>
+    <p class="big reveal" data-anim="up">
+      <span class="dim">Most local businesses are invisible online.</span>
+      We build the kind of website that earns a second glance —
+      <em>then</em> we make sure it is the first one Google shows, and the name
+      the AI assistants <em>name</em> when a customer asks for someone like you.
+    </p>
+  </div>
+</section>
+
+<!-- ===================== SERVICES ===================== -->
+<section class="services" id="services">
+  <div class="wrap">
+    <div class="sec-head reveal" data-anim="up">
+      <div class="lab"><span class="no">02</span><span class="over">The Craft</span></div>
+      <h2 class="sec-title">Three things, done <em>impeccably</em>.</h2>
+    </div>
+    <div class="svc-grid">
+      <div class="svc reveal" data-anim="up">
+        <span class="numb">I</span>
+        <h3>A modern <em>website</em></h3>
+        <p>Designed like a flagship, not a flyer. Fast, elegant, mobile-first — a storefront that flatters your business the moment it loads, and tells your story in your own voice.</p>
+        <div class="tag">Bespoke · Hand-built · Yours</div>
+      </div>
+      <div class="svc reveal" data-anim="up">
+        <span class="numb">II</span>
+        <h3>Found on <em>Google &amp; AI</em></h3>
+        <p>Structured so search engines understand you and AI assistants recommend you. When someone nearby searches — or simply asks — your name is the answer that surfaces.</p>
+        <div class="tag">SEO · AI-ready · Local intent</div>
+      </div>
+      <div class="svc reveal" data-anim="up">
+        <span class="numb">III</span>
+        <h3>Leads to <em>WhatsApp</em></h3>
+        <p>Every visitor a tap away from a conversation. Enquiries land where you already reply — no forms lost to a spam folder, no customer left waiting.</p>
+        <div class="tag">One tap · Instant · No friction</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WORK ===================== -->
+<section class="work" id="work">
+  <div class="wrap">
+    <div class="sec-head reveal" data-anim="up">
+      <div class="lab"><span class="no">03</span><span class="over">The Collection</span></div>
+      <h2 class="sec-title">Selected <em>works</em>.</h2>
+    </div>
+
+    <!-- PIECE I -->
+    <article class="piece">
+      <div class="workframe reveal" data-anim="frame">
+        <div class="matte"><img src="../v2/noir.png" alt="Noir — sample site"></div>
+      </div>
+      <div class="piece-cap reveal" data-anim="up">
+        <div class="lhs">
+          <div class="plate"><span class="ln"></span><span class="pn">Pièce I</span></div>
+          <h4><em>Noir</em> — the after-dark trade</h4>
+          <p>An evening-led venue dressed in low light and gold. Built to whisper exclusivity and pull reservations straight to WhatsApp.</p>
+        </div>
+        <div class="rhs">
+          <div class="spec">Discipline<b>Hospitality</b></div>
+          <div class="spec">Delivered<b>11 Days</b></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- PIECE II -->
+    <article class="piece">
+      <div class="workframe reveal" data-anim="frame">
+        <div class="matte"><img src="../v2/forge.png" alt="Forge — sample site"></div>
+      </div>
+      <div class="piece-cap reveal" data-anim="up">
+        <div class="lhs">
+          <div class="plate"><span class="ln"></span><span class="pn">Pièce II</span></div>
+          <h4><em>Forge</em> — the maker's house</h4>
+          <p>A trades &amp; craft studio rendered with weight and grain. Engineered to rank for local intent and convert browsers into bookings.</p>
+        </div>
+        <div class="rhs">
+          <div class="spec">Discipline<b>Trade &amp; Craft</b></div>
+          <div class="spec">Delivered<b>13 Days</b></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- PIECE III -->
+    <article class="piece">
+      <div class="workframe reveal" data-anim="frame">
+        <div class="matte"><img src="../v2/bloom.png" alt="Bloom — sample site"></div>
+      </div>
+      <div class="piece-cap reveal" data-anim="up">
+        <div class="lhs">
+          <div class="plate"><span class="ln"></span><span class="pn">Pièce III</span></div>
+          <h4><em>Bloom</em> — the boutique florist</h4>
+          <p>A retail atelier in soft, editorial colour. Tuned for Google's local pack and for the AI answer when a customer asks who to call.</p>
+        </div>
+        <div class="rhs">
+          <div class="spec">Discipline<b>Boutique Retail</b></div>
+          <div class="spec">Delivered<b>10 Days</b></div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ===================== CTA ===================== -->
+<section class="cta" id="enquire">
+  <div class="glow"></div>
+  <div class="wrap cta-wrap reveal" data-anim="up">
+    <span class="over">A standing invitation</span>
+    <h2>See it <em>before</em> you decide.</h2>
+    <p class="promise">
+      We'll compose a free preview of your new website — no brief required, no obligation.
+      If your first enquiry hasn't arrived within 14 days, you pay nothing.
+    </p>
+    <a href="https://wa.me/60000000000" class="cta-btn">
+      <span class="lbl">Request your free preview</span>
+      <span class="ar">→</span>
+    </a>
+    <div class="cta-fine">First enquiry in 14 days — or it's on the house</div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <div class="mark">FoundLocal</div>
+        <div class="tl">Web Atelier · Found on Google &amp; AI</div>
+      </div>
+      <div class="foot-cols">
+        <div class="foot-col">
+          <div class="ttl">Maison</div>
+          <a href="#services">Services</a>
+          <a href="#work">Sample work</a>
+          <a href="#enquire">Enquire</a>
+        </div>
+        <div class="foot-col">
+          <div class="ttl">Sample Work</div>
+          <a href="#work">Noir</a>
+          <a href="#work">Forge</a>
+          <a href="#work">Bloom</a>
+        </div>
+        <div class="foot-col">
+          <div class="ttl">Languages</div>
+          <div class="foot-langs">
+            <span class="act">EN</span><span>MS</span><span>中文</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <div class="c">© 2026 FoundLocal · Crafted for local houses</div>
+      <div class="c">EN · MS · 中文</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ===================== SCRIPTS ===================== -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+/* ---------- THEME ---------- */
+(function(){
+  var root=document.documentElement;
+  var params=new URLSearchParams(location.search);
+  // ?theme=... wins (for screenshots), then remembered choice, else LIGHT default
+  var saved=params.get('theme')||localStorage.getItem('fl-maison-theme')||'light';
+  apply(saved);
+  function apply(t){
+    root.setAttribute('data-theme',t);
+    var ic=document.getElementById('knobIc');
+    if(ic) ic.textContent = (t==='light') ? '☀' : '☾';
+  }
+  document.getElementById('themeToggle').addEventListener('click',function(){
+    var next = root.getAttribute('data-theme')==='light' ? 'dark' : 'light';
+    apply(next);
+    localStorage.setItem('fl-maison-theme',next);
+  });
+})();
+
+/* ---------- MOTION (screenshot-safe) ---------- */
+window.addEventListener('load',function(){
+  if(!window.gsap||!window.ScrollTrigger){return;}
+  gsap.registerPlugin(ScrollTrigger);
+
+  // hero entrance — slow elegant fades, content already visible (opacity:1 base)
+  var heroT=gsap.timeline({defaults:{ease:'power3.out'}});
+  heroT
+    .from('.hero-kick',{y:24,opacity:0,duration:1.1})
+    .from('.hero h1 .ln',{yPercent:110,opacity:0,duration:1.25,stagger:.14},'-=.7')
+    .from('.hero-sub',{y:26,opacity:0,duration:1.1},'-=.7')
+    .from('.hero-meta .item',{y:24,opacity:0,duration:.9,stagger:.12},'-=.7');
+
+  // scroll reveals
+  gsap.utils.toArray('[data-anim="up"]').forEach(function(el){
+    if(el.closest('.hero')) return;
+    gsap.from(el,{
+      scrollTrigger:{trigger:el,start:'top 86%'},
+      y:34,opacity:0,duration:1.05,ease:'power3.out',
+      clearProps:'all'
+    });
+  });
+
+  // gallery frames — refined matte reveal
+  gsap.utils.toArray('[data-anim="frame"]').forEach(function(el){
+    gsap.from(el,{
+      scrollTrigger:{trigger:el,start:'top 84%'},
+      y:48,opacity:0,scale:.985,duration:1.25,ease:'power3.out',
+      clearProps:'all'
+    });
+  });
+
+  ScrollTrigger.refresh();
+
+  // safety net — guarantee everything is visible after 2.5s
+  setTimeout(function(){
+    gsap.set('.reveal',{clearProps:'all',opacity:1});
+    document.querySelectorAll('.reveal').forEach(function(e){
+      e.style.opacity='1'; e.style.transform='none';
+    });
+  },2500);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ideal Dental of Tucson — Happy Smiles for Little Humans</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky:#5ec5ef;
+    --sky-deep:#2ba8da;
+    --sun:#ffcf3f;
+    --coral:#ff7a72;
+    --coral-deep:#f85f57;
+    --mint:#7fe0c0;
+    --mint-deep:#41c79e;
+    --ink:#2c4a5e;
+    --soft:#5a7689;
+    --cream:#fffaf2;
+    --white:#ffffff;
+    --shadow:0 18px 40px -16px rgba(44,74,94,.28);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Nunito',sans-serif;
+    color:var(--ink);
+    background:var(--cream);
+    overflow-x:hidden;
+    line-height:1.6;
+  }
+  h1,h2,h3,.brand,.pill,.eyebrow{font-family:'Fredoka',sans-serif;font-weight:600}
+  section{position:relative}
+
+  /* ---------- floaty helpers ---------- */
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+  @keyframes bobslow{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-22px) rotate(6deg)}}
+  @keyframes wobble{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+  @keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
+  @keyframes drift{0%{transform:translateX(0)}50%{transform:translateX(18px)}100%{transform:translateX(0)}}
+  @keyframes spinslow{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+  /* ---------- nav ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px clamp(20px,5vw,64px);
+    background:rgba(255,250,242,.82);
+    backdrop-filter:blur(10px);
+  }
+  .brand{display:flex;align-items:center;gap:11px;font-size:1.55rem;color:var(--ink);font-weight:700}
+  .brand .logo{
+    width:46px;height:46px;border-radius:50% 50% 50% 12px;
+    background:linear-gradient(135deg,var(--sky),var(--mint));
+    display:grid;place-items:center;font-size:1.5rem;
+    box-shadow:0 8px 18px -6px rgba(94,197,239,.7);
+    animation:wobble 5s ease-in-out infinite;
+  }
+  .navlinks{display:flex;gap:30px;align-items:center}
+  .navlinks a{
+    text-decoration:none;color:var(--soft);font-weight:700;font-size:1rem;
+    transition:color .25s;
+  }
+  .navlinks a:hover{color:var(--coral-deep)}
+  .pill{
+    display:inline-block;border:none;cursor:pointer;
+    padding:13px 26px;border-radius:999px;
+    font-size:1rem;font-weight:600;text-decoration:none;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .pill-coral{background:var(--coral);color:#fff;box-shadow:0 10px 22px -8px var(--coral-deep)}
+  .pill-coral:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 16px 28px -8px var(--coral-deep)}
+  .pill-sun{background:var(--sun);color:var(--ink);box-shadow:0 10px 22px -8px #e9b21f}
+  .pill-sun:hover{transform:translateY(-3px) scale(1.03)}
+  .pill-white{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
+  .pill-white:hover{transform:translateY(-3px) scale(1.03)}
+  .navlinks .pill{padding:11px 22px}
+  @media(max-width:780px){.navlinks a:not(.pill){display:none}}
+
+  /* ---------- HERO : split asymmetric, big type left, playful scene right ---------- */
+  .hero{
+    background:linear-gradient(180deg,#eafaff 0%, var(--cream) 100%);
+    padding:40px clamp(20px,5vw,64px) 140px;
+    display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;
+    min-height:78vh;
+  }
+  @media(max-width:900px){.hero{grid-template-columns:1fr;padding-bottom:110px;text-align:center}}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    background:#fff;color:var(--mint-deep);font-weight:600;font-size:.95rem;
+    padding:8px 18px;border-radius:999px;box-shadow:var(--shadow);margin-bottom:24px;
+  }
+  .hero h1{
+    font-family:'Fredoka',sans-serif;font-weight:700;
+    font-size:clamp(2.7rem,6.2vw,5rem);line-height:1.02;color:var(--ink);
+    letter-spacing:-1px;margin-bottom:22px;
+  }
+  .hero h1 .squig{color:var(--coral);position:relative;display:inline-block}
+  .hero h1 .sky{color:var(--sky-deep)}
+  .hero p.lead{font-size:1.2rem;color:var(--soft);max-width:480px;margin-bottom:34px}
+  @media(max-width:900px){.hero p.lead{margin-inline:auto}}
+  .hero-cta{display:flex;gap:16px;flex-wrap:wrap}
+  @media(max-width:900px){.hero-cta{justify-content:center}}
+  .trust{display:flex;gap:26px;margin-top:36px;flex-wrap:wrap}
+  @media(max-width:900px){.trust{justify-content:center}}
+  .trust div{display:flex;flex-direction:column}
+  .trust b{font-family:'Fredoka';font-size:1.7rem;color:var(--coral-deep);line-height:1}
+  .trust span{font-size:.85rem;color:var(--soft);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+
+  /* hero scene */
+  .scene{position:relative;height:440px}
+  @media(max-width:900px){.scene{height:360px;margin-top:10px}}
+  .blob{
+    position:absolute;inset:6% 4%;
+    background:radial-gradient(circle at 35% 30%,var(--sun),#ffbf2e 70%);
+    border-radius:46% 54% 60% 40% / 52% 44% 56% 48%;
+    box-shadow:inset 0 -20px 40px rgba(233,168,20,.35), 0 30px 60px -20px rgba(255,196,46,.6);
+    animation:bobslow 8s ease-in-out infinite;
+  }
+  .tooth{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:170px;height:190px;background:#fff;
+    border-radius:48% 48% 42% 42%/55% 55% 45% 45%;
+    box-shadow:0 22px 40px -16px rgba(44,74,94,.4), inset 0 -14px 24px rgba(94,197,239,.18);
+    animation:bob 5.5s ease-in-out infinite;
+  }
+  .tooth::before,.tooth::after{
+    content:"";position:absolute;bottom:-6px;width:46%;height:55px;background:#fff;
+    border-radius:0 0 60% 60%;box-shadow:inset 0 -8px 16px rgba(94,197,239,.18);
+  }
+  .tooth::before{left:6px}.tooth::after{right:6px}
+  .face{position:absolute;left:0;right:0;top:42px;text-align:center}
+  .eyes{display:flex;gap:30px;justify-content:center;margin-bottom:10px}
+  .eyes i{width:16px;height:22px;background:var(--ink);border-radius:50%;display:block;animation:pop 4s ease-in-out infinite}
+  .smile{width:54px;height:28px;border:5px solid var(--coral);border-top:none;border-radius:0 0 40px 40px;margin:0 auto}
+  .cheek{width:18px;height:12px;background:#ffc0bb;border-radius:50%;position:absolute;top:26px}
+  .cheek.l{left:30px}.cheek.r{right:30px}
+
+  .floatie{position:absolute;border-radius:50%;display:grid;place-items:center;font-size:1.6rem;box-shadow:var(--shadow)}
+  .f1{width:64px;height:64px;background:var(--mint);top:2%;right:8%;animation:bob 4.5s ease-in-out infinite}
+  .f2{width:54px;height:54px;background:var(--coral);bottom:6%;left:2%;animation:bobslow 6s ease-in-out infinite}
+  .f3{width:46px;height:46px;background:var(--sky);bottom:22%;right:0;animation:drift 7s ease-in-out infinite}
+  .f4{width:38px;height:38px;background:#fff;top:30%;left:0;animation:bob 5s ease-in-out infinite;font-size:1.1rem}
+  .sparkle{position:absolute;font-size:1.4rem;animation:pop 3s ease-in-out infinite}
+  .sp1{top:8%;left:12%}.sp2{bottom:14%;right:24%;animation-delay:1s}
+
+  /* ---------- wavy divider ---------- */
+  .wave{display:block;width:100%;height:90px;position:absolute;left:0;bottom:-1px;line-height:0}
+  .wave svg{width:100%;height:100%}
+
+  /* ---------- SERVICES : offset bubble row, not a 3-card grid ---------- */
+  .services{background:var(--white);padding:30px clamp(20px,5vw,64px) 120px}
+  .sec-head{text-align:center;max-width:640px;margin:0 auto 60px}
+  .sec-head .eyebrow{margin-bottom:16px}
+  .sec-head h2{font-size:clamp(2rem,4.5vw,3.1rem);color:var(--ink);letter-spacing:-1px;margin-bottom:12px}
+  .sec-head p{color:var(--soft);font-size:1.1rem}
+  .bubbles{
+    display:flex;gap:26px;justify-content:center;flex-wrap:wrap;align-items:flex-start;
+  }
+  .bubble{
+    width:240px;background:var(--cream);border-radius:34px;padding:34px 26px;text-align:center;
+    box-shadow:var(--shadow);transition:transform .3s ease;position:relative;
+  }
+  .bubble:hover{transform:translateY(-10px)}
+  .bubble:nth-child(even){margin-top:46px}
+  @media(max-width:560px){.bubble:nth-child(even){margin-top:0}}
+  .bubble .icon{
+    width:84px;height:84px;border-radius:50% 50% 50% 14px;display:grid;place-items:center;
+    font-size:2.3rem;margin:0 auto 20px;animation:bobslow 7s ease-in-out infinite;
+  }
+  .bubble:nth-child(1) .icon{background:linear-gradient(135deg,var(--sky),#bdeeff)}
+  .bubble:nth-child(2) .icon{background:linear-gradient(135deg,var(--coral),#ffd0cc)}
+  .bubble:nth-child(3) .icon{background:linear-gradient(135deg,var(--mint),#cdf6e9)}
+  .bubble:nth-child(4) .icon{background:linear-gradient(135deg,var(--sun),#ffe9a8)}
+  .bubble h3{font-size:1.35rem;color:var(--ink);margin-bottom:10px}
+  .bubble p{font-size:.97rem;color:var(--soft)}
+
+  /* ---------- HOW IT WORKS : wavy mint band, zig-zag steps ---------- */
+  .steps-band{background:linear-gradient(180deg,#eafaf6,#defaf1);padding:90px clamp(20px,5vw,64px) 130px}
+  .steps{max-width:880px;margin:50px auto 0;display:flex;flex-direction:column;gap:34px}
+  .step{
+    display:flex;align-items:center;gap:30px;background:#fff;border-radius:40px;
+    padding:26px 34px;box-shadow:var(--shadow);
+  }
+  .step:nth-child(even){flex-direction:row-reverse;text-align:right}
+  @media(max-width:640px){.step,.step:nth-child(even){flex-direction:column;text-align:center;gap:14px}}
+  .step .num{
+    flex:none;width:74px;height:74px;border-radius:50%;display:grid;place-items:center;
+    font-family:'Fredoka';font-weight:700;font-size:2rem;color:#fff;
+  }
+  .step:nth-child(1) .num{background:var(--sky-deep)}
+  .step:nth-child(2) .num{background:var(--coral)}
+  .step:nth-child(3) .num{background:var(--mint-deep)}
+  .step h3{font-size:1.4rem;color:var(--ink);margin-bottom:6px}
+  .step p{color:var(--soft)}
+  .step .emoji{font-size:2.4rem;animation:wobble 4s ease-in-out infinite}
+
+  /* ---------- QUOTE / TRUST strip ---------- */
+  .quote{background:var(--white);padding:100px clamp(20px,5vw,64px);text-align:center}
+  .quote .mark{font-family:'Fredoka';font-size:5rem;color:var(--sun);line-height:.4;display:block;height:40px}
+  .quote blockquote{
+    font-family:'Fredoka';font-weight:500;font-size:clamp(1.5rem,3.4vw,2.4rem);
+    color:var(--ink);max-width:760px;margin:24px auto 24px;line-height:1.3;letter-spacing:-.5px;
+  }
+  .quote .who{color:var(--soft);font-weight:700}
+  .stars{font-size:1.5rem;letter-spacing:4px;margin-top:14px}
+
+  /* ---------- CTA : big coral wavy block ---------- */
+  .cta{
+    background:linear-gradient(135deg,var(--coral) 0%,#ff9a6b 100%);
+    padding:120px clamp(20px,5vw,64px);text-align:center;color:#fff;position:relative;overflow:hidden;
+  }
+  .cta .ring{position:absolute;border-radius:50%;border:18px solid rgba(255,255,255,.12)}
+  .cta .r1{width:260px;height:260px;top:-90px;left:-60px;animation:spinslow 30s linear infinite}
+  .cta .r2{width:180px;height:180px;bottom:-50px;right:-30px;animation:spinslow 24s linear infinite reverse}
+  .cta h2{font-size:clamp(2.2rem,5.5vw,3.8rem);letter-spacing:-1px;margin-bottom:18px;position:relative}
+  .cta p{font-size:1.2rem;max-width:520px;margin:0 auto 38px;opacity:.95;position:relative}
+  .cta .hero-cta{justify-content:center;position:relative}
+  .cta .pill-white{color:var(--coral-deep)}
+  .cta .tooth-mini{position:absolute;font-size:3rem;animation:bob 4s ease-in-out infinite}
+  .cta .tm1{top:18%;left:14%}.cta .tm2{bottom:18%;right:16%;animation-delay:1.2s}
+
+  /* ---------- footer ---------- */
+  footer{background:var(--ink);color:#cfe2ee;padding:64px clamp(20px,5vw,64px) 40px}
+  .foot-grid{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;max-width:1100px;margin:0 auto}
+  footer .brand{color:#fff;margin-bottom:14px}
+  footer .brand .logo{box-shadow:none}
+  .foot-col h4{font-family:'Fredoka';color:#fff;margin-bottom:14px;font-size:1.1rem;font-weight:600}
+  .foot-col a,.foot-col p{display:block;color:#a9c6d8;text-decoration:none;font-size:.95rem;margin-bottom:8px}
+  .foot-col a:hover{color:var(--sun)}
+  .foot-bottom{text-align:center;margin-top:48px;color:#7fa0b4;font-size:.85rem}
+  .hours-pill{display:inline-block;background:rgba(255,207,63,.15);color:var(--sun);padding:6px 16px;border-radius:999px;font-weight:700;font-size:.9rem;margin-top:6px}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="brand"><span class="logo">🦷</span>Ideal Dental of Tucson</div>
+  <div class="navlinks">
+    <a href="#services">Our Care</a>
+    <a href="#how">First Visit</a>
+    <a href="#love">Parent Love</a>
+    <a href="#book" class="pill pill-coral">Book a Smile</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-copy">
+    <span class="eyebrow">🌸 Now welcoming little patients ages 0–16</span>
+    <h1>Big smiles<br>start with <span class="sky">tiny</span><br><span class="squig">teeth</span> 🪥</h1>
+    <p class="lead">A gentle, giggle-friendly dental clinic where kids actually <em>want</em> to come back — and parents can finally relax in the chair beside them.</p>
+    <div class="hero-cta">
+      <a href="#book" class="pill pill-coral">Book your free first visit</a>
+      <a href="#how" class="pill pill-white">See how it works →</a>
+    </div>
+    <div class="trust">
+      <div><b>12k+</b><span>happy smiles</span></div>
+      <div><b>4.9★</b><span>from 800 parents</span></div>
+      <div><b>0</b><span>scary moments</span></div>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="sparkle sp1">✨</div>
+    <div class="sparkle sp2">⭐</div>
+    <div class="blob"></div>
+    <div class="tooth">
+      <div class="cheek l"></div><div class="cheek r"></div>
+      <div class="face">
+        <div class="eyes"><i></i><i></i></div>
+        <div class="smile"></div>
+      </div>
+    </div>
+    <div class="floatie f1">🌟</div>
+    <div class="floatie f2">❤️</div>
+    <div class="floatie f3">🫧</div>
+    <div class="floatie f4">🍎</div>
+  </div>
+
+  <div class="wave">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none"><path fill="#ffffff" d="M0,40 C240,90 480,0 720,30 C960,60 1200,95 1440,45 L1440,90 L0,90 Z"></path></svg>
+  </div>
+</header>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="sec-head">
+    <span class="eyebrow">💙 Gentle care, head to toe... ish</span>
+    <h2>Everything their little smiles need</h2>
+    <p>No jargon, no judgment, no rush. Just kind dentists who speak fluent kid.</p>
+  </div>
+  <div class="bubbles">
+    <div class="bubble">
+      <div class="icon">🪥</div>
+      <h3>Cheerful Check-ups</h3>
+      <p>Sticker-rewarded cleanings and gentle exams that feel more like playtime than a procedure.</p>
+    </div>
+    <div class="bubble">
+      <div class="icon">🛡️</div>
+      <h3>Sealants & Fluoride</h3>
+      <p>A friendly shield against cavities so those baby teeth stay strong, bright and healthy.</p>
+    </div>
+    <div class="bubble">
+      <div class="icon">🌈</div>
+      <h3>Calm Comfort Care</h3>
+      <p>Nervous wriggler? We use happy gas, story time and zero pressure to keep things breezy.</p>
+    </div>
+    <div class="bubble">
+      <div class="icon">😬</div>
+      <h3>Tiny Braces & Spacers</h3>
+      <p>Early guidance for growing grins, with colourful options the kids get to pick themselves.</p>
+    </div>
+  </div>
+  <div class="wave">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none"><path fill="#eafaf6" d="M0,55 C220,5 520,5 740,45 C980,90 1220,90 1440,40 L1440,90 L0,90 Z"></path></svg>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="steps-band" id="how">
+  <div class="sec-head">
+    <span class="eyebrow">🌟 The Ideal Dental first-visit promise</span>
+    <h2>Three easy, no-tears steps</h2>
+    <p>We designed the whole visit around making your kiddo feel like a superstar.</p>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="num">1</div>
+      <div><h3>Meet & greet</h3><p>A tour of our treasure-chest waiting room, a high-five from the team, and a comfy seat together.</p></div>
+      <div class="emoji">👋</div>
+    </div>
+    <div class="step">
+      <div class="num">2</div>
+      <div><h3>Count the teeth</h3><p>A gentle, game-like check-up where every tooth gets named. Bubbles, mirrors and zero surprises.</p></div>
+      <div class="emoji">🔍</div>
+    </div>
+    <div class="step">
+      <div class="num">3</div>
+      <div><h3>Celebrate!</h3><p>A sticker, a balloon, a spin of the prize wheel — and a happy plan you can actually follow at home.</p></div>
+      <div class="emoji">🎈</div>
+    </div>
+  </div>
+  <div class="wave">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none"><path fill="#ffffff" d="M0,45 C260,95 460,10 720,40 C980,70 1180,95 1440,50 L1440,90 L0,90 Z"></path></svg>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section class="quote" id="love">
+  <span class="mark">“</span>
+  <blockquote>My daughter used to cry in the car park. Now she asks if it's a <span style="color:var(--coral-deep)">Ideal Dental day</span> yet. These folks are pure magic.</blockquote>
+  <div class="who">— Priya & little Maya, age 6</div>
+  <div class="stars">⭐⭐⭐⭐⭐</div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="book">
+  <div class="ring r1"></div>
+  <div class="ring r2"></div>
+  <div class="tooth-mini tm1">🦷</div>
+  <div class="tooth-mini tm2">🪥</div>
+  <h2>Ready for a happy smile?</h2>
+  <p>Your child's first visit is on us. Book in under 60 seconds — pick a time that fits nap schedules, school runs and snack breaks.</p>
+  <div class="hero-cta">
+    <a href="#" class="pill pill-white">Book the free first visit 🌸</a>
+    <a href="tel:+10000000000" class="pill pill-sun">Call us: (07) 123-BLOOM</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-grid">
+    <div class="foot-col">
+      <div class="brand"><span class="logo">🦷</span>Ideal Dental of Tucson</div>
+      <p>Where little teeth learn to love the dentist.<br>123 Sunny Lane, Greenfields.</p>
+      <span class="hours-pill">Mon–Sat · 8am–6pm</span>
+    </div>
+    <div class="foot-col">
+      <h4>Our Care</h4>
+      <a href="#services">Check-ups</a>
+      <a href="#services">Sealants & fluoride</a>
+      <a href="#services">Comfort care</a>
+      <a href="#services">Tiny braces</a>
+    </div>
+    <div class="foot-col">
+      <h4>For Parents</h4>
+      <a href="#how">Your first visit</a>
+      <a href="#love">Parent reviews</a>
+      <a href="#">Insurance & plans</a>
+      <a href="#">New patient forms</a>
+    </div>
+    <div class="foot-col">
+      <h4>Say hi 👋</h4>
+      <a href="tel:+10000000000">(07) 123-BLOOM</a>
+      <a href="mailto:hi@bloomdental.com">hi@bloomdental.com</a>
+      <a href="#">📷 @bloomdental</a>
+    </div>
+  </div>
+  <div class="foot-bottom">© 2026 Ideal Dental of Tucson Co. · Made with 🫶 and minty-fresh breath.</div>
+</footer>
+
+</body>
+</html>

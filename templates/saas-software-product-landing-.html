@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Flowdesk — The workspace that thinks ahead</title>
+<meta name="description" content="Flowdesk unifies your tasks, docs, and team into one calm, fast workspace. Ship more, with less noise." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;450;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#fbfbfd;
+    --bg-soft:#f4f4f8;
+    --surface:#ffffff;
+    --ink:#0f1015;
+    --ink-2:#3a3c46;
+    --muted:#6b6e7d;
+    --line:#ececf2;
+    --line-2:#e2e2ec;
+    --brand:#5b4bff;
+    --brand-2:#8b6bff;
+    --brand-ink:#3a2ce0;
+    --accent:#16c2a3;
+    --accent-warm:#ff8a4c;
+    --pink:#ff5d9e;
+    --radius:18px;
+    --radius-lg:26px;
+    --radius-sm:11px;
+    --shadow-sm:0 1px 2px rgba(16,18,30,.05), 0 2px 6px rgba(16,18,30,.04);
+    --shadow:0 10px 30px -12px rgba(28,24,80,.18), 0 4px 12px -6px rgba(28,24,80,.10);
+    --shadow-lg:0 30px 70px -30px rgba(40,30,120,.35), 0 10px 30px -16px rgba(28,24,80,.16);
+    --maxw:1180px;
+    --font:'Plus Jakarta Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    --font-body:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{
+    font-family:var(--font-body);
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,h4{font-family:var(--font);font-weight:700;line-height:1.08;letter-spacing:-.02em;color:var(--ink)}
+  a{color:inherit;text-decoration:none}
+  img,svg{display:block;max-width:100%}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  section{position:relative}
+
+  /* ---------- mesh gradient background blobs ---------- */
+  .mesh{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+  .blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55}
+  .blob.b1{width:520px;height:520px;background:radial-gradient(circle at 30% 30%,#8b6bff,#5b4bff00 70%);top:-180px;left:-120px}
+  .blob.b2{width:460px;height:460px;background:radial-gradient(circle at 60% 40%,#16c2a3,#16c2a300 70%);top:-120px;right:-100px;opacity:.4}
+  .blob.b3{width:380px;height:380px;background:radial-gradient(circle at 50% 50%,#ff5d9e,#ff5d9e00 70%);top:140px;left:42%;opacity:.28}
+
+  /* ---------- buttons ---------- */
+  .btn{
+    display:inline-flex;align-items:center;gap:9px;
+    font-family:var(--font);font-weight:600;font-size:15px;
+    padding:13px 22px;border-radius:12px;cursor:pointer;border:1px solid transparent;
+    transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s,background .2s,border-color .2s;
+    white-space:nowrap;
+  }
+  .btn svg{width:17px;height:17px}
+  .btn-primary{
+    color:#fff;background:linear-gradient(180deg,#6a5aff,#5b4bff);
+    box-shadow:0 8px 20px -8px rgba(91,75,255,.6), inset 0 1px 0 rgba(255,255,255,.25);
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 28px -10px rgba(91,75,255,.7), inset 0 1px 0 rgba(255,255,255,.25)}
+  .btn-ghost{background:var(--surface);border-color:var(--line-2);color:var(--ink);box-shadow:var(--shadow-sm)}
+  .btn-ghost:hover{transform:translateY(-2px);border-color:#d4d4e4;box-shadow:var(--shadow)}
+  .btn-light{background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.22);backdrop-filter:blur(6px)}
+  .btn-light:hover{background:rgba(255,255,255,.22);transform:translateY(-2px)}
+  .btn-white{background:#fff;color:var(--brand-ink)}
+  .btn-white:hover{transform:translateY(-2px);box-shadow:0 14px 30px -12px rgba(0,0,0,.35)}
+
+  /* ---------- nav ---------- */
+  header{position:sticky;top:0;z-index:50;transition:background .3s,box-shadow .3s,border-color .3s;border-bottom:1px solid transparent}
+  header.scrolled{background:rgba(251,251,253,.82);backdrop-filter:saturate(160%) blur(16px);border-bottom-color:var(--line);box-shadow:0 1px 0 rgba(16,18,30,.02)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:72px}
+  .brand{display:flex;align-items:center;gap:11px;font-family:var(--font);font-weight:800;font-size:19px;letter-spacing:-.02em}
+  .logo-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#6a5aff,#8b6bff 55%,#16c2a3);display:grid;place-items:center;box-shadow:0 6px 14px -6px rgba(91,75,255,.7), inset 0 1px 0 rgba(255,255,255,.4)}
+  .logo-mark svg{width:19px;height:19px}
+  .nav-links{display:flex;align-items:center;gap:34px}
+  .nav-links a{font-size:15px;font-weight:500;color:var(--ink-2);transition:color .2s;position:relative}
+  .nav-links a:hover{color:var(--ink)}
+  .nav-links a::after{content:"";position:absolute;left:0;bottom:-6px;height:2px;width:0;background:var(--brand);border-radius:2px;transition:width .25s}
+  .nav-links a:hover::after{width:100%}
+  .nav-cta{display:flex;align-items:center;gap:12px}
+  .nav-cta .sign{font-weight:600;font-size:15px;color:var(--ink-2);padding:9px 6px;transition:color .2s}
+  .nav-cta .sign:hover{color:var(--ink)}
+  .menu-btn{display:none;background:none;border:1px solid var(--line-2);border-radius:10px;width:42px;height:42px;cursor:pointer;align-items:center;justify-content:center}
+  .menu-btn svg{width:20px;height:20px;stroke:var(--ink)}
+
+  /* ---------- hero ---------- */
+  .hero{padding:72px 0 70px;text-align:center;overflow:hidden}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:9px;
+    background:var(--surface);border:1px solid var(--line-2);
+    border-radius:100px;padding:7px 7px 7px 14px;font-size:13.5px;font-weight:500;color:var(--ink-2);
+    box-shadow:var(--shadow-sm);margin-bottom:30px;
+  }
+  .eyebrow .pill{background:linear-gradient(135deg,#6a5aff,#8b6bff);color:#fff;font-weight:600;font-size:11.5px;padding:3px 9px;border-radius:100px;letter-spacing:.02em}
+  .eyebrow .arrow{transition:transform .2s}
+  .eyebrow:hover .arrow{transform:translateX(3px)}
+  .hero h1{font-size:clamp(38px,6.3vw,70px);font-weight:800;max-width:14ch;margin:0 auto;letter-spacing:-.035em}
+  .hero h1 .grad{background:linear-gradient(115deg,#6a5aff 10%,#8b6bff 45%,#16c2a3 95%);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p.sub{font-size:clamp(16.5px,2.1vw,20px);color:var(--muted);max-width:54ch;margin:24px auto 0;line-height:1.55}
+  .hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:36px}
+  .hero-note{margin-top:18px;font-size:13.5px;color:var(--muted);display:flex;gap:8px;align-items:center;justify-content:center}
+  .hero-note svg{width:16px;height:16px;color:var(--accent)}
+
+  /* ---------- product mock ---------- */
+  .mock-shell{margin:60px auto 0;max-width:1040px;position:relative}
+  .mock-glow{position:absolute;inset:-6% 6% auto 6%;height:70%;background:radial-gradient(ellipse at 50% 0%,rgba(91,75,255,.32),transparent 70%);filter:blur(40px);z-index:0}
+  .mock{
+    position:relative;z-index:1;background:#fff;border:1px solid var(--line-2);
+    border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);overflow:hidden;
+  }
+  .mock-top{display:flex;align-items:center;gap:8px;padding:14px 18px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#fcfcff,#f7f7fb)}
+  .dot{width:11px;height:11px;border-radius:50%}
+  .dot.r{background:#ff5f57}.dot.y{background:#febc2e}.dot.g{background:#28c840}
+  .mock-url{margin-left:14px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:5px 14px;font-size:12.5px;color:var(--muted);font-family:var(--font-body);flex:1;max-width:340px;display:flex;align-items:center;gap:7px}
+  .mock-url svg{width:12px;height:12px;color:var(--accent)}
+  .mock-body{display:grid;grid-template-columns:210px 1fr;min-height:380px}
+  .mock-side{border-right:1px solid var(--line);padding:18px 14px;background:#fafafd}
+  .side-team{display:flex;align-items:center;gap:9px;padding:8px;border-radius:10px;margin-bottom:14px}
+  .side-team .ava{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#6a5aff,#16c2a3);flex:none}
+  .side-team .meta{font-size:12.5px;line-height:1.3}
+  .side-team .meta b{font-family:var(--font);font-weight:700;font-size:13px;display:block}
+  .side-team .meta span{color:var(--muted);font-size:11px}
+  .nav-item{display:flex;align-items:center;gap:11px;padding:8px 10px;border-radius:9px;font-size:13px;color:var(--ink-2);font-weight:500;margin-bottom:2px}
+  .nav-item svg{width:15px;height:15px;color:var(--muted)}
+  .nav-item.active{background:#fff;color:var(--brand-ink);box-shadow:var(--shadow-sm);font-weight:600}
+  .nav-item.active svg{color:var(--brand)}
+  .mock-main{padding:22px 24px;background:#fff}
+  .mm-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+  .mm-head h4{font-size:17px}
+  .mm-head .chip{font-size:11px;font-weight:600;font-family:var(--font);color:var(--accent);background:rgba(22,194,163,.1);padding:4px 10px;border-radius:100px}
+  .col-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .col{background:#fafafd;border:1px solid var(--line);border-radius:13px;padding:12px}
+  .col-h{font-size:11.5px;font-weight:700;font-family:var(--font);color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;display:flex;justify-content:space-between}
+  .card-t{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 11px;margin-bottom:9px;box-shadow:var(--shadow-sm)}
+  .card-t .tag{display:inline-block;font-size:10px;font-weight:600;font-family:var(--font);padding:2px 8px;border-radius:6px;margin-bottom:7px}
+  .tag.a{background:rgba(91,75,255,.1);color:var(--brand-ink)}
+  .tag.b{background:rgba(255,138,76,.13);color:#d9621f}
+  .tag.c{background:rgba(22,194,163,.13);color:#0d8a73}
+  .card-t .ttl{font-size:12.5px;font-weight:600;font-family:var(--font);color:var(--ink);margin-bottom:8px;line-height:1.3}
+  .card-t .foot{display:flex;align-items:center;justify-content:space-between}
+  .avs{display:flex}
+  .avs span{width:19px;height:19px;border-radius:50%;border:2px solid #fff;margin-left:-6px;background:linear-gradient(135deg,#8b6bff,#16c2a3)}
+  .avs span:first-child{margin-left:0;background:linear-gradient(135deg,#ff5d9e,#ff8a4c)}
+  .avs span:nth-child(2){background:linear-gradient(135deg,#5b4bff,#8b6bff)}
+  .prog{height:5px;border-radius:4px;background:var(--line);overflow:hidden;width:42px}
+  .prog i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#6a5aff,#16c2a3)}
+  .float-card{
+    position:absolute;z-index:3;background:#fff;border:1px solid var(--line-2);border-radius:14px;
+    box-shadow:var(--shadow-lg);padding:13px 15px;display:flex;align-items:center;gap:11px;
+    animation:float 5s ease-in-out infinite;
+  }
+  .float-card .ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;flex:none}
+  .float-card .ic svg{width:18px;height:18px;color:#fff}
+  .float-card .tx b{font-family:var(--font);font-weight:700;font-size:14px;display:block;line-height:1.2}
+  .float-card .tx span{font-size:12px;color:var(--muted)}
+  .float-1{top:64px;left:-26px;animation-delay:0s}
+  .float-1 .ic{background:linear-gradient(135deg,#16c2a3,#0d9e84)}
+  .float-2{bottom:48px;right:-30px;animation-delay:-2.5s}
+  .float-2 .ic{background:linear-gradient(135deg,#6a5aff,#8b6bff)}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
+  /* ---------- logos strip ---------- */
+  .logos{padding:54px 0 8px}
+  .logos p{text-align:center;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:30px}
+  .logo-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:46px}
+  .logo-row .lg{display:flex;align-items:center;gap:9px;color:#a3a6b4;font-family:var(--font);font-weight:700;font-size:19px;letter-spacing:-.02em;opacity:.85;transition:color .25s,opacity .25s}
+  .logo-row .lg:hover{color:var(--ink-2);opacity:1}
+  .logo-row .lg svg{width:23px;height:23px}
+
+  /* ---------- section heading ---------- */
+  .sec{padding:96px 0}
+  .sec-head{text-align:center;max-width:640px;margin:0 auto 56px}
+  .kicker{display:inline-block;font-family:var(--font);font-weight:700;font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--brand);margin-bottom:14px}
+  .sec-head h2{font-size:clamp(29px,4.2vw,46px);font-weight:800;letter-spacing:-.03em}
+  .sec-head p{color:var(--muted);font-size:clamp(16px,1.9vw,18.5px);margin-top:16px;line-height:1.55}
+
+  /* ---------- bento ---------- */
+  .bento{display:grid;grid-template-columns:repeat(6,1fr);gap:18px}
+  .cell{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:28px;
+    position:relative;overflow:hidden;box-shadow:var(--shadow-sm);
+    transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s,border-color .35s;
+  }
+  .cell:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--line-2)}
+  .cell .ic-box{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;margin-bottom:20px;background:linear-gradient(135deg,#f0eeff,#e8f8f4);border:1px solid var(--line)}
+  .cell .ic-box svg{width:23px;height:23px;color:var(--brand)}
+  .cell h3{font-size:20px;font-weight:700;margin-bottom:9px}
+  .cell p{color:var(--muted);font-size:15px;line-height:1.55}
+  .c-2{grid-column:span 2}.c-3{grid-column:span 3}.c-4{grid-column:span 4}.c-6{grid-column:span 6}
+  /* feature hero cell */
+  .cell.feature{grid-column:span 4;background:linear-gradient(150deg,#fff 40%,#f6f4ff);min-height:280px}
+  .cell.feature .ic-box{background:linear-gradient(135deg,#6a5aff,#8b6bff);border:none}
+  .cell.feature .ic-box svg{color:#fff}
+  .cell.feature h3{font-size:25px}
+  .mini-ui{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap}
+  .mini-ui .pillui{background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 13px;font-size:13px;font-weight:600;font-family:var(--font);color:var(--ink-2);display:flex;align-items:center;gap:8px;box-shadow:var(--shadow-sm)}
+  .mini-ui .pillui .d{width:8px;height:8px;border-radius:50%}
+  .accent-cell{grid-column:span 2;background:linear-gradient(160deg,#0f1015,#1c1830);color:#fff;border:none;overflow:hidden}
+  .accent-cell::before{content:"";position:absolute;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(91,75,255,.55),transparent 70%);top:-90px;right:-70px}
+  .accent-cell .ic-box{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16)}
+  .accent-cell .ic-box svg{color:#a99bff}
+  .accent-cell h3{color:#fff}
+  .accent-cell p{color:#b9bac9}
+  .stat-big{font-family:var(--font);font-weight:800;font-size:44px;letter-spacing:-.03em;background:linear-gradient(120deg,#a99bff,#5fe9d0);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1;margin-bottom:6px}
+
+  /* ---------- how it works ---------- */
+  .how{background:linear-gradient(180deg,#fff,#f7f7fb);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;counter-reset:s;position:relative}
+  .step{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:30px 28px;box-shadow:var(--shadow-sm);transition:transform .3s,box-shadow .3s}
+  .step:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+  .step .num{counter-increment:s;font-family:var(--font);font-weight:800;font-size:15px;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,#6a5aff,#8b6bff);margin-bottom:20px;box-shadow:0 6px 14px -6px rgba(91,75,255,.6)}
+  .step .num::before{content:"0" counter(s)}
+  .step h3{font-size:19px;margin-bottom:9px}
+  .step p{color:var(--muted);font-size:15px}
+  .step-line{display:none}
+
+  /* ---------- testimonial ---------- */
+  .quote-wrap{max-width:880px;margin:0 auto;text-align:center}
+  .stars{display:flex;gap:5px;justify-content:center;margin-bottom:28px}
+  .stars svg{width:22px;height:22px;color:#ffb23e}
+  .quote{font-family:var(--font);font-weight:600;font-size:clamp(22px,3.3vw,33px);line-height:1.32;letter-spacing:-.02em;color:var(--ink)}
+  .quote .hl{background:linear-gradient(180deg,transparent 62%,rgba(91,75,255,.18) 62%)}
+  .quote-author{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:34px}
+  .quote-author .ava{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#6a5aff,#16c2a3);flex:none;box-shadow:var(--shadow)}
+  .quote-author .meta{text-align:left}
+  .quote-author .meta b{font-family:var(--font);font-weight:700;font-size:16px;display:block}
+  .quote-author .meta span{color:var(--muted);font-size:14px}
+  .mini-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:760px;margin:70px auto 0;text-align:center}
+  .mini-stats .ms b{font-family:var(--font);font-weight:800;font-size:clamp(28px,4vw,40px);letter-spacing:-.03em;display:block;background:linear-gradient(120deg,#5b4bff,#16c2a3);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .mini-stats .ms span{color:var(--muted);font-size:14.5px;font-weight:500}
+  .mini-stats .ms{border-left:1px solid var(--line)}
+  .mini-stats .ms:first-child{border-left:none}
+
+  /* ---------- pricing ---------- */
+  .pricing{background:#fafafd;border-top:1px solid var(--line)}
+  .toggle{display:flex;align-items:center;justify-content:center;gap:13px;margin:-26px auto 50px;font-size:14.5px;font-weight:600;color:var(--ink-2)}
+  .toggle .save{background:rgba(22,194,163,.13);color:#0d8a73;font-size:12px;font-weight:700;padding:3px 9px;border-radius:100px;font-family:var(--font)}
+  .switch{width:48px;height:27px;border-radius:100px;background:var(--brand);position:relative;cursor:pointer;border:none;transition:background .2s}
+  .switch i{position:absolute;width:21px;height:21px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left .25s cubic-bezier(.2,.8,.2,1);box-shadow:0 2px 5px rgba(0,0,0,.2)}
+  .switch.off{background:#cfcfe0}
+  .switch.off i{left:3px}
+  .switch:not(.off) i{left:24px}
+  .tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:stretch}
+  .tier{background:var(--surface);border:1px solid var(--line-2);border-radius:var(--radius-lg);padding:32px 30px;display:flex;flex-direction:column;position:relative;transition:transform .3s,box-shadow .3s}
+  .tier:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+  .tier h3{font-size:20px;font-weight:700}
+  .tier .desc{color:var(--muted);font-size:14px;margin-top:6px;min-height:40px}
+  .price{display:flex;align-items:flex-end;gap:4px;margin:22px 0 4px}
+  .price .cur{font-family:var(--font);font-weight:700;font-size:22px;color:var(--ink-2);margin-bottom:7px}
+  .price .amt{font-family:var(--font);font-weight:800;font-size:50px;letter-spacing:-.03em;line-height:1}
+  .price .per{color:var(--muted);font-size:14.5px;margin-bottom:9px}
+  .tier .billed{font-size:13px;color:var(--muted);margin-bottom:24px}
+  .tier .btn{width:100%;justify-content:center;margin-bottom:26px}
+  .feat{display:flex;flex-direction:column;gap:13px}
+  .feat li{display:flex;align-items:flex-start;gap:11px;font-size:14.5px;color:var(--ink-2);list-style:none}
+  .feat li svg{width:19px;height:19px;flex:none;margin-top:1px;color:var(--accent)}
+  .tier.featured{
+    background:linear-gradient(180deg,#15131f,#0f1015);color:#fff;border:none;
+    box-shadow:var(--shadow-lg);transform:scale(1.03);
+  }
+  .tier.featured:hover{transform:scale(1.03) translateY(-4px)}
+  .tier.featured::before{content:"";position:absolute;inset:0;border-radius:var(--radius-lg);padding:1px;background:linear-gradient(160deg,#8b6bff,transparent 50%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+  .tier.featured h3,.tier.featured .price .amt{color:#fff}
+  .tier.featured .price .cur{color:#cfcfe0}
+  .tier.featured .desc,.tier.featured .per,.tier.featured .billed{color:#9d9fb3}
+  .tier.featured .feat li{color:#d9dae6}
+  .tier.featured .feat li svg{color:#5fe9d0}
+  .badge-pop{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#6a5aff,#8b6bff);color:#fff;font-family:var(--font);font-weight:700;font-size:12px;padding:6px 16px;border-radius:100px;box-shadow:0 8px 18px -6px rgba(91,75,255,.7);letter-spacing:.02em}
+
+  /* ---------- CTA ---------- */
+  .cta-sec{padding:30px 0 110px}
+  .cta-box{
+    position:relative;overflow:hidden;border-radius:var(--radius-lg);
+    background:linear-gradient(140deg,#16132a,#211a3d 55%,#0f1015);
+    padding:72px 40px;text-align:center;box-shadow:var(--shadow-lg);
+  }
+  .cta-box .mesh .blob.cb1{background:radial-gradient(circle,#6a5aff,transparent 70%);width:420px;height:420px;top:-160px;left:-80px;opacity:.6}
+  .cta-box .mesh .blob.cb2{background:radial-gradient(circle,#16c2a3,transparent 70%);width:360px;height:360px;bottom:-160px;right:-60px;opacity:.45}
+  .cta-box h2{position:relative;z-index:1;color:#fff;font-size:clamp(28px,4.5vw,46px);font-weight:800;letter-spacing:-.03em;max-width:18ch;margin:0 auto}
+  .cta-box p{position:relative;z-index:1;color:#bcbdcf;font-size:clamp(16px,2vw,19px);margin:20px auto 0;max-width:46ch}
+  .cta-box .hero-cta{position:relative;z-index:1}
+  .cta-box .hero-note{color:#9698ab;margin-top:22px}
+
+  /* ---------- footer ---------- */
+  footer{border-top:1px solid var(--line);padding:70px 0 36px;background:var(--bg)}
+  .foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px;margin-bottom:54px}
+  .foot-brand .brand{margin-bottom:16px}
+  .foot-brand p{color:var(--muted);font-size:14.5px;max-width:30ch;margin-bottom:20px}
+  .socials{display:flex;gap:10px}
+  .socials a{width:38px;height:38px;border-radius:10px;border:1px solid var(--line-2);display:grid;place-items:center;color:var(--ink-2);transition:transform .2s,border-color .2s,color .2s,background .2s}
+  .socials a:hover{transform:translateY(-3px);border-color:var(--brand);color:var(--brand);background:#f6f4ff}
+  .socials a svg{width:18px;height:18px}
+  .foot-col h4{font-family:var(--font);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink);margin-bottom:18px}
+  .foot-col a{display:block;color:var(--muted);font-size:14.5px;margin-bottom:12px;transition:color .2s,transform .2s}
+  .foot-col a:hover{color:var(--brand);transform:translateX(3px)}
+  .foot-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:28px;border-top:1px solid var(--line);flex-wrap:wrap;gap:14px}
+  .foot-bottom p{color:var(--muted);font-size:13.5px}
+  .foot-bottom .links{display:flex;gap:24px}
+  .foot-bottom .links a{color:var(--muted);font-size:13.5px;transition:color .2s}
+  .foot-bottom .links a:hover{color:var(--ink)}
+
+  /* ---------- reveal anim ---------- */
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.8,.2,1),transform .7s cubic-bezier(.2,.8,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  /* ---------- mobile menu ---------- */
+  .mobile-menu{display:none;position:fixed;inset:72px 0 0;background:rgba(251,251,253,.98);backdrop-filter:blur(10px);z-index:40;padding:30px 24px;flex-direction:column;gap:6px}
+  .mobile-menu.open{display:flex}
+  .mobile-menu a{font-family:var(--font);font-weight:600;font-size:20px;padding:14px 6px;border-bottom:1px solid var(--line);color:var(--ink)}
+  .mobile-menu .btn{margin-top:20px;justify-content:center}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:980px){
+    .nav-links,.nav-cta .sign{display:none}
+    .menu-btn{display:flex}
+    .nav-cta .btn-primary{display:none}
+    .menu-btn{margin-left:auto}
+    .mock-body{grid-template-columns:1fr}
+    .mock-side{display:none}
+    .bento{grid-template-columns:repeat(2,1fr)}
+    .cell.feature,.c-4,.c-3,.c-2,.accent-cell{grid-column:span 2}
+    .steps{grid-template-columns:1fr}
+    .tiers{grid-template-columns:1fr;max-width:440px;margin:0 auto}
+    .tier.featured{transform:none;order:-1}
+    .tier.featured:hover{transform:translateY(-4px)}
+    .foot-grid{grid-template-columns:1fr 1fr}
+    .foot-brand{grid-column:span 2}
+    .float-card{display:none}
+  }
+  @media (max-width:560px){
+    .wrap{padding:0 18px}
+    .hero{padding:48px 0 50px}
+    .sec{padding:70px 0}
+    .bento{grid-template-columns:1fr}
+    .cell.feature,.c-4,.c-3,.c-2,.accent-cell{grid-column:span 1}
+    .mini-stats{grid-template-columns:1fr;gap:0}
+    .mini-stats .ms{border-left:none;border-top:1px solid var(--line);padding:22px 0}
+    .mini-stats .ms:first-child{border-top:none;padding-top:0}
+    .logo-row{gap:28px}
+    .foot-grid{grid-template-columns:1fr}
+    .foot-brand{grid-column:span 1}
+    .cta-box{padding:50px 24px}
+    .col-row{grid-template-columns:1fr}
+    .hero-cta .btn{width:100%;justify-content:center}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header id="hdr">
+  <div class="wrap">
+    <nav class="nav">
+      <a class="brand" href="#">
+        <span class="logo-mark">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M5 13.5 9 17l10-10" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="7" r="1.7" fill="#fff"/></svg>
+        </span>
+        Flowdesk
+      </a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#how">How it works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#story">Customers</a>
+      </div>
+      <div class="nav-cta">
+        <a class="sign" href="#">Sign in</a>
+        <a class="btn btn-primary" href="#pricing">
+          Start free
+          <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <button class="menu-btn" id="menuBtn" aria-label="Menu">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#features">Features</a>
+  <a href="#how">How it works</a>
+  <a href="#pricing">Pricing</a>
+  <a href="#story">Customers</a>
+  <a class="btn btn-primary" href="#pricing">Start free trial</a>
+</div>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="mesh">
+    <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+  </div>
+  <div class="wrap" style="position:relative;z-index:1">
+    <a class="eyebrow reveal" href="#">
+      <span class="pill">NEW</span>
+      Flowdesk AI now writes your standups
+      <span class="arrow">→</span>
+    </a>
+    <h1 class="reveal">The workspace that <span class="grad">thinks ahead</span> of your team</h1>
+    <p class="sub reveal">Flowdesk unifies tasks, docs, and conversations into one calm, fast surface — then quietly automates the busywork so you ship more with a lot less noise.</p>
+    <div class="hero-cta reveal">
+      <a class="btn btn-primary" href="#pricing">
+        Start for free
+        <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a class="btn btn-ghost" href="#how">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M10 9l5 3-5 3V9z" fill="currentColor"/></svg>
+        Watch demo
+      </a>
+    </div>
+    <p class="hero-note reveal">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Free 14-day trial · No credit card · Cancel anytime
+    </p>
+
+    <!-- product mock -->
+    <div class="mock-shell reveal">
+      <div class="mock-glow"></div>
+
+      <div class="float-card float-1">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="tx"><b>+32% faster</b><span>cycle time this sprint</span></span>
+      </div>
+      <div class="float-card float-2">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5L12 3z" fill="currentColor"/></svg></span>
+        <span class="tx"><b>AI summary ready</b><span>Q3 roadmap recap</span></span>
+      </div>
+
+      <div class="mock">
+        <div class="mock-top">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="mock-url">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M7 11V8a5 5 0 0110 0v3" stroke="currentColor" stroke-width="2"/><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="2"/></svg>
+            app.flowdesk.io/board
+          </span>
+        </div>
+        <div class="mock-body">
+          <aside class="mock-side">
+            <div class="side-team">
+              <span class="ava"></span>
+              <span class="meta"><b>Northwind</b><span>12 members</span></span>
+            </div>
+            <div class="nav-item active"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/></svg>Board</div>
+            <div class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Docs</div>
+            <div class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>Inbox</div>
+            <div class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2v6m0 8v6M2 12h6m8 0h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>Automations</div>
+            <div class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M3 13l4-4 4 4 4-6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Insights</div>
+          </aside>
+          <main class="mock-main">
+            <div class="mm-head">
+              <h4>Sprint 24 — Launch</h4>
+              <span class="chip">● On track</span>
+            </div>
+            <div class="col-row">
+              <div class="col">
+                <div class="col-h"><span>To do</span><span>3</span></div>
+                <div class="card-t">
+                  <span class="tag a">Design</span>
+                  <div class="ttl">Refine onboarding flow</div>
+                  <div class="foot"><div class="avs"><span></span><span></span></div><div class="prog"><i style="width:35%"></i></div></div>
+                </div>
+                <div class="card-t">
+                  <span class="tag b">Backend</span>
+                  <div class="ttl">Webhook retries</div>
+                  <div class="foot"><div class="avs"><span></span></div><div class="prog"><i style="width:15%"></i></div></div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="col-h"><span>In progress</span><span>2</span></div>
+                <div class="card-t">
+                  <span class="tag c">Live</span>
+                  <div class="ttl">Realtime presence</div>
+                  <div class="foot"><div class="avs"><span></span><span></span><span></span></div><div class="prog"><i style="width:72%"></i></div></div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="col-h"><span>Done</span><span>8</span></div>
+                <div class="card-t">
+                  <span class="tag a">Ship</span>
+                  <div class="ttl">v2.4 release notes</div>
+                  <div class="foot"><div class="avs"><span></span></div><div class="prog"><i style="width:100%"></i></div></div>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LOGOS ============ -->
+<section class="logos">
+  <div class="wrap reveal">
+    <p>Trusted by fast-moving teams at</p>
+    <div class="logo-row">
+      <span class="lg"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2l9 5v10l-9 5-9-5V7l9-5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>Northwind</span>
+      <span class="lg"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="1.8"/></svg>Orbital</span>
+      <span class="lg"><svg viewBox="0 0 24 24" fill="none"><path d="M4 18 12 4l8 14H4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>Apex</span>
+      <span class="lg"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="5" stroke="currentColor" stroke-width="1.8"/><path d="M9 12h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Lumen</span>
+      <span class="lg"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2a10 10 0 100 20M12 2a10 10 0 010 20" stroke="currentColor" stroke-width="1.8"/></svg>Cascade</span>
+      <span class="lg"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12h5l2-7 4 14 2-7h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Vela</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BENTO FEATURES ============ -->
+<section class="sec" id="features">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker">Everything in one place</span>
+      <h2>One surface for the entire workflow</h2>
+      <p>Stop stitching together six tools. Flowdesk gives your team a single, fast home for planning, building, and shipping — with AI that handles the repetitive parts.</p>
+    </div>
+
+    <div class="bento">
+      <!-- feature hero -->
+      <div class="cell feature reveal">
+        <span class="ic-box"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5L12 2z" fill="currentColor"/></svg></span>
+        <h3>AI that drafts, summarizes & sorts</h3>
+        <p>Flowdesk AI turns a messy thread into a clean task list, writes your standup, and surfaces what's blocked — before you even ask.</p>
+        <div class="mini-ui">
+          <span class="pillui"><span class="d" style="background:#16c2a3"></span>Summarize thread</span>
+          <span class="pillui"><span class="d" style="background:#6a5aff"></span>Generate tasks</span>
+          <span class="pillui"><span class="d" style="background:#ff8a4c"></span>Draft update</span>
+        </div>
+      </div>
+
+      <!-- dark accent -->
+      <div class="cell accent-cell reveal">
+        <span class="ic-box"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" fill="currentColor"/></svg></span>
+        <div class="stat-big">0.2s</div>
+        <h3 style="font-size:18px;margin-bottom:7px">Instant everywhere</h3>
+        <p>Local-first sync keeps every board, doc, and search snappy — even offline.</p>
+      </div>
+
+      <!-- row 2 -->
+      <div class="cell c-2 reveal">
+        <span class="ic-box"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        <h3>Automations</h3>
+        <p>Route, assign and notify with no-code rules that run the moment something changes.</p>
+      </div>
+      <div class="cell c-2 reveal">
+        <span class="ic-box"><svg viewBox="0 0 24 24" fill="none"><path d="M3 13l4-4 4 4 4-6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <h3>Live insights</h3>
+        <p>Velocity, cycle time and load — visualized in real time, never stale.</p>
+      </div>
+      <div class="cell c-2 reveal">
+        <span class="ic-box"><svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="4" width="18" height="16" rx="3" stroke="currentColor" stroke-width="2"/></svg></span>
+        <h3>Secure by default</h3>
+        <p>SOC 2 Type II, SSO, SCIM and granular roles — enterprise ready out of the box.</p>
+      </div>
+
+      <!-- row 3 -->
+      <div class="cell c-3 reveal">
+        <span class="ic-box"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>
+        <h3>Conversations that stay in context</h3>
+        <p>Comment threads live right where the work happens — no more digging through chat. Mentions, reactions, and decisions stay attached to the task forever.</p>
+      </div>
+      <div class="cell c-3 reveal">
+        <span class="ic-box"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7l8-4 8 4v10l-8 4-8-4V7z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M4 7l8 4 8-4M12 11v10" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>
+        <h3>100+ integrations</h3>
+        <p>GitHub, Slack, Figma, Linear and your stack — connected in a click. Two-way sync keeps everything honest, so nothing falls between the tools.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section class="sec how" id="how">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker">Up & running in minutes</span>
+      <h2>From chaos to clarity in three steps</h2>
+      <p>No migration headaches, no week-long onboarding. Flowdesk meets your team where they already work.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <span class="num"></span>
+        <h3>Connect your tools</h3>
+        <p>Import from Jira, Trello, or a spreadsheet in one click. Flowdesk maps your projects, people, and history automatically.</p>
+      </div>
+      <div class="step reveal">
+        <span class="num"></span>
+        <h3>Let AI organize</h3>
+        <p>Flowdesk AI groups work, suggests owners, and flags risk — so your board is clean and prioritized from day one.</p>
+      </div>
+      <div class="step reveal">
+        <span class="num"></span>
+        <h3>Ship & watch it flow</h3>
+        <p>Automations handle the busywork while live insights show exactly where things stand. You just keep building.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIAL ============ -->
+<section class="sec" id="story">
+  <div class="wrap">
+    <div class="quote-wrap reveal">
+      <div class="stars">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6.5 7 .9-5 4.8 1.3 7L12 18l-6.3 3.2L7 14.2 2 9.4l7-.9L12 2z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6.5 7 .9-5 4.8 1.3 7L12 18l-6.3 3.2L7 14.2 2 9.4l7-.9L12 2z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6.5 7 .9-5 4.8 1.3 7L12 18l-6.3 3.2L7 14.2 2 9.4l7-.9L12 2z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6.5 7 .9-5 4.8 1.3 7L12 18l-6.3 3.2L7 14.2 2 9.4l7-.9L12 2z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6.5 7 .9-5 4.8 1.3 7L12 18l-6.3 3.2L7 14.2 2 9.4l7-.9L12 2z"/></svg>
+      </div>
+      <p class="quote">"We replaced four tools with Flowdesk and shipped our biggest release <span class="hl">two weeks early</span>. It's the first tool the whole team actually wants to open."</p>
+      <div class="quote-author">
+        <span class="ava"></span>
+        <div class="meta">
+          <b>Maya Okonkwo</b>
+          <span>VP of Product, Northwind</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mini-stats">
+      <div class="ms reveal"><b>12,000+</b><span>teams onboarded</span></div>
+      <div class="ms reveal"><b>32%</b><span>faster cycle time</span></div>
+      <div class="ms reveal"><b>4.9/5</b><span>average rating</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING ============ -->
+<section class="sec pricing" id="pricing">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker">Simple, honest pricing</span>
+      <h2>Plans that scale with your team</h2>
+      <p>Start free, upgrade when you're ready. Every plan includes unlimited docs and core automations.</p>
+    </div>
+
+    <div class="toggle reveal">
+      <span>Monthly</span>
+      <button class="switch off" id="billSwitch" aria-label="Toggle billing"><i></i></button>
+      <span>Yearly <span class="save">Save 20%</span></span>
+    </div>
+
+    <div class="tiers">
+      <!-- Starter -->
+      <div class="tier reveal">
+        <h3>Starter</h3>
+        <p class="desc">For small teams getting organized.</p>
+        <div class="price"><span class="cur">$</span><span class="amt" data-m="0" data-y="0">0</span><span class="per">/ user / mo</span></div>
+        <p class="billed">Free forever · up to 5 members</p>
+        <a class="btn btn-ghost" href="#">Get started</a>
+        <ul class="feat">
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Unlimited tasks & docs</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>3 active boards</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Core automations</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Community support</li>
+        </ul>
+      </div>
+
+      <!-- Pro (featured) -->
+      <div class="tier featured reveal">
+        <span class="badge-pop">Most popular</span>
+        <h3>Pro</h3>
+        <p class="desc">For growing teams that ship fast.</p>
+        <div class="price"><span class="cur">$</span><span class="amt" data-m="14" data-y="11">14</span><span class="per">/ user / mo</span></div>
+        <p class="billed">Billed monthly · or $11 yearly</p>
+        <a class="btn btn-white" href="#">Start 14-day trial</a>
+        <ul class="feat">
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Everything in Starter</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Unlimited boards & guests</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Flowdesk AI assistant</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Advanced insights</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Priority support</li>
+        </ul>
+      </div>
+
+      <!-- Enterprise -->
+      <div class="tier reveal">
+        <h3>Enterprise</h3>
+        <p class="desc">For orgs that need control & scale.</p>
+        <div class="price"><span class="cur">$</span><span class="amt" data-m="29" data-y="24">29</span><span class="per">/ user / mo</span></div>
+        <p class="billed">Custom contracts available</p>
+        <a class="btn btn-ghost" href="#">Contact sales</a>
+        <ul class="feat">
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Everything in Pro</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>SSO, SCIM & audit logs</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Dedicated success manager</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>99.99% uptime SLA</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="cta-sec">
+  <div class="wrap">
+    <div class="cta-box reveal">
+      <div class="mesh"><span class="blob cb1"></span><span class="blob cb2"></span></div>
+      <h2>Give your team a calmer way to ship</h2>
+      <p>Join 12,000+ teams who traded tool-chaos for one fast, focused workspace.</p>
+      <div class="hero-cta">
+        <a class="btn btn-white" href="#">
+          Start free trial
+          <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a class="btn btn-light" href="#">Book a demo</a>
+      </div>
+      <p class="hero-note">
+        <svg viewBox="0 0 24 24" fill="none" style="color:#5fe9d0"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        No credit card required · Set up in under 5 minutes
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="brand" href="#">
+          <span class="logo-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13.5 9 17l10-10" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="7" r="1.7" fill="#fff"/></svg></span>
+          Flowdesk
+        </a>
+        <p>The calm, fast workspace that helps modern teams ship more with less noise.</p>
+        <div class="socials">
+          <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 5.8a8 8 0 01-2.3.6 4 4 0 001.8-2.2 8 8 0 01-2.5 1 4 4 0 00-6.9 3.6A11.3 11.3 0 013 4.8a4 4 0 001.2 5.3 4 4 0 01-1.8-.5v.1a4 4 0 003.2 3.9 4 4 0 01-1.8.1 4 4 0 003.7 2.8A8 8 0 012 18.3a11.3 11.3 0 006.1 1.8c7.3 0 11.4-6.1 11.4-11.4v-.5A8 8 0 0022 5.8z"/></svg></a>
+          <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3V9zm6 0h3.8v1.7h.1a4.2 4.2 0 013.8-2.1c4 0 4.8 2.6 4.8 6V21h-4v-5.3c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21H9V9z"/></svg></a>
+          <a href="#" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.4-3.4-1.4-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.3-1.1.6-1.4-2.2-.3-4.6-1.1-4.6-5a3.9 3.9 0 011-2.7 3.6 3.6 0 01.1-2.7s.8-.3 2.7 1a9.3 9.3 0 015 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7a3.9 3.9 0 011 2.7c0 3.9-2.3 4.7-4.6 5 .4.3.7.9.7 1.8v2.6c0 .3.2.6.7.5A10 10 0 0012 2z"/></svg></a>
+        </div>
+      </div>
+      <div class="foot-col">
+        <h4>Product</h4>
+        <a href="#">Features</a>
+        <a href="#">Integrations</a>
+        <a href="#">Automations</a>
+        <a href="#">Changelog</a>
+        <a href="#">Roadmap</a>
+      </div>
+      <div class="foot-col">
+        <h4>Company</h4>
+        <a href="#">About</a>
+        <a href="#">Careers</a>
+        <a href="#">Blog</a>
+        <a href="#">Customers</a>
+        <a href="#">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h4>Resources</h4>
+        <a href="#">Help center</a>
+        <a href="#">Documentation</a>
+        <a href="#">API reference</a>
+        <a href="#">Community</a>
+        <a href="#">Status</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <p>© 2026 Flowdesk Labs, Inc. All rights reserved.</p>
+      <div class="links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Security</a>
+        <a href="#">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // sticky nav shadow
+  const hdr = document.getElementById('hdr');
+  const onScroll = () => hdr.classList.toggle('scrolled', window.scrollY > 8);
+  onScroll();
+  window.addEventListener('scroll', onScroll, {passive:true});
+
+  // mobile menu
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
+
+  // pricing toggle
+  const billSwitch = document.getElementById('billSwitch');
+  billSwitch.addEventListener('click', () => {
+    const yearly = billSwitch.classList.toggle('off') === false;
+    document.querySelectorAll('.amt').forEach(el => {
+      const v = yearly ? el.dataset.y : el.dataset.m;
+      if (v !== undefined) el.textContent = v;
+    });
+  });
+
+  // scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        e.target.style.transitionDelay = (Math.min(i,4) * 60) + 'ms';
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, {threshold:0.12, rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>

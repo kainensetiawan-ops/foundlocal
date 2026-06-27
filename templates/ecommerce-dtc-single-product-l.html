@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lume — The Aromatherapy Diffuser That Reads the Room</title>
+<meta name="description" content="Lume is a tactile, ceramic aromatherapy diffuser with adaptive mist, hand-blended oils, and an 18-hour fragrance run. Calm, on demand." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --cream:#F6EFE4;
+    --cream-2:#EFE5D6;
+    --paper:#FBF7F0;
+    --ink:#241D16;
+    --ink-soft:#5A4F44;
+    --ink-mute:#8B7E6F;
+    --terra:#C2603A;
+    --terra-deep:#A24A2A;
+    --amber:#E0A04B;
+    --sage:#6F7A5A;
+    --line:rgba(36,29,22,.12);
+    --card:#FFFDF9;
+    --shadow-sm:0 1px 2px rgba(36,29,22,.05), 0 6px 18px rgba(36,29,22,.06);
+    --shadow-md:0 10px 30px rgba(36,29,22,.10), 0 30px 60px rgba(36,29,22,.08);
+    --shadow-lg:0 30px 80px rgba(60,32,18,.22);
+    --r-sm:14px; --r-md:22px; --r-lg:34px; --r-pill:999px;
+    --display:"Fraunces", Georgia, serif;
+    --body:"Inter", system-ui, -apple-system, sans-serif;
+    --maxw:1200px;
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{
+    font-family:var(--body);
+    color:var(--ink);
+    background:var(--cream);
+    line-height:1.6;
+    font-size:17px;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--terra);color:#fff}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  .display{font-family:var(--display);font-weight:500;line-height:1.04;letter-spacing:-.02em}
+  .eyebrow{
+    font-size:12.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--terra-deep);display:inline-flex;align-items:center;gap:9px;
+  }
+  .eyebrow::before{content:"";width:22px;height:1.5px;background:var(--terra);display:inline-block}
+  .muted{color:var(--ink-soft)}
+
+  /* ---------- buttons ---------- */
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    font-weight:600;font-size:15.5px;letter-spacing:.01em;
+    padding:15px 26px;border-radius:var(--r-pill);border:1px solid transparent;
+    cursor:pointer;transition:transform .35s var(--ease), box-shadow .35s var(--ease), background .3s ease, color .3s ease;
+    will-change:transform;white-space:nowrap;
+  }
+  .btn-primary{
+    background:linear-gradient(180deg,#CB6A41,#A8492A);
+    color:#FFF6EE;box-shadow:0 10px 24px rgba(162,74,42,.32), inset 0 1px 0 rgba(255,255,255,.22);
+  }
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 18px 34px rgba(162,74,42,.40), inset 0 1px 0 rgba(255,255,255,.22)}
+  .btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+  .btn-ghost:hover{border-color:var(--ink);transform:translateY(-2px)}
+  .btn-light{background:var(--ink);color:var(--paper)}
+  .btn-light:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+  .btn .arr{transition:transform .35s var(--ease)}
+  .btn:hover .arr{transform:translateX(4px)}
+
+  /* ---------- nav ---------- */
+  header{
+    position:sticky;top:0;z-index:60;
+    backdrop-filter:saturate(140%) blur(12px);
+    background:rgba(246,239,228,.72);
+    border-bottom:1px solid transparent;
+    transition:border-color .4s ease, background .4s ease, box-shadow .4s ease;
+  }
+  header.scrolled{border-bottom-color:var(--line);box-shadow:0 6px 24px rgba(36,29,22,.05)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:72px}
+  .brand{display:flex;align-items:center;gap:11px;font-family:var(--display);font-weight:600;font-size:22px;letter-spacing:-.01em}
+  .brand .mark{width:30px;height:30px;flex:0 0 30px}
+  .nav-links{display:flex;align-items:center;gap:34px;font-size:15px;font-weight:500}
+  .nav-links a{color:var(--ink-soft);transition:color .25s ease;position:relative}
+  .nav-links a::after{content:"";position:absolute;left:0;bottom:-6px;height:2px;width:0;background:var(--terra);transition:width .3s var(--ease)}
+  .nav-links a:hover{color:var(--ink)}
+  .nav-links a:hover::after{width:100%}
+  .nav-cta{display:flex;align-items:center;gap:14px}
+  .price-tag{font-size:14px;font-weight:600;color:var(--ink-soft)}
+  .price-tag b{color:var(--ink)}
+  .burger{display:none;flex-direction:column;gap:5px;background:none;border:0;cursor:pointer;padding:8px}
+  .burger span{width:22px;height:2px;background:var(--ink);border-radius:2px;transition:.3s}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;padding:64px 0 40px;overflow:hidden}
+  .hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center}
+  .hero-copy h1{font-size:clamp(44px,6.4vw,82px);margin:18px 0 22px}
+  .hero-copy h1 em{font-style:italic;color:var(--terra-deep)}
+  .hero-copy p.lead{font-size:19px;color:var(--ink-soft);max-width:34ch;margin-bottom:30px}
+  .hero-actions{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:30px}
+  .hero-price{display:flex;align-items:baseline;gap:10px}
+  .hero-price .now{font-family:var(--display);font-size:30px;font-weight:600}
+  .hero-price .was{color:var(--ink-mute);text-decoration:line-through;font-size:17px}
+  .hero-price .save{font-size:12.5px;font-weight:700;letter-spacing:.04em;color:var(--terra-deep);background:rgba(194,96,58,.12);padding:4px 9px;border-radius:var(--r-pill)}
+  .hero-meta{display:flex;align-items:center;gap:22px;flex-wrap:wrap;font-size:14px;color:var(--ink-soft)}
+  .hero-meta .stars{display:inline-flex;align-items:center;gap:7px;font-weight:600;color:var(--ink)}
+  .hero-meta .dot{width:4px;height:4px;border-radius:50%;background:var(--ink-mute)}
+  .hero-meta .chk{display:inline-flex;align-items:center;gap:7px}
+
+  /* hero visual */
+  .hero-visual{position:relative}
+  .product-stage{
+    position:relative;border-radius:var(--r-lg);overflow:hidden;
+    aspect-ratio:4/4.4;
+    background:
+      radial-gradient(120% 90% at 50% 8%, #F4D6B0 0%, #E7B27E 32%, #CC8550 62%, #9C5630 100%);
+    box-shadow:var(--shadow-lg);
+    display:flex;align-items:flex-end;justify-content:center;
+  }
+  .product-stage::before{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(60% 50% at 50% 110%, rgba(0,0,0,.28), transparent 70%);
+  }
+  .stage-glow{
+    position:absolute;top:14%;left:50%;transform:translateX(-50%);
+    width:62%;aspect-ratio:1;border-radius:50%;
+    background:radial-gradient(circle, rgba(255,244,224,.85), rgba(255,244,224,0) 70%);
+    filter:blur(4px);animation:breathe 6s var(--ease) infinite;
+  }
+  @keyframes breathe{0%,100%{opacity:.55;transform:translateX(-50%) scale(.96)}50%{opacity:.95;transform:translateX(-50%) scale(1.04)}}
+  /* mist puffs */
+  .mist{position:absolute;left:50%;bottom:46%;width:10px;height:10px;border-radius:50%;
+    background:rgba(255,250,242,.7);filter:blur(6px);transform:translateX(-50%);opacity:0}
+  .mist.m1{animation:rise 5.5s ease-in infinite}
+  .mist.m2{animation:rise 5.5s ease-in infinite 1.8s;left:46%}
+  .mist.m3{animation:rise 5.5s ease-in infinite 3.4s;left:54%}
+  @keyframes rise{0%{opacity:0;transform:translate(-50%,0) scale(.5)}20%{opacity:.8}100%{opacity:0;transform:translate(-50%,-150px) scale(2.6)}}
+
+  /* the device (pure CSS ceramic diffuser) */
+  .device{position:relative;width:46%;margin-bottom:11%;z-index:2;filter:drop-shadow(0 22px 30px rgba(60,30,12,.4))}
+  .device .body{
+    width:100%;aspect-ratio:1/1.12;border-radius:48% 48% 44% 44%/40% 40% 56% 56%;
+    background:linear-gradient(150deg,#FBF3E7 0%,#EAD9C2 46%,#CDB294 100%);
+    position:relative;box-shadow:inset -10px -14px 26px rgba(120,90,60,.35), inset 8px 10px 18px rgba(255,255,255,.6);
+  }
+  .device .top{
+    position:absolute;top:-7%;left:50%;transform:translateX(-50%);
+    width:54%;aspect-ratio:1/.4;border-radius:50%;
+    background:linear-gradient(180deg,#3A2E24,#241B14);
+    box-shadow:inset 0 -3px 6px rgba(0,0,0,.5), 0 2px 5px rgba(0,0,0,.25);
+  }
+  .device .vent{
+    position:absolute;top:-3.5%;left:50%;transform:translateX(-50%);
+    width:20%;aspect-ratio:1;border-radius:50%;
+    background:radial-gradient(circle,#FFF3DD,#E8B873);
+    box-shadow:0 0 18px 4px rgba(255,224,170,.8);
+    animation:breathe 6s var(--ease) infinite;
+  }
+  .device .seam{position:absolute;left:14%;right:14%;top:54%;height:1.5px;background:rgba(120,90,60,.22);border-radius:2px}
+  .device .seam.s2{top:62%}
+
+  .float-card{
+    position:absolute;background:rgba(255,253,249,.92);backdrop-filter:blur(8px);
+    border:1px solid rgba(255,255,255,.6);border-radius:var(--r-md);
+    box-shadow:var(--shadow-md);padding:13px 16px;display:flex;align-items:center;gap:12px;
+    animation:floaty 6s var(--ease) infinite;
+  }
+  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+  .float-card .ic{width:38px;height:38px;border-radius:11px;background:var(--cream-2);display:grid;place-items:center;color:var(--terra-deep);flex:0 0 38px}
+  .float-card .t{font-size:13px;line-height:1.3}
+  .float-card .t b{display:block;font-family:var(--display);font-size:16px;font-weight:600}
+  .fc-1{top:8%;left:-26px}
+  .fc-2{bottom:13%;right:-30px;animation-delay:2.2s}
+
+  .hero-logos{margin-top:46px;border-top:1px solid var(--line);padding-top:26px}
+  .hero-logos p{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-mute);font-weight:600;margin-bottom:16px}
+  .logo-row{display:flex;align-items:center;gap:40px;flex-wrap:wrap;opacity:.62}
+  .logo-row span{font-family:var(--display);font-weight:600;font-size:19px;letter-spacing:.02em;color:var(--ink-soft)}
+
+  /* ---------- marquee ---------- */
+  .marquee{background:var(--ink);color:var(--paper);overflow:hidden;padding:16px 0}
+  .marquee-track{display:flex;gap:48px;width:max-content;animation:slide 28s linear infinite;white-space:nowrap}
+  .marquee-track span{font-family:var(--display);font-size:19px;font-weight:500;display:inline-flex;align-items:center;gap:48px;opacity:.92}
+  .marquee-track span::after{content:"✶";color:var(--amber);font-size:13px}
+  @keyframes slide{to{transform:translateX(-50%)}}
+
+  /* ---------- section base ---------- */
+  section{position:relative}
+  .pad{padding:96px 0}
+  .sec-head{max-width:640px;margin-bottom:54px}
+  .sec-head.center{margin-left:auto;margin-right:auto;text-align:center}
+  .sec-head h2{font-size:clamp(32px,4.4vw,52px);margin:16px 0 14px}
+  .sec-head p{font-size:18px;color:var(--ink-soft)}
+
+  /* ---------- benefits ---------- */
+  .benefits{background:var(--paper)}
+  .bgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .bcard{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);
+    padding:30px;box-shadow:var(--shadow-sm);transition:transform .45s var(--ease), box-shadow .45s var(--ease), border-color .45s ease;
+  }
+  .bcard:hover{transform:translateY(-7px);box-shadow:var(--shadow-md);border-color:rgba(194,96,58,.3)}
+  .bcard .bic{
+    width:54px;height:54px;border-radius:16px;display:grid;place-items:center;margin-bottom:20px;
+    background:linear-gradient(145deg,#F3E4D0,#E7CFB2);color:var(--terra-deep);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
+  }
+  .bcard h3{font-family:var(--display);font-size:23px;font-weight:600;margin-bottom:9px;letter-spacing:-.01em}
+  .bcard p{font-size:15.5px;color:var(--ink-soft)}
+  .bcard.feature{grid-column:span 2;display:flex;gap:30px;align-items:center;background:linear-gradient(145deg,#2A2118,#3A2C1F);color:var(--paper);border-color:transparent}
+  .bcard.feature h3{color:#fff}
+  .bcard.feature p{color:rgba(251,247,240,.72)}
+  .bcard.feature .bic{background:rgba(255,255,255,.1);color:var(--amber)}
+  .feature-art{flex:0 0 130px;width:130px;aspect-ratio:1;border-radius:var(--r-md);background:radial-gradient(120% 120% at 30% 20%,#E0A04B,#A24A2A);position:relative;overflow:hidden}
+  .feature-art::after{content:"";position:absolute;inset:0;background:radial-gradient(60% 60% at 70% 80%,rgba(255,244,224,.5),transparent)}
+
+  /* ---------- how it works ---------- */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;counter-reset:step}
+  .step{position:relative;padding-top:18px}
+  .step .num{
+    counter-increment:step;font-family:var(--display);font-size:15px;font-weight:600;
+    width:46px;height:46px;border-radius:50%;border:1.5px solid var(--terra);color:var(--terra-deep);
+    display:grid;place-items:center;margin-bottom:22px;position:relative;background:var(--cream);
+  }
+  .step .num::before{content:"0" counter(step)}
+  .step:not(:last-child) .num::after{
+    content:"";position:absolute;left:56px;top:50%;width:calc(100% + 28px - 56px + 28px);height:1.5px;
+    background:repeating-linear-gradient(90deg,var(--line) 0 7px,transparent 7px 14px);
+  }
+  .step h3{font-family:var(--display);font-size:22px;font-weight:600;margin-bottom:8px}
+  .step p{font-size:15.5px;color:var(--ink-soft)}
+  .how-visual{
+    margin-top:60px;border-radius:var(--r-lg);overflow:hidden;position:relative;
+    background:linear-gradient(120deg,#F3E3CC,#E6C49A);min-height:300px;
+    display:grid;grid-template-columns:1.1fr 1fr;align-items:center;box-shadow:var(--shadow-md);
+  }
+  .how-visual .hv-copy{padding:46px}
+  .how-visual .hv-copy h3{font-family:var(--display);font-size:28px;font-weight:600;margin-bottom:12px}
+  .how-visual .hv-copy p{color:var(--ink-soft);max-width:38ch}
+  .hv-art{position:relative;height:100%;min-height:300px;background:radial-gradient(80% 80% at 60% 40%,#CC8550,#7E4322)}
+  .hv-art .ring{position:absolute;border:2px solid rgba(255,244,224,.55);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);animation:pulse 4s var(--ease) infinite}
+  .hv-art .ring.r1{width:80px;height:80px}
+  .hv-art .ring.r2{width:160px;height:160px;animation-delay:1.3s}
+  .hv-art .ring.r3{width:240px;height:240px;animation-delay:2.6s}
+  @keyframes pulse{0%{opacity:.7}70%{opacity:.05}100%{opacity:0}}
+
+  /* ---------- stats / trust ---------- */
+  .trust{background:var(--ink);color:var(--paper)}
+  .trust .pad{padding:72px 0}
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center}
+  .stat .n{font-family:var(--display);font-size:clamp(38px,5vw,58px);font-weight:600;letter-spacing:-.02em;line-height:1;background:linear-gradient(180deg,#F4D6B0,#E0A04B);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stat .l{font-size:14px;color:rgba(251,247,240,.62);margin-top:10px}
+  .stat:not(:last-child){border-right:1px solid rgba(255,255,255,.1)}
+
+  /* ---------- reviews ---------- */
+  .reviews{background:var(--paper)}
+  .rev-top{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:46px}
+  .rev-score{display:flex;align-items:center;gap:18px}
+  .rev-score .big{font-family:var(--display);font-size:58px;font-weight:600;line-height:1}
+  .rev-score .meta .stars{color:var(--amber);font-size:18px;letter-spacing:3px}
+  .rev-score .meta span{font-size:14px;color:var(--ink-soft);display:block;margin-top:4px}
+  .rgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .rcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r-md);padding:26px;box-shadow:var(--shadow-sm);transition:transform .4s var(--ease),box-shadow .4s var(--ease)}
+  .rcard:hover{transform:translateY(-5px);box-shadow:var(--shadow-md)}
+  .rcard .stars{color:var(--amber);font-size:14px;letter-spacing:2px;margin-bottom:14px}
+  .rcard p{font-size:15.5px;color:var(--ink);margin-bottom:20px}
+  .rcard .who{display:flex;align-items:center;gap:12px}
+  .rcard .av{width:42px;height:42px;border-radius:50%;flex:0 0 42px;display:grid;place-items:center;font-weight:700;color:#fff;font-size:15px}
+  .rcard .who b{font-size:14.5px;display:block}
+  .rcard .who span{font-size:12.5px;color:var(--ink-mute);display:flex;align-items:center;gap:6px}
+  .vbadge{font-size:11px;font-weight:700;color:var(--sage);letter-spacing:.03em}
+
+  /* ---------- pricing / offer ---------- */
+  .offer{background:linear-gradient(160deg,#2A2017,#1C150F);color:var(--paper);overflow:hidden;position:relative}
+  .offer::before{content:"";position:absolute;top:-30%;right:-10%;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(224,160,75,.28),transparent 65%);pointer-events:none}
+  .offer-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center;position:relative}
+  .offer-copy h2{font-family:var(--display);font-size:clamp(32px,4.4vw,50px);font-weight:600;line-height:1.05;margin:16px 0 18px}
+  .offer-copy h2 em{font-style:italic;color:var(--amber)}
+  .offer-copy p{color:rgba(251,247,240,.74);font-size:17px;max-width:42ch;margin-bottom:26px}
+  .offer-list{display:grid;gap:14px;margin-bottom:8px}
+  .offer-list li{list-style:none;display:flex;align-items:flex-start;gap:12px;font-size:15.5px;color:rgba(251,247,240,.9)}
+  .offer-list .ck{flex:0 0 22px;width:22px;height:22px;border-radius:50%;background:rgba(224,160,75,.18);color:var(--amber);display:grid;place-items:center;margin-top:1px}
+
+  .pricecard{
+    background:var(--paper);color:var(--ink);border-radius:var(--r-lg);padding:34px;
+    box-shadow:var(--shadow-lg);position:relative;border:1px solid rgba(255,255,255,.5);
+  }
+  .pricecard .ribbon{position:absolute;top:22px;right:-8px;background:var(--terra);color:#fff;font-size:12px;font-weight:700;letter-spacing:.06em;padding:7px 16px 7px 14px;border-radius:var(--r-pill) 0 0 var(--r-pill);box-shadow:var(--shadow-sm)}
+  .pricecard h3{font-family:var(--display);font-size:24px;font-weight:600;margin-bottom:4px}
+  .pricecard .sub{font-size:14px;color:var(--ink-soft);margin-bottom:22px}
+  .pc-price{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+  .pc-price .now{font-family:var(--display);font-size:54px;font-weight:600;letter-spacing:-.02em;line-height:1}
+  .pc-price .was{font-size:20px;color:var(--ink-mute);text-decoration:line-through}
+  .pc-save{display:inline-block;font-size:13px;font-weight:700;color:var(--terra-deep);background:rgba(194,96,58,.12);padding:5px 12px;border-radius:var(--r-pill);margin-bottom:22px}
+  .pc-incl{display:grid;gap:11px;margin:22px 0;padding:22px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .pc-incl li{list-style:none;display:flex;align-items:center;gap:11px;font-size:14.5px}
+  .pc-incl .ck{color:var(--sage);flex:0 0 18px}
+  .pc-foot{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:18px;font-size:12.5px;color:var(--ink-mute);flex-wrap:wrap}
+  .pc-foot .chk{display:inline-flex;align-items:center;gap:6px}
+  .pricecard .btn{width:100%;margin-top:4px;padding:17px}
+
+  /* ---------- FAQ ---------- */
+  .faq-wrap{max-width:780px;margin:0 auto}
+  .faq{border-top:1px solid var(--line)}
+  .faq:last-child{border-bottom:1px solid var(--line)}
+  .faq button{
+    width:100%;background:none;border:0;cursor:pointer;text-align:left;
+    display:flex;align-items:center;justify-content:space-between;gap:20px;
+    padding:26px 4px;font-family:var(--display);font-size:20px;font-weight:600;color:var(--ink);letter-spacing:-.01em;
+  }
+  .faq .q-ic{flex:0 0 30px;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;transition:.35s var(--ease);position:relative}
+  .faq .q-ic::before,.faq .q-ic::after{content:"";position:absolute;background:var(--ink);border-radius:2px}
+  .faq .q-ic::before{width:12px;height:2px}
+  .faq .q-ic::after{width:2px;height:12px;transition:.35s var(--ease)}
+  .faq.open .q-ic{background:var(--ink);border-color:var(--ink)}
+  .faq.open .q-ic::before,.faq.open .q-ic::after{background:var(--paper)}
+  .faq.open .q-ic::after{transform:scaleY(0)}
+  .faq .ans{max-height:0;overflow:hidden;transition:max-height .45s var(--ease)}
+  .faq .ans p{padding:0 4px 26px;color:var(--ink-soft);font-size:16px;max-width:62ch}
+
+  /* ---------- final cta band ---------- */
+  .finalcta{background:var(--paper)}
+  .finalcta-inner{
+    background:radial-gradient(120% 140% at 0% 0%,#CB6A41,#8E3F22 70%);
+    border-radius:var(--r-lg);padding:64px;text-align:center;color:#fff;position:relative;overflow:hidden;box-shadow:var(--shadow-md)
+  }
+  .finalcta-inner::after{content:"";position:absolute;inset:0;background:radial-gradient(60% 70% at 100% 100%,rgba(255,244,224,.25),transparent 60%)}
+  .finalcta-inner h2{position:relative;font-family:var(--display);font-size:clamp(30px,4.6vw,52px);font-weight:600;line-height:1.05;margin-bottom:16px}
+  .finalcta-inner p{position:relative;color:rgba(255,255,255,.85);max-width:46ch;margin:0 auto 30px;font-size:18px}
+  .finalcta-inner .btn-light{background:var(--paper);color:var(--ink);position:relative}
+  .finalcta-inner .mini{position:relative;margin-top:18px;font-size:13.5px;color:rgba(255,255,255,.8)}
+
+  /* ---------- footer ---------- */
+  footer{background:var(--ink);color:rgba(251,247,240,.7);padding:64px 0 30px}
+  .foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:36px;margin-bottom:46px}
+  .foot-brand .brand{color:var(--paper);margin-bottom:14px}
+  .foot-brand p{font-size:14.5px;max-width:34ch;color:rgba(251,247,240,.6)}
+  .foot-social{display:flex;gap:12px;margin-top:20px}
+  .foot-social a{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.14);display:grid;place-items:center;transition:.3s;color:rgba(251,247,240,.7)}
+  .foot-social a:hover{background:var(--terra);border-color:var(--terra);color:#fff;transform:translateY(-3px)}
+  .foot-col h4{color:var(--paper);font-size:13px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:18px;font-weight:600}
+  .foot-col a{display:block;font-size:14.5px;margin-bottom:11px;color:rgba(251,247,240,.62);transition:color .25s}
+  .foot-col a:hover{color:var(--paper)}
+  .foot-bot{border-top:1px solid rgba(255,255,255,.1);padding-top:24px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;font-size:13px;color:rgba(251,247,240,.45)}
+  .foot-bot .pays{display:flex;gap:10px;align-items:center}
+  .foot-bot .pays span{padding:5px 10px;border:1px solid rgba(255,255,255,.12);border-radius:7px;font-size:11px;font-weight:600;letter-spacing:.04em;color:rgba(251,247,240,.55)}
+
+  /* ---------- sticky buy bar ---------- */
+  .stickybar{
+    position:fixed;left:0;right:0;bottom:0;z-index:70;
+    background:rgba(251,247,240,.86);backdrop-filter:blur(14px) saturate(140%);
+    border-top:1px solid var(--line);box-shadow:0 -10px 30px rgba(36,29,22,.1);
+    transform:translateY(120%);transition:transform .5s var(--ease);
+  }
+  .stickybar.show{transform:translateY(0)}
+  .sb-inner{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:13px 0}
+  .sb-left{display:flex;align-items:center;gap:14px;min-width:0}
+  .sb-thumb{width:46px;height:46px;border-radius:12px;flex:0 0 46px;background:radial-gradient(120% 120% at 40% 20%,#F4D6B0,#A24A2A);box-shadow:var(--shadow-sm)}
+  .sb-info b{font-family:var(--display);font-size:17px;font-weight:600;display:block;line-height:1.2}
+  .sb-info span{font-size:13px;color:var(--ink-soft)}
+  .sb-info .stars{color:var(--amber)}
+  .sb-right{display:flex;align-items:center;gap:16px}
+  .sb-price{text-align:right;line-height:1.2}
+  .sb-price .now{font-family:var(--display);font-size:22px;font-weight:600}
+  .sb-price .was{font-size:13px;color:var(--ink-mute);text-decoration:line-through;margin-left:6px}
+
+  /* ---------- reveal animation ---------- */
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+  .reveal.d1{transition-delay:.08s}.reveal.d2{transition-delay:.16s}.reveal.d3{transition-delay:.24s}
+
+  /* ---------- responsive ---------- */
+  @media(max-width:980px){
+    .hero-grid{grid-template-columns:1fr;gap:50px}
+    .hero-visual{max-width:440px;margin:0 auto;width:100%}
+    .hero-copy p.lead{max-width:46ch}
+    .offer-grid{grid-template-columns:1fr;gap:38px}
+    .how-visual{grid-template-columns:1fr}
+    .hv-art{min-height:220px}
+    .foot-grid{grid-template-columns:1fr 1fr;gap:30px}
+    .foot-brand{grid-column:span 2}
+  }
+  @media(max-width:760px){
+    .nav-links,.nav-cta .price-tag,.nav-cta .btn-ghost{display:none}
+    .burger{display:flex}
+    .nav-links.mobile{
+      display:flex;position:absolute;top:72px;left:0;right:0;flex-direction:column;align-items:flex-start;
+      gap:4px;background:var(--paper);padding:18px 24px 26px;border-bottom:1px solid var(--line);box-shadow:var(--shadow-md)
+    }
+    .nav-links.mobile a{padding:11px 0;width:100%;font-size:17px;color:var(--ink)}
+    .nav-links.mobile a::after{display:none}
+    .bgrid{grid-template-columns:1fr}
+    .bcard.feature{grid-column:span 1;flex-direction:column;text-align:center}
+    .steps{grid-template-columns:1fr;gap:34px}
+    .step:not(:last-child) .num::after{display:none}
+    .stat-row{grid-template-columns:1fr 1fr;gap:36px 12px}
+    .stat:nth-child(2){border-right:0}
+    .stat{border-right:0!important}
+    .rgrid{grid-template-columns:1fr}
+    .pad{padding:72px 0}
+    .finalcta-inner{padding:44px 26px}
+    .foot-bot{justify-content:center;text-align:center}
+    .sb-info span{display:none}
+  }
+  @media(max-width:430px){
+    body{font-size:16px}
+    .wrap{padding:0 18px}
+    .hero{padding:36px 0 20px}
+    .hero-actions{gap:14px}
+    .hero-actions .btn-primary{width:100%}
+    .foot-grid{grid-template-columns:1fr}
+    .foot-brand{grid-column:span 1}
+    .pricecard{padding:26px}
+    .sb-thumb{display:none}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .reveal{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<header id="top">
+  <div class="wrap nav">
+    <a class="brand" href="#top" aria-label="Lume home">
+      <svg class="mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <path d="M16 2C16 2 6 11 6 19a10 10 0 0020 0C26 11 16 2 16 2z" fill="url(#g1)"/>
+        <path d="M16 9c0 0-5 5-5 9.5A5 5 0 0016 23" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity=".75"/>
+        <defs><linearGradient id="g1" x1="6" y1="4" x2="26" y2="29"><stop stop-color="#E0A04B"/><stop offset="1" stop-color="#A24A2A"/></linearGradient></defs>
+      </svg>
+      Lume
+    </a>
+    <nav class="nav-links" id="navlinks">
+      <a href="#benefits">Benefits</a>
+      <a href="#how">How it works</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#offer">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="nav-cta">
+      <span class="price-tag">From <b>$89</b></span>
+      <a href="#offer" class="btn btn-ghost">Buy now</a>
+      <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow reveal">New · Ceramic Edition</span>
+      <h1 class="display reveal d1">Calm that fills<br>the room, <em>quietly.</em></h1>
+      <p class="lead reveal d2">Lume is a hand-finished ceramic diffuser with adaptive mist and a warm ambient glow — paired with botanically blended oils that run for up to 18 hours on a single fill.</p>
+      <div class="hero-actions reveal d2">
+        <a href="#offer" class="btn btn-primary">Get Lume <span class="arr">→</span></a>
+        <div class="hero-price">
+          <span class="now">$89</span>
+          <span class="was">$129</span>
+          <span class="save">Save 31%</span>
+        </div>
+      </div>
+      <div class="hero-meta reveal d3">
+        <span class="stars">★★★★★ <span class="muted">4.9</span></span>
+        <span class="dot"></span>
+        <span class="chk">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#6F7A5A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          12,400+ happy homes
+        </span>
+        <span class="dot"></span>
+        <span class="chk">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 12l4 4 14-13" stroke="#6F7A5A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Free 2-day shipping
+        </span>
+      </div>
+
+      <div class="hero-logos reveal d3">
+        <p>As featured in</p>
+        <div class="logo-row">
+          <span>Dwell</span><span>Kinfolk</span><span>GOOP</span><span>Wirecutter</span><span>Vogue</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual reveal d1">
+      <div class="product-stage">
+        <div class="stage-glow"></div>
+        <div class="mist m1"></div><div class="mist m2"></div><div class="mist m3"></div>
+        <div class="device">
+          <div class="vent"></div>
+          <div class="top"></div>
+          <div class="body">
+            <div class="seam"></div>
+            <div class="seam s2"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="float-card fc-1">
+        <div class="ic">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="t"><b>18 hrs</b>per fill</div>
+      </div>
+      <div class="float-card fc-2">
+        <div class="ic">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.4-7-9.5A4.5 4.5 0 0112 8a4.5 4.5 0 017 3.5C19 16.6 12 21 12 21z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="t"><b>Whisper</b>under 24 dB</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MARQUEE ===== -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Adaptive mist</span><span>Hand-glazed ceramic</span><span>Botanical oils</span><span>Auto shut-off</span><span>Ambient glow</span><span>BPA-free</span>
+    <span>Adaptive mist</span><span>Hand-glazed ceramic</span><span>Botanical oils</span><span>Auto shut-off</span><span>Ambient glow</span><span>BPA-free</span>
+  </div>
+</div>
+
+<!-- ===== BENEFITS ===== -->
+<section class="benefits" id="benefits">
+  <div class="wrap pad">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Why Lume</span>
+      <h2 class="display">Designed to be felt,<br>not just noticed.</h2>
+      <p>Every detail earns its place — from the weight of the ceramic in your hand to the way the light fades when you fall asleep.</p>
+    </div>
+
+    <div class="bgrid">
+      <div class="bcard reveal">
+        <div class="bic">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2c0 5-4 6-4 10a4 4 0 008 0c0-4-4-5-4-10z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 13a2 2 0 002-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Adaptive mist</h3>
+        <p>Sensors read humidity and room size, then dial the mist to keep fragrance even — never overpowering, never faint.</p>
+      </div>
+
+      <div class="bcard reveal d1">
+        <div class="bic">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>18-hour run time</h3>
+        <p>A single 280ml fill carries you from a slow morning through a quiet night — no constant refilling.</p>
+      </div>
+
+      <div class="bcard feature reveal d2">
+        <div class="feature-art"></div>
+        <div>
+          <div class="bic">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 3a6 6 0 016 6c0 4-6 9-6 9s-6-5-6-9a6 6 0 016-6z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="9" r="2.2" stroke="currentColor" stroke-width="1.8"/></svg>
+          </div>
+          <h3>Hand-glazed ceramic, not plastic</h3>
+          <p>Each shell is dipped, fired, and finished by hand — so the piece on your shelf looks like an object, not a gadget. Eight matte tones to choose from.</p>
+        </div>
+      </div>
+
+      <div class="bcard reveal">
+        <div class="bic">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 12h4l3 7 4-14 3 7h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Whisper-quiet</h3>
+        <p>Ultrasonic, not mechanical — under 24 dB, so it disappears into the background of a bedroom or a focused desk.</p>
+      </div>
+
+      <div class="bcard reveal d1">
+        <div class="bic">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/></svg>
+        </div>
+        <h3>Warm ambient glow</h3>
+        <p>A dimmable amber light with a sunset fade — set it as a nightlight or let it ease you toward sleep automatically.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section class="pad" id="how">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow" style="justify-content:center">Three steps</span>
+      <h2 class="display">From box to calm in<br>under a minute.</h2>
+    </div>
+
+    <div class="steps">
+      <div class="step reveal">
+        <div class="num"></div>
+        <h3>Fill & blend</h3>
+        <p>Pour in water to the line, add 6–8 drops of your Lume botanical blend, and twist the ceramic lid back on.</p>
+      </div>
+      <div class="step reveal d1">
+        <div class="num"></div>
+        <h3>Set the mood</h3>
+        <p>Tap once for mist, hold for the glow. Pick a 2, 4, or 8-hour timer — or let adaptive mode decide.</p>
+      </div>
+      <div class="step reveal d2">
+        <div class="num"></div>
+        <h3>Let it breathe</h3>
+        <p>Lume reads the room and keeps it gently scented. It shuts off on its own when the water runs low.</p>
+      </div>
+    </div>
+
+    <div class="how-visual reveal d1">
+      <div class="hv-copy">
+        <span class="eyebrow">Adaptive mode</span>
+        <h3 class="display" style="margin-top:12px">It learns your room, then gets out of the way.</h3>
+        <p>No app required. The sensor ring reads humidity every few seconds and adjusts output — full when you walk in, soft while you sleep.</p>
+      </div>
+      <div class="hv-art">
+        <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TRUST STATS ===== -->
+<section class="trust">
+  <div class="wrap pad">
+    <div class="stat-row">
+      <div class="stat reveal"><div class="n">12.4k</div><div class="l">Homes scented</div></div>
+      <div class="stat reveal d1"><div class="n">4.9★</div><div class="l">From 3,100 reviews</div></div>
+      <div class="stat reveal d2"><div class="n">18h</div><div class="l">Run time per fill</div></div>
+      <div class="stat reveal d3"><div class="n">60-day</div><div class="l">Home trial, risk-free</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== REVIEWS ===== -->
+<section class="reviews" id="reviews">
+  <div class="wrap pad">
+    <div class="rev-top">
+      <div class="sec-head reveal" style="margin-bottom:0;max-width:520px">
+        <span class="eyebrow">Loved at home</span>
+        <h2 class="display">People keep buying<br>a second one.</h2>
+      </div>
+      <div class="rev-score reveal d1">
+        <div class="big display">4.9</div>
+        <div class="meta">
+          <div class="stars">★★★★★</div>
+          <span>Based on 3,142 verified reviews</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="rgrid">
+      <div class="rcard reveal">
+        <div class="stars">★★★★★</div>
+        <p>"It actually looks like a piece of pottery. Guests assume it's decor until the mist starts. The glow at night is unreal — we sleep with it every evening."</p>
+        <div class="who">
+          <div class="av" style="background:linear-gradient(145deg,#C2603A,#8E3F22)">MR</div>
+          <div><b>Mara R.</b><span>Verified buyer <span class="vbadge">✓</span></span></div>
+        </div>
+      </div>
+      <div class="rcard reveal d1">
+        <div class="stars">★★★★★</div>
+        <p>"I've owned three plastic diffusers that died within a year. Lume feels like it'll outlast them all. The adaptive mode means I never come home to an empty, dry tank."</p>
+        <div class="who">
+          <div class="av" style="background:linear-gradient(145deg,#6F7A5A,#4C5440)">DK</div>
+          <div><b>Devin K.</b><span>Verified buyer <span class="vbadge">✓</span></span></div>
+        </div>
+      </div>
+      <div class="rcard reveal d2">
+        <div class="stars">★★★★★</div>
+        <p>"Bought one for my desk, then immediately ordered a second for the bedroom. The Cedar + Bergamot blend is the one. Whisper quiet during calls too."</p>
+        <div class="who">
+          <div class="av" style="background:linear-gradient(145deg,#E0A04B,#A24A2A)">JT</div>
+          <div><b>Jules T.</b><span>Verified buyer <span class="vbadge">✓</span></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== OFFER / PRICING ===== -->
+<section class="offer" id="offer">
+  <div class="wrap pad">
+    <div class="offer-grid">
+      <div class="offer-copy reveal">
+        <span class="eyebrow" style="color:var(--amber)">The starter set</span>
+        <h2>Everything you need to <em>start tonight.</em></h2>
+        <p>The Lume diffuser, three signature botanical blends, and our 60-day at-home trial — bundled at the lowest it goes.</p>
+        <ul class="offer-list">
+          <li><span class="ck">✓</span> 1× Ceramic Lume diffuser (pick your tone)</li>
+          <li><span class="ck">✓</span> 3× 15ml botanical oil blends — Cedar, Dusk, Bloom</li>
+          <li><span class="ck">✓</span> Magnetic USB-C charging base + linen pouch</li>
+          <li><span class="ck">✓</span> Free 2-day shipping & easy returns</li>
+        </ul>
+      </div>
+
+      <div class="pricecard reveal d1">
+        <span class="ribbon">Most popular</span>
+        <h3>Lume Starter Set</h3>
+        <p class="sub">Diffuser + 3 botanical blends</p>
+        <div class="pc-price">
+          <span class="now">$89</span>
+          <span class="was">$129</span>
+        </div>
+        <span class="pc-save">You save $40 (31%)</span>
+        <ul class="pc-incl">
+          <li><span class="ck"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Ceramic diffuser, your choice of tone</li>
+          <li><span class="ck"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span> 3 signature oil blends included</li>
+          <li><span class="ck"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span> 60-day home trial, full refund</li>
+          <li><span class="ck"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span> 2-year warranty</li>
+        </ul>
+        <a href="#" class="btn btn-primary">Add to cart — $89 <span class="arr">→</span></a>
+        <div class="pc-foot">
+          <span class="chk"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8 10V7a4 4 0 018 0v3" stroke="currentColor" stroke-width="2"/></svg> Secure checkout</span>
+          <span class="chk"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M3 12l5 5L21 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Free returns</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="pad" id="faq">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow" style="justify-content:center">Good to know</span>
+      <h2 class="display">Questions, answered.</h2>
+    </div>
+    <div class="faq-wrap">
+      <div class="faq reveal">
+        <button aria-expanded="false">How long does one fill last?<span class="q-ic"></span></button>
+        <div class="ans"><p>On the standard setting, a single 280ml fill runs up to 18 hours. In adaptive mode it stretches further, since output drops automatically once the room reaches your target scent level.</p></div>
+      </div>
+      <div class="faq reveal">
+        <button aria-expanded="false">Can I use my own essential oils?<span class="q-ic"></span></button>
+        <div class="ans"><p>Absolutely. Lume works with any water-soluble essential oil. We include three of our botanical blends to get you started, but the ceramic chamber is rated for daily use with the oils you already love.</p></div>
+      </div>
+      <div class="faq reveal">
+        <button aria-expanded="false">Is it safe to leave on overnight?<span class="q-ic"></span></button>
+        <div class="ans"><p>Yes. Lume runs cool — there's no heat element — and it shuts off automatically when the water runs low. Pair it with the 8-hour timer and the sunset glow for a worry-free night.</p></div>
+      </div>
+      <div class="faq reveal">
+        <button aria-expanded="false">What's the return policy?<span class="q-ic"></span></button>
+        <div class="ans"><p>Every order ships with our 60-day home trial. Live with it, sleep with it, gift it — if it isn't right, send it back for a full refund. No restocking fees, no questions.</p></div>
+      </div>
+      <div class="faq reveal">
+        <button aria-expanded="false">How do I clean it?<span class="q-ic"></span></button>
+        <div class="ans"><p>Rinse the chamber weekly with warm water and a drop of dish soap, then wipe dry. Once a month, run a 10-minute cycle with water and a splash of white vinegar to keep the misting plate clear.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FINAL CTA ===== -->
+<section class="finalcta">
+  <div class="wrap pad" style="padding-top:0">
+    <div class="finalcta-inner reveal">
+      <h2 class="display">Your home, a little<br>calmer by tonight.</h2>
+      <p>Join 12,400+ homes that traded the plastic gadget for something worth keeping on the shelf.</p>
+      <a href="#offer" class="btn btn-light">Get the Starter Set — $89 <span class="arr">→</span></a>
+      <div class="mini">Free 2-day shipping · 60-day trial · 2-year warranty</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="brand" href="#top">
+          <svg class="mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <path d="M16 2C16 2 6 11 6 19a10 10 0 0020 0C26 11 16 2 16 2z" fill="url(#g2)"/>
+            <defs><linearGradient id="g2" x1="6" y1="4" x2="26" y2="29"><stop stop-color="#E0A04B"/><stop offset="1" stop-color="#A24A2A"/></linearGradient></defs>
+          </svg>
+          Lume
+        </a>
+        <p>Tactile, hand-finished diffusers and botanical blends — made to make a room feel like a place you want to stay.</p>
+        <div class="foot-social">
+          <a href="#" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg></a>
+          <a href="#" aria-label="TikTok"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M14 4v9.5a3.5 3.5 0 11-3-3.46" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M14 4c.4 2.4 2 3.9 4.5 4.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></a>
+          <a href="#" aria-label="Pinterest"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7c-2.2 0-3.5 1.4-3.5 3.2 0 .8.4 1.7 1 2M12 12l-1 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></a>
+        </div>
+      </div>
+      <div class="foot-col">
+        <h4>Shop</h4>
+        <a href="#offer">Starter Set</a>
+        <a href="#">Diffusers</a>
+        <a href="#">Botanical oils</a>
+        <a href="#">Gift cards</a>
+      </div>
+      <div class="foot-col">
+        <h4>Company</h4>
+        <a href="#">Our story</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#">Sustainability</a>
+        <a href="#">Press</a>
+      </div>
+      <div class="foot-col">
+        <h4>Support</h4>
+        <a href="#faq">FAQ</a>
+        <a href="#">Shipping</a>
+        <a href="#">Returns</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <span>© 2026 Lume Goods Co. All rights reserved.</span>
+      <div class="pays"><span>VISA</span><span>MASTERCARD</span><span>AMEX</span><span>PAYPAL</span><span>APPLE PAY</span></div>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== STICKY BUY BAR ===== -->
+<div class="stickybar" id="stickybar">
+  <div class="wrap sb-inner">
+    <div class="sb-left">
+      <div class="sb-thumb"></div>
+      <div class="sb-info">
+        <b>Lume Starter Set</b>
+        <span><span class="stars">★★★★★</span> 4.9 · In stock</span>
+      </div>
+    </div>
+    <div class="sb-right">
+      <div class="sb-price">
+        <span class="now">$89</span><span class="was">$129</span>
+      </div>
+      <a href="#offer" class="btn btn-primary">Buy now <span class="arr">→</span></a>
+    </div>
+  </div>
+</div>
+
+<script>
+  // sticky header shadow
+  const header = document.getElementById('top');
+  const stickybar = document.getElementById('stickybar');
+  const onScroll = () => {
+    const y = window.scrollY;
+    header.classList.toggle('scrolled', y > 12);
+    stickybar.classList.toggle('show', y > 620);
+  };
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  // mobile menu
+  const burger = document.getElementById('burger');
+  const navlinks = document.getElementById('navlinks');
+  burger.addEventListener('click', () => navlinks.classList.toggle('mobile'));
+  navlinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navlinks.classList.remove('mobile')));
+
+  // FAQ accordion
+  document.querySelectorAll('.faq button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.parentElement;
+      const ans = item.querySelector('.ans');
+      const open = item.classList.contains('open');
+      document.querySelectorAll('.faq.open').forEach(o => {
+        if (o !== item){ o.classList.remove('open'); o.querySelector('.ans').style.maxHeight = null; o.querySelector('button').setAttribute('aria-expanded','false'); }
+      });
+      item.classList.toggle('open', !open);
+      btn.setAttribute('aria-expanded', String(!open));
+      ans.style.maxHeight = !open ? ans.scrollHeight + 'px' : null;
+    });
+  });
+
+  // scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:.12, rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>

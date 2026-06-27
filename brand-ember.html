@@ -1,0 +1,196 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<title>EMBER — Brand Identity</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,300;9..144,0,400;9..144,0,500;9..144,0,600;9..144,1,400&family=Inter:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--espresso:#241710;--deep:#160d07;--ember:#c4623a;--gold:#d9a441;--sage:#8b9a7d;--cream:#f4ece0;--cream2:#ece0cf;--ink:#241710}
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1600px;background:var(--cream);font-family:'Inter',sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+.sec{width:1600px;padding:90px 110px;position:relative;overflow:hidden}
+.kick{font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.34em;text-transform:uppercase}
+.flame{border-radius:50% 50% 50% 0;background:linear-gradient(155deg,var(--gold),var(--ember));transform:rotate(45deg);display:inline-block}
+
+/* HERO */
+.hero{background:radial-gradient(120% 90% at 70% 10%,#3a2418 0%,var(--espresso) 45%,var(--deep) 100%);color:var(--cream);height:780px;display:flex;flex-direction:column;justify-content:space-between}
+.hero .glow{position:absolute;width:760px;height:760px;right:-120px;top:-200px;border-radius:50%;background:radial-gradient(circle,rgba(217,164,65,.5),rgba(196,98,58,.2) 45%,transparent 68%);filter:blur(20px)}
+.hero .top{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:2}
+.hero .kick{color:var(--gold)}
+.hmark{width:60px;height:60px;border-radius:50%;background:rgba(244,236,224,.08);border:1px solid rgba(244,236,224,.18);display:flex;align-items:center;justify-content:center}
+.hmark .flame{width:26px;height:26px}
+.hero .mid{position:relative;z-index:2}
+.hero h1{font-family:'Fraunces',serif;font-weight:500;font-size:230px;line-height:.84;letter-spacing:.01em}
+.hero .tag{font-family:'Fraunces',serif;font-style:italic;font-weight:400;font-size:34px;color:var(--gold);margin-top:18px}
+.hero .bottom{display:flex;justify-content:space-between;align-items:flex-end;position:relative;z-index:2;border-top:1px solid rgba(244,236,224,.16);padding-top:26px}
+.hero .bottom div{font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.12em;color:#cdbfae}
+
+/* section header */
+.sh{display:flex;align-items:baseline;gap:18px;margin-bottom:46px}
+.sh .num{font-family:'Space Mono',monospace;font-size:14px;color:var(--ember)}
+.sh h2{font-family:'Fraunces',serif;font-weight:500;font-size:40px;letter-spacing:-.01em}
+
+/* LOGO SYSTEM */
+.logos{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.lcard{border-radius:18px;height:240px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;position:relative}
+.lcard .cap{position:absolute;bottom:18px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;opacity:.55}
+.l-light{background:#fff;border:1px solid var(--cream2)}
+.l-dark{background:var(--espresso);color:var(--cream)}
+.l-ember{background:var(--ember);color:var(--cream)}
+.wm{font-family:'Fraunces',serif;font-weight:600;font-size:58px;letter-spacing:.03em;display:flex;align-items:center;gap:16px}
+.wm .dot{width:42px;height:42px;border-radius:50%;background:var(--espresso);display:flex;align-items:center;justify-content:center}
+.l-dark .wm .dot,.l-ember .wm .dot{background:rgba(244,236,224,.12)}
+.wm .dot .flame{width:18px;height:18px}
+.markonly{width:96px;height:96px;border-radius:50%;background:var(--espresso);display:flex;align-items:center;justify-content:center}
+.l-ember .markonly,.l-dark .markonly{background:rgba(244,236,224,.12)}
+.markonly .flame{width:42px;height:42px}
+
+/* PALETTE band */
+.palette{padding:0;display:flex;height:300px}
+.pcol{flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:30px 28px;color:#fff}
+.pcol b{font-family:'Fraunces',serif;font-weight:500;font-size:24px;display:block}
+.pcol span{font-family:'Space Mono',monospace;font-size:13px;opacity:.8}
+.pcol em{font-style:normal;font-size:12px;font-family:'Space Mono',monospace;letter-spacing:.16em;text-transform:uppercase;opacity:.6;display:block;margin-top:6px}
+.pcol.light{color:var(--ink)}
+
+/* TYPE */
+.type-wrap{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.spec .aa{font-family:'Fraunces',serif;font-weight:500;font-size:200px;line-height:.8;color:var(--espresso)}
+.spec .name{font-family:'Fraunces',serif;font-size:46px;font-weight:500;margin-top:10px}
+.spec .meta{font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.16em;color:var(--sage);margin-top:8px}
+.spec .glyphs{font-family:'Fraunces',serif;font-size:26px;color:#7a6757;margin-top:16px;letter-spacing:.04em}
+.bodyspec h3{font-family:'Inter',sans-serif;font-weight:600;font-size:30px;margin-bottom:6px}
+.bodyspec .meta{font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.16em;color:var(--sage);margin-bottom:22px}
+.bodyspec p{font-size:19px;line-height:1.7;color:#5a4a3d;max-width:560px}
+.weights{display:flex;gap:24px;margin-top:24px;font-size:20px}
+.weights span{color:#7a6757}.weights .w3{font-weight:300}.weights .w4{font-weight:400}.weights .w5{font-weight:500}.weights .w6{font-weight:600}
+
+/* APPLICATIONS */
+.apps{background:linear-gradient(160deg,#efe3d2,#e6d7c2)}
+.appgrid{display:grid;grid-template-columns:1.1fr 1fr;gap:40px}
+.stage{background:#fff;border-radius:22px;padding:48px;display:flex;align-items:center;justify-content:center;gap:40px;box-shadow:0 30px 70px rgba(36,23,16,.12);position:relative;min-height:420px}
+.stage .lbl{position:absolute;top:22px;left:26px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--sage)}
+/* coffee bag */
+.bag{width:210px;height:330px;background:linear-gradient(165deg,#34221a,#1d120b 75%);border-radius:6px 6px 16px 16px;position:relative;box-shadow:0 34px 60px rgba(36,23,16,.4);display:flex;flex-direction:column;align-items:center}
+.bag:before{content:"";position:absolute;top:-10px;left:22px;right:22px;height:20px;background:#2a1a12;border-radius:5px;box-shadow:inset 0 -3px 6px rgba(0,0,0,.4)}
+.bag:after{content:"";position:absolute;left:0;top:30px;bottom:0;width:30px;background:linear-gradient(90deg,rgba(0,0,0,.32),transparent);border-radius:6px 0 0 16px}
+.bag .label{margin-top:54px;width:150px;background:var(--cream);border-radius:6px;padding:20px 0;display:flex;flex-direction:column;align-items:center;gap:8px;z-index:2}
+.bag .label .dot{width:42px;height:42px;border-radius:50%;background:var(--espresso);display:flex;align-items:center;justify-content:center}
+.bag .label .dot .flame{width:18px;height:18px}
+.bag .label .bw{font-family:'Fraunces',serif;font-weight:600;font-size:26px;color:var(--espresso);letter-spacing:.04em}
+.bag .label .bv{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;color:var(--ember);text-transform:uppercase}
+/* cup */
+.cup{width:150px;height:200px;position:relative;filter:drop-shadow(0 26px 40px rgba(36,23,16,.34))}
+.cupbody{width:100%;height:100%;background:linear-gradient(90deg,#e7dccb,#fbf5ea 40%,#e7dccb);clip-path:polygon(14% 0,86% 0,76% 100%,24% 100%);position:relative}
+.cuplid{position:absolute;top:-14px;left:8%;width:84%;height:24px;background:#2a1a12;border-radius:30px}
+.sleeve{position:absolute;top:78px;left:0;width:100%;height:74px;background:var(--ember);clip-path:polygon(17% 0,83% 0,80% 100%,20% 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.sleeve .sw{font-family:'Fraunces',serif;font-weight:600;font-size:22px;color:var(--cream)}
+.sleeve .st{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.16em;color:rgba(244,236,224,.85)}
+/* cards */
+.cards{position:relative;width:300px;height:330px}
+.card{position:absolute;width:300px;height:180px;border-radius:14px;padding:26px;box-shadow:0 24px 50px rgba(36,23,16,.28)}
+.card.front{top:0;left:0;background:var(--espresso);color:var(--cream);transform:rotate(-5deg)}
+.card.back{bottom:0;right:0;background:var(--ember);color:var(--cream);transform:rotate(4deg);display:flex;flex-direction:column;justify-content:space-between}
+.card .cw{font-family:'Fraunces',serif;font-weight:600;font-size:40px;display:flex;align-items:center;gap:12px}
+.card .cw .dot{width:34px;height:34px;border-radius:50%;background:rgba(244,236,224,.14);display:flex;align-items:center;justify-content:center}
+.card .cw .dot .flame{width:15px;height:15px}
+.card .meta{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.08em;line-height:1.8;margin-top:14px}
+.card.front .role{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;margin-top:8px}
+/* social tile */
+.tile{width:300px;height:300px;border-radius:18px;background:radial-gradient(120% 100% at 30% 20%,#3a2418,var(--espresso) 60%,var(--deep));color:var(--cream);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;box-shadow:0 26px 50px rgba(36,23,16,.32);position:relative;overflow:hidden}
+.tile .g{position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(217,164,65,.4),transparent 60%);top:-120px;right:-120px}
+.tile .tdot{width:64px;height:64px;border-radius:50%;background:rgba(244,236,224,.1);display:flex;align-items:center;justify-content:center;z-index:2}
+.tile .tdot .flame{width:28px;height:28px}
+.tile .tt{font-family:'Fraunces',serif;font-style:italic;font-size:24px;color:var(--gold);z-index:2}
+.tile .th{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.24em;z-index:2;opacity:.8}
+
+/* CLOSE */
+.close{background:var(--espresso);color:var(--cream);text-align:center;padding:110px;display:flex;flex-direction:column;align-items:center;gap:22px}
+.close .flame{width:38px;height:38px}
+.close h2{font-family:'Fraunces',serif;font-style:italic;font-weight:400;font-size:50px;color:var(--gold);max-width:760px}
+.close .ft{font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:#cdbfae}
+</style></head><body>
+
+<!-- HERO -->
+<section class="sec hero">
+  <div class="glow"></div>
+  <div class="top">
+    <div class="hmark"><span class="flame"></span></div>
+    <div class="kick">Brand Identity — Concept</div>
+  </div>
+  <div class="mid">
+    <h1>EMBER</h1>
+    <div class="tag">Small-batch coffee, slow-roasted.</div>
+  </div>
+  <div class="bottom">
+    <div>Logo · Palette · Type · Packaging · Social</div>
+    <div>FoundLocal — 2026</div>
+  </div>
+</section>
+
+<!-- LOGO SYSTEM -->
+<section class="sec">
+  <div class="sh"><span class="num">01</span><h2>The mark</h2></div>
+  <div class="logos">
+    <div class="lcard l-light"><div class="wm"><span class="dot"><span class="flame"></span></span>EMBER</div><span class="cap">Primary lockup</span></div>
+    <div class="lcard l-dark"><div class="markonly"><span class="flame"></span></div><span class="cap">Icon — reversed</span></div>
+    <div class="lcard l-ember"><div class="wm"><span class="dot"><span class="flame"></span></span>EMBER</div><span class="cap">On brand colour</span></div>
+  </div>
+</section>
+
+<!-- PALETTE -->
+<section class="sec palette">
+  <div class="pcol" style="background:#241710"><b>Espresso</b><span>#241710</span><em>Primary</em></div>
+  <div class="pcol" style="background:#c4623a"><b>Ember</b><span>#C4623A</span><em>Accent</em></div>
+  <div class="pcol" style="background:#d9a441"><b>Gold</b><span>#D9A441</span><em>Highlight</em></div>
+  <div class="pcol" style="background:#8b9a7d"><b>Sage</b><span>#8B9A7D</span><em>Support</em></div>
+  <div class="pcol light" style="background:#f4ece0"><b>Cream</b><span>#F4ECE0</span><em>Surface</em></div>
+</section>
+
+<!-- TYPE -->
+<section class="sec">
+  <div class="sh"><span class="num">02</span><h2>Typography</h2></div>
+  <div class="type-wrap">
+    <div class="spec">
+      <div class="aa">Aa</div>
+      <div class="name">Fraunces</div>
+      <div class="meta">DISPLAY · HEADLINES</div>
+      <div class="glyphs">A B C D E · a b c d e · 1 2 3 4 5</div>
+    </div>
+    <div class="bodyspec">
+      <h3>Inter</h3>
+      <div class="meta">BODY · INTERFACE</div>
+      <p>The quiet ritual of a better morning. Sourced in small lots, roasted slow, and poured with patience — coffee worth waking up for.</p>
+      <div class="weights"><span class="w3">Light</span><span class="w4">Regular</span><span class="w5">Medium</span><span class="w6">Semibold</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- APPLICATIONS -->
+<section class="sec apps">
+  <div class="sh"><span class="num">03</span><h2>In the world</h2></div>
+  <div class="appgrid">
+    <div class="stage"><span class="lbl">Packaging</span>
+      <div class="bag"><div class="label"><span class="dot"><span class="flame"></span></span><span class="bw">EMBER</span><span class="bv">Ethiopia · Light</span></div></div>
+      <div class="cup"><div class="cuplid"></div><div class="cupbody"></div><div class="sleeve"><span class="sw">EMBER</span><span class="st">SLOW-ROASTED</span></div></div>
+    </div>
+    <div class="stage"><span class="lbl">Stationery</span>
+      <div class="cards">
+        <div class="card front"><div class="cw"><span class="dot"><span class="flame"></span></span>EMBER</div><div class="role">Small-batch coffee</div></div>
+        <div class="card back"><div class="meta">hello@ember.co<br>@embercoffee<br>ember.co</div><div class="meta" style="opacity:.8">No. 14 Rue de Verre</div></div>
+      </div>
+    </div>
+    <div class="stage" style="grid-column:1/3;min-height:360px">
+      <span class="lbl">Social</span>
+      <div class="tile"><div class="g"></div><div class="tdot"><span class="flame"></span></div><div class="tt">Worth waking up for.</div><div class="th">@EMBERCOFFEE</div></div>
+      <div style="max-width:420px"><div style="font-family:'Fraunces',serif;font-weight:500;font-size:34px;color:var(--espresso);line-height:1.1">One ritual,<br>endlessly repeatable.</div><p style="font-size:18px;color:#6a584a;margin-top:16px;line-height:1.6">A warm, restrained system that works the same on a bag, a cup, a card, or a feed — calm, premium, unmistakably EMBER.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSE -->
+<section class="sec close">
+  <span class="flame"></span>
+  <h2>Restraint, warmth, and the patience of a slow roast.</h2>
+  <div class="ft">EMBER · Brand Identity Concept · designed by FoundLocal</div>
+</section>
+
+</body></html>

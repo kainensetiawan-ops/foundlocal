@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="foundlight">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FoundLocal — Get found on Google &amp; AI</title>
+<meta name="description" content="FoundLocal builds modern websites that get local businesses found on Google and AI search, then turn visitors into WhatsApp enquiries." />
+
+<!-- Tailwind + DaisyUI (CDN) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+
+<!-- Google Fonts: Sora + Plus Jakarta Sans + Inter -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<!-- GSAP 3.12 + ScrollTrigger (CDN). NO Lenis / NO smooth-scroll hijack. -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          display: ['Sora', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+          body: ['Inter', 'system-ui', 'sans-serif'],
+        },
+      },
+    },
+  };
+</script>
+
+<style>
+  :root {
+    --violet: #7c3aed;
+    --violet-2: #a855f7;
+    --magenta: #d946ef;
+    --peach: #ffd9b3;
+    --lavender: #ede9fe;
+  }
+
+  html {
+    scroll-behavior: smooth;          /* native smooth scroll only */
+    scroll-padding-top: 84px;         /* sticky nav offset for anchors */
+  }
+  /* NEVER overflow:hidden on html/body — native scroll must work */
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    overflow-x: hidden;               /* horizontal only, vertical scroll free */
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, .font-display { font-family: 'Sora', 'Plus Jakarta Sans', sans-serif; }
+
+  /* ---------- THEME SURFACES ---------- */
+  /* LIGHT: bright white + lavender/violet + peach gradient mesh */
+  html[data-theme="foundlight"] body {
+    color: #1e1b2e;
+    background:
+      radial-gradient(60% 50% at 12% 8%, rgba(168,85,247,0.22) 0%, rgba(168,85,247,0) 60%),
+      radial-gradient(55% 45% at 88% 18%, rgba(255,184,140,0.45) 0%, rgba(255,184,140,0) 60%),
+      radial-gradient(60% 55% at 50% 100%, rgba(124,58,237,0.16) 0%, rgba(124,58,237,0) 60%),
+      #ffffff;
+  }
+  /* DARK: near-black + violet→magenta aurora */
+  html[data-theme="founddark"] body {
+    color: #f3f0ff;
+    background:
+      radial-gradient(55% 45% at 15% 6%, rgba(124,58,237,0.40) 0%, rgba(124,58,237,0) 60%),
+      radial-gradient(50% 45% at 85% 14%, rgba(217,70,239,0.32) 0%, rgba(217,70,239,0) 60%),
+      radial-gradient(60% 55% at 50% 100%, rgba(168,85,247,0.22) 0%, rgba(168,85,247,0) 60%),
+      #0a0710;
+  }
+
+  /* glass cards adapt to theme */
+  html[data-theme="foundlight"] .glass {
+    background: rgba(255,255,255,0.72);
+    border: 1px solid rgba(124,58,237,0.16);
+    box-shadow: 0 18px 50px -22px rgba(124,58,237,0.40);
+  }
+  html[data-theme="founddark"] .glass {
+    background: rgba(28,18,46,0.55);
+    border: 1px solid rgba(168,85,247,0.28);
+    box-shadow: 0 18px 60px -22px rgba(0,0,0,0.85);
+  }
+  .glass { backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+
+  html[data-theme="foundlight"] .nav-glass { background: rgba(255,255,255,0.70); border-bottom: 1px solid rgba(124,58,237,0.12); }
+  html[data-theme="founddark"]  .nav-glass { background: rgba(10,7,16,0.62);   border-bottom: 1px solid rgba(168,85,247,0.20); }
+  .nav-glass { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+
+  html[data-theme="foundlight"] .muted { color: #4b4565; }
+  html[data-theme="founddark"]  .muted { color: #b9b2d6; }
+
+  html[data-theme="foundlight"] .hairline { border-color: rgba(124,58,237,0.14); }
+  html[data-theme="founddark"]  .hairline { border-color: rgba(168,85,247,0.22); }
+
+  /* gradient text + brand pill */
+  .grad-text {
+    background: linear-gradient(100deg, var(--violet) 0%, var(--magenta) 55%, var(--violet-2) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .btn-grad {
+    background: linear-gradient(100deg, #7c3aed 0%, #d946ef 100%);
+    color: #fff; border: none;
+    box-shadow: 0 14px 34px -12px rgba(124,58,237,0.65);
+    transition: transform .25s ease, box-shadow .25s ease, filter .25s ease;
+  }
+  .btn-grad:hover { transform: translateY(-3px); box-shadow: 0 22px 48px -12px rgba(217,70,239,0.7); filter: brightness(1.06); }
+
+  /* floating parallax blobs */
+  .blob { position: absolute; border-radius: 50%; filter: blur(60px); pointer-events: none; z-index: 0; will-change: transform; }
+
+  /* WORK card hover zoom + lift */
+  .work-card { transition: transform .4s cubic-bezier(.2,.7,.2,1), box-shadow .4s ease; will-change: transform; }
+  .work-card:hover { transform: translateY(-10px); }
+  .work-card .work-img { transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+  .work-card:hover .work-img { transform: scale(1.07); }
+  html[data-theme="foundlight"] .work-card:hover { box-shadow: 0 40px 80px -30px rgba(124,58,237,0.55); }
+  html[data-theme="founddark"]  .work-card:hover { box-shadow: 0 40px 90px -30px rgba(217,70,239,0.55); }
+
+  /* service card hover glow */
+  .svc-card { transition: transform .35s ease, box-shadow .35s ease; }
+  .svc-card:hover { transform: translateY(-8px); }
+  html[data-theme="foundlight"] .svc-card:hover { box-shadow: 0 30px 60px -28px rgba(124,58,237,0.55); }
+  html[data-theme="founddark"]  .svc-card:hover { box-shadow: 0 30px 70px -28px rgba(217,70,239,0.55); }
+
+  /* marquee */
+  .marquee { overflow: hidden; white-space: nowrap; }
+  .marquee-track { display: inline-block; will-change: transform; animation: marquee 22s linear infinite; }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* hero headline words: visible by default (screenshot-safe). GSAP animates FROM offset. */
+  .reveal-word { display: inline-block; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track { animation: none; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+
+<body class="font-body relative min-h-screen">
+
+  <!-- ================= FLOATING PARALLAX BLOBS ================= -->
+  <div class="blob" data-speed="0.30" style="top:-80px; left:-60px; width:420px; height:420px; background: radial-gradient(circle, rgba(168,85,247,0.55), rgba(168,85,247,0));"></div>
+  <div class="blob" data-speed="0.18" style="top:18%; right:-90px; width:380px; height:380px; background: radial-gradient(circle, rgba(217,70,239,0.45), rgba(217,70,239,0));"></div>
+  <div class="blob" data-speed="0.42" style="top:64%; left:-70px; width:360px; height:360px; background: radial-gradient(circle, rgba(255,184,140,0.50), rgba(255,184,140,0));"></div>
+
+  <!-- ================= NAV ================= -->
+  <header class="fixed top-0 inset-x-0 z-50 nav-glass">
+    <nav class="max-w-6xl mx-auto px-5 h-[68px] flex items-center justify-between">
+      <a href="#top" class="flex items-center gap-2 font-display font-extrabold text-lg tracking-tight">
+        <span class="inline-grid place-items-center w-8 h-8 rounded-xl btn-grad text-sm">F</span>
+        <span>Found<span class="grad-text">Local</span></span>
+      </a>
+      <div class="flex items-center gap-1 sm:gap-2">
+        <a href="#services" class="hidden sm:inline-block px-3 py-2 rounded-lg text-sm font-semibold muted hover:text-violet-500 transition">Services</a>
+        <a href="#work"     class="hidden sm:inline-block px-3 py-2 rounded-lg text-sm font-semibold muted hover:text-violet-500 transition">Work</a>
+        <a href="#contact"  class="hidden sm:inline-block px-3 py-2 rounded-lg text-sm font-semibold muted hover:text-violet-500 transition">Contact</a>
+        <a href="#contact"  class="btn-grad px-4 py-2 rounded-xl text-sm font-bold">Free preview</a>
+        <button id="themeToggle" aria-label="Toggle light and dark mode"
+                class="ml-1 w-10 h-10 grid place-items-center rounded-xl border hairline text-lg hover:scale-110 transition">
+          <span id="themeIcon">🌙</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section id="top" class="relative z-10 pt-36 pb-20 px-5">
+    <div class="max-w-5xl mx-auto text-center">
+      <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider glass mb-7">
+        <span class="w-2 h-2 rounded-full" style="background:#22c55e"></span>
+        Websites for local businesses
+      </span>
+
+      <h1 id="heroHead" class="font-display font-extrabold leading-[1.05] tracking-tight text-4xl sm:text-6xl md:text-7xl">
+        <span class="reveal-word">Get</span> <span class="reveal-word">found</span> <span class="reveal-word">on</span>
+        <span class="reveal-word grad-text">Google</span><br class="hidden sm:block" />
+        <span class="reveal-word">&amp;</span> <span class="reveal-word grad-text">AI</span> <span class="reveal-word">search.</span>
+      </h1>
+
+      <p id="heroSub" class="muted max-w-2xl mx-auto mt-7 text-lg sm:text-xl leading-relaxed">
+        FoundLocal builds fast, modern websites that put your business in front of nearby
+        customers — on Google <em>and</em> the new AI assistants — then turns every visit into a WhatsApp enquiry.
+      </p>
+
+      <div id="heroBtns" class="mt-9 flex flex-wrap items-center justify-center gap-3">
+        <a href="#work" class="btn-grad px-7 py-3.5 rounded-2xl text-base font-bold">See my work</a>
+        <a href="#contact" class="px-7 py-3.5 rounded-2xl text-base font-bold border-2 hairline glass hover:scale-105 transition">
+          Get a free preview
+        </a>
+      </div>
+
+      <!-- counters -->
+      <div id="statRow" class="mt-14 grid grid-cols-3 gap-3 max-w-2xl mx-auto">
+        <div class="glass rounded-2xl px-3 py-5">
+          <div class="counter font-display font-extrabold text-3xl sm:text-4xl grad-text" data-target="14">0</div>
+          <div class="muted text-xs sm:text-sm mt-1 font-semibold">days to live preview</div>
+        </div>
+        <div class="glass rounded-2xl px-3 py-5">
+          <div class="counter font-display font-extrabold text-3xl sm:text-4xl grad-text" data-target="3" data-suffix=""></div>
+          <div class="muted text-xs sm:text-sm mt-1 font-semibold">languages supported</div>
+        </div>
+        <div class="glass rounded-2xl px-3 py-5">
+          <div class="counter font-display font-extrabold text-3xl sm:text-4xl grad-text" data-target="100" data-suffix="%">0</div>
+          <div class="muted text-xs sm:text-sm mt-1 font-semibold">mobile-first &amp; fast</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MARQUEE ================= -->
+  <div class="relative z-10 py-5 marquee border-y hairline">
+    <div class="marquee-track font-display font-extrabold text-2xl sm:text-3xl tracking-tight">
+      <span class="muted">WEBSITES&nbsp;·&nbsp;<span class="grad-text">LOCAL SEO</span>&nbsp;·&nbsp;AI VISIBILITY&nbsp;·&nbsp;<span class="grad-text">WHATSAPP LEADS</span>&nbsp;·&nbsp;FOUND ON GOOGLE&nbsp;·&nbsp;</span>
+      <span class="muted">WEBSITES&nbsp;·&nbsp;<span class="grad-text">LOCAL SEO</span>&nbsp;·&nbsp;AI VISIBILITY&nbsp;·&nbsp;<span class="grad-text">WHATSAPP LEADS</span>&nbsp;·&nbsp;FOUND ON GOOGLE&nbsp;·&nbsp;</span>
+    </div>
+  </div>
+
+  <!-- ================= SERVICES ================= -->
+  <section id="services" class="relative z-10 py-24 px-5">
+    <div class="max-w-6xl mx-auto">
+      <div class="anim-up text-center mb-14">
+        <h2 class="font-display font-extrabold text-3xl sm:text-5xl tracking-tight">Everything to get you <span class="grad-text">found &amp; booked</span></h2>
+        <p class="muted mt-4 text-lg max-w-2xl mx-auto">Three things, done properly. No bloat, no jargon — just more of the right people finding you.</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="anim-up svc-card glass rounded-3xl p-7">
+          <div class="w-12 h-12 grid place-items-center rounded-2xl btn-grad text-2xl mb-5">✶</div>
+          <h3 class="font-display font-bold text-xl mb-2">A modern website</h3>
+          <p class="muted leading-relaxed">A fast, beautiful, mobile-first site that loads in a blink and actually looks like your business in 2026 — not 2014.</p>
+        </div>
+        <div class="anim-up svc-card glass rounded-3xl p-7">
+          <div class="w-12 h-12 grid place-items-center rounded-2xl btn-grad text-2xl mb-5">◎</div>
+          <h3 class="font-display font-bold text-xl mb-2">Found on Google &amp; AI</h3>
+          <p class="muted leading-relaxed">Structured so search engines <em>and</em> AI assistants like ChatGPT recommend you when locals ask "best near me".</p>
+        </div>
+        <div class="anim-up svc-card glass rounded-3xl p-7">
+          <div class="w-12 h-12 grid place-items-center rounded-2xl btn-grad text-2xl mb-5">➤</div>
+          <h3 class="font-display font-bold text-xl mb-2">WhatsApp lead capture</h3>
+          <p class="muted leading-relaxed">A one-tap WhatsApp button on every page, so a curious visitor becomes a real enquiry in your chat — instantly.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= WORK ================= -->
+  <section id="work" class="relative z-10 py-24 px-5">
+    <div class="max-w-6xl mx-auto">
+      <div class="anim-up text-center mb-14">
+        <span class="text-xs font-bold uppercase tracking-wider muted">Sample work</span>
+        <h2 class="font-display font-extrabold text-3xl sm:text-5xl tracking-tight mt-2">Real designs, <span class="grad-text">real businesses</span></h2>
+        <p class="muted mt-4 text-lg max-w-2xl mx-auto">Hover to take a closer look. These are concept builds shown as samples of the FoundLocal style.</p>
+      </div>
+
+      <div class="grid lg:grid-cols-3 gap-7">
+        <figure class="anim-up work-card glass rounded-3xl overflow-hidden">
+          <div class="overflow-hidden rounded-t-3xl">
+            <img class="work-img w-full h-auto block" src="designs/v2/noir.png" alt="Noir — fine-dining restaurant website sample" loading="lazy" />
+          </div>
+          <figcaption class="p-6">
+            <h3 class="font-display font-bold text-lg">Noir</h3>
+            <p class="muted text-sm mt-1">Fine-dining restaurant · reservations &amp; menu</p>
+          </figcaption>
+        </figure>
+
+        <figure class="anim-up work-card glass rounded-3xl overflow-hidden">
+          <div class="overflow-hidden rounded-t-3xl">
+            <img class="work-img w-full h-auto block" src="designs/v2/forge.png" alt="Forge — gym and fitness studio website sample" loading="lazy" />
+          </div>
+          <figcaption class="p-6">
+            <h3 class="font-display font-bold text-lg">Forge</h3>
+            <p class="muted text-sm mt-1">Gym &amp; strength studio · class sign-ups</p>
+          </figcaption>
+        </figure>
+
+        <figure class="anim-up work-card glass rounded-3xl overflow-hidden">
+          <div class="overflow-hidden rounded-t-3xl">
+            <img class="work-img w-full h-auto block" src="designs/v2/bloom.png" alt="Bloom — kids dental clinic website sample" loading="lazy" />
+          </div>
+          <figcaption class="p-6">
+            <h3 class="font-display font-bold text-lg">Bloom</h3>
+            <p class="muted text-sm mt-1">Kids dental clinic · friendly bookings</p>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CTA / CONTACT ================= -->
+  <section id="contact" class="relative z-10 py-24 px-5">
+    <div class="max-w-4xl mx-auto anim-up glass rounded-[2rem] p-10 sm:p-14 text-center">
+      <h2 class="font-display font-extrabold text-3xl sm:text-5xl tracking-tight leading-[1.1]">
+        Free preview — <span class="grad-text">first enquiry in 14 days</span><br class="hidden sm:block" /> or you pay nothing.
+      </h2>
+      <p class="muted mt-5 text-lg max-w-2xl mx-auto">
+        I'll design a live preview of your new site, free. If it doesn't bring you a real enquiry within 14 days of going live, you don't pay a cent.
+      </p>
+      <div class="mt-9 flex flex-wrap items-center justify-center gap-3">
+        <a href="https://wa.me/60193763199?text=Hi%20FoundLocal%2C%20I%27d%20like%20a%20free%20website%20preview%20for%20my%20business."
+           class="btn-grad px-8 py-4 rounded-2xl text-base font-bold inline-flex items-center gap-2">
+          <span>💬</span> Message on WhatsApp
+        </a>
+        <a href="mailto:hello@foundlocal.studio?subject=Free%20website%20preview&body=Hi%20FoundLocal%2C%20I%27d%20like%20a%20free%20preview%20for%20my%20business."
+           class="px-8 py-4 rounded-2xl text-base font-bold border-2 hairline glass hover:scale-105 transition inline-flex items-center gap-2">
+          <span>✉️</span> Email me
+        </a>
+      </div>
+      <p class="muted text-xs mt-6">Swap <code>60193763199</code> for your WhatsApp number to go live.</p>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="relative z-10 border-t hairline py-12 px-5">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-5">
+      <a href="#top" class="flex items-center gap-2 font-display font-extrabold text-lg">
+        <span class="inline-grid place-items-center w-8 h-8 rounded-xl btn-grad text-sm">F</span>
+        Found<span class="grad-text">Local</span>
+      </a>
+      <div class="muted text-sm flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+        <span>English</span><span class="opacity-40">·</span>
+        <span>Malay</span><span class="opacity-40">·</span>
+        <span>中文</span>
+      </div>
+      <p class="muted text-xs">© <span id="year">2026</span> FoundLocal · sample work shown</p>
+    </div>
+  </footer>
+
+  <!-- ================= SCRIPT ================= -->
+  <script>
+  (function () {
+    'use strict';
+
+    /* ---------- THEME (toggle + remember + ?theme=dark) ---------- */
+    var LIGHT = 'foundlight', DARK = 'founddark';
+    var root = document.documentElement;
+    function applyTheme(t) {
+      root.setAttribute('data-theme', t);
+      var icon = document.getElementById('themeIcon');
+      if (icon) icon.textContent = (t === DARK) ? '☀️' : '🌙';
+    }
+    var params = new URLSearchParams(window.location.search);
+    var stored = null;
+    try { stored = localStorage.getItem('fl-theme'); } catch (e) {}
+    var initial = LIGHT;
+    if (params.get('theme') === 'dark') initial = DARK;
+    else if (params.get('theme') === 'light') initial = LIGHT;
+    else if (stored === DARK || stored === LIGHT) initial = stored;
+    applyTheme(initial);
+
+    var toggle = document.getElementById('themeToggle');
+    if (toggle) toggle.addEventListener('click', function () {
+      var next = (root.getAttribute('data-theme') === DARK) ? LIGHT : DARK;
+      applyTheme(next);
+      try { localStorage.setItem('fl-theme', next); } catch (e) {}
+    });
+
+    var y = document.getElementById('year');
+    if (y) y.textContent = new Date().getFullYear();
+
+    /* ---------- SAFETY NET: force everything visible after 2.5s ---------- */
+    /* (in case GSAP fails to load / a ScrollTrigger never fires) */
+    function forceVisible() {
+      document.querySelectorAll('.anim-up, .reveal-word, #heroSub, #heroBtns, #statRow, .counter')
+        .forEach(function (el) {
+          el.style.opacity = '1';
+          el.style.transform = 'none';
+        });
+      document.querySelectorAll('.counter').forEach(function (el) {
+        if (!el.dataset.done) {
+          el.textContent = el.dataset.target + (el.dataset.suffix || '');
+        }
+      });
+    }
+    var safetyTimer = setTimeout(forceVisible, 2500);
+
+    /* ---------- GSAP MOTION (degrades gracefully) ---------- */
+    if (window.gsap) {
+      try {
+        if (window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
+
+        // Hero headline: dramatic word stagger FROM offset → settles visible
+        gsap.from('#heroHead .reveal-word', {
+          yPercent: 120, opacity: 0, rotateX: -40, duration: 0.9,
+          ease: 'back.out(1.6)', stagger: 0.08, delay: 0.15,
+          clearProps: 'all'
+        });
+        gsap.from('#heroSub', { y: 30, opacity: 0, duration: 0.8, delay: 0.65, ease: 'power3.out', clearProps: 'all' });
+        gsap.from('#heroBtns', { y: 30, opacity: 0, duration: 0.8, delay: 0.8, ease: 'power3.out', clearProps: 'all' });
+        gsap.from('#statRow', { y: 30, opacity: 0, duration: 0.8, delay: 0.95, ease: 'power3.out', clearProps: 'all' });
+
+        if (window.ScrollTrigger) {
+          // Bold scroll-in for sections & cards
+          gsap.utils.toArray('.anim-up').forEach(function (el) {
+            gsap.from(el, {
+              scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' },
+              y: 56, opacity: 0, scale: 0.96, duration: 0.85, ease: 'power3.out',
+              clearProps: 'all'
+            });
+          });
+
+          // Parallax on background blobs
+          gsap.utils.toArray('.blob').forEach(function (b) {
+            var speed = parseFloat(b.dataset.speed) || 0.25;
+            gsap.to(b, {
+              yPercent: speed * 100,
+              ease: 'none',
+              scrollTrigger: { trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: 1 }
+            });
+          });
+
+          // Number counters count up when they enter
+          gsap.utils.toArray('.counter').forEach(function (el) {
+            var target = parseFloat(el.dataset.target) || 0;
+            var suffix = el.dataset.suffix || '';
+            var obj = { v: 0 };
+            ScrollTrigger.create({
+              trigger: el, start: 'top 90%', once: true,
+              onEnter: function () {
+                gsap.to(obj, {
+                  v: target, duration: 1.6, ease: 'power2.out',
+                  onUpdate: function () { el.textContent = Math.round(obj.v) + suffix; },
+                  onComplete: function () { el.textContent = target + suffix; el.dataset.done = '1'; }
+                });
+              }
+            });
+          });
+
+          ScrollTrigger.refresh();
+        }
+      } catch (e) {
+        // any motion error → just show everything
+        forceVisible();
+      }
+    } else {
+      forceVisible();
+    }
+
+    // Once images load, recompute trigger positions (long page)
+    window.addEventListener('load', function () {
+      if (window.ScrollTrigger) ScrollTrigger.refresh();
+    });
+  })();
+  </script>
+</body>
+</html>

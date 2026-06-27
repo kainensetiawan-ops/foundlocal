@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FoundLocal — get found.</title>
+<meta name="description" content="We build cinematic websites for local businesses and make sure customers find you on Google and AI search." />
+
+<!-- Fonts: Fraunces (editorial luxury serif) + Inter (clean) + Space Mono (labels) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- GSAP + ScrollTrigger (free) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<style>
+:root{
+  --ink:#08080b;
+  --ink-2:#0d0d12;
+  --ivory:#f4f1ea;
+  --ivory-dim:#a8a49b;
+  --line:rgba(244,241,234,.12);
+  --amber:#ffb877;
+  --rose:#ff7d9c;
+  --teal:#6fe3d2;
+  --grad:linear-gradient(105deg,#ffd29e 0%,#ff9a76 38%,#ff7d9c 70%,#c98bff 100%);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--ink);
+  color:var(--ivory);
+  font-family:'Inter',sans-serif;
+  font-weight:300;
+  line-height:1.6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--rose);color:var(--ink)}
+
+/* ---------- living cinematic background ---------- */
+.aurora{position:fixed;inset:-30% -10% -10% -10%;z-index:-2;filter:blur(90px);opacity:.55;pointer-events:none}
+.aurora span{position:absolute;border-radius:50%;mix-blend-mode:screen;animation:drift 26s ease-in-out infinite}
+.aurora .a1{width:48vw;height:48vw;left:-6vw;top:-6vw;background:radial-gradient(circle,#ff9a5a,transparent 60%)}
+.aurora .a2{width:52vw;height:52vw;right:-10vw;top:18vh;background:radial-gradient(circle,#ff5e8a,transparent 60%);animation-delay:-8s}
+.aurora .a3{width:46vw;height:46vw;left:18vw;bottom:-12vw;background:radial-gradient(circle,#7d6bff,transparent 60%);animation-delay:-15s}
+.aurora .a4{width:40vw;height:40vw;right:6vw;bottom:-6vw;background:radial-gradient(circle,#4fd6c4,transparent 62%);animation-delay:-20s}
+@keyframes drift{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(6vw,-4vh) scale(1.12)}66%{transform:translate(-4vw,5vh) scale(.95)}}
+.grain{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+@media(prefers-reduced-motion:reduce){.aurora span{animation:none}}
+
+/* ---------- nav ---------- */
+nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
+  padding:22px clamp(20px,5vw,64px);mix-blend-mode:difference}
+.brand{font-family:'Fraunces',serif;font-weight:500;font-size:20px;letter-spacing:-.01em;color:#fff}
+.brand b{font-style:italic;font-weight:400}
+.nav-cta{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+  color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.5);border-radius:40px;padding:9px 18px;
+  transition:.4s}
+.nav-cta:hover{background:#fff;color:#000}
+
+/* progress bar */
+.progress{position:fixed;top:0;left:0;height:2px;width:0;z-index:60;background:var(--grad)}
+
+/* ---------- shared scene ---------- */
+section{position:relative;padding:clamp(80px,12vh,150px) clamp(20px,6vw,90px);min-height:100vh;
+  display:flex;flex-direction:column;justify-content:center}
+.label{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ivory-dim);display:flex;align-items:center;gap:14px;margin-bottom:34px}
+.label::before{content:'';width:34px;height:1px;background:var(--ivory-dim)}
+.huge{font-family:'Fraunces',serif;font-weight:300;line-height:.92;letter-spacing:-.025em;
+  font-size:clamp(3.4rem,15vw,15rem)}
+.huge em{font-style:italic;font-weight:400}
+.grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.lead{font-size:clamp(1.05rem,2vw,1.5rem);font-weight:300;color:#cfccc4;max-width:620px;margin-top:34px;line-height:1.55}
+.reveal{opacity:0;transform:translateY(34px)}
+
+/* ---------- HERO ---------- */
+#hero{justify-content:flex-end;padding-bottom:clamp(60px,10vh,120px)}
+#hero .huge{font-size:clamp(4rem,20vw,20rem)}
+.hero-sub{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:30px;margin-top:42px}
+.hero-sub p{max-width:440px;font-size:clamp(1rem,1.6vw,1.25rem);color:#cfccc4;font-weight:300}
+.scroll-cue{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ivory-dim);display:flex;align-items:center;gap:10px}
+.scroll-cue i{display:block;width:1px;height:46px;background:linear-gradient(var(--ivory-dim),transparent);position:relative;overflow:hidden}
+.scroll-cue i::after{content:'';position:absolute;top:0;left:0;width:100%;height:14px;background:var(--ivory);animation:run 2s ease-in-out infinite}
+@keyframes run{0%{transform:translateY(-14px)}100%{transform:translateY(46px)}}
+
+/* ---------- SERP climb ---------- */
+.serp{margin-top:40px;max-width:680px;width:100%;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.02)}
+.serp-row{display:flex;align-items:center;gap:16px;padding:16px 20px;border-bottom:1px solid var(--line);transition:.6s}
+.serp-row:last-child{border-bottom:0}
+.serp-row .rank{font-family:'Space Mono',monospace;font-size:13px;color:var(--ivory-dim);width:26px}
+.serp-row .nm{font-size:15px;color:#d9d6cf}
+.serp-row .meta{margin-left:auto;font-size:12px;color:var(--ivory-dim);font-family:'Space Mono',monospace}
+.serp-row.you{background:linear-gradient(90deg,rgba(255,125,156,.16),rgba(201,139,255,.10));border-left:2px solid var(--rose)}
+.serp-row.you .nm{color:#fff;font-weight:500}
+.serp-row.you .rank{color:var(--rose)}
+
+/* ---------- what we do ---------- */
+.do-line{font-family:'Fraunces',serif;font-weight:300;line-height:1.04;letter-spacing:-.02em;
+  font-size:clamp(2.4rem,8vw,7rem);padding:6px 0;color:#56524a;transition:color .4s}
+.do-line.on{color:var(--ivory)}
+.do-line span{font-style:italic}
+.do-num{font-family:'Space Mono',monospace;font-size:13px;color:var(--ivory-dim);vertical-align:super;margin-right:18px}
+
+/* ---------- WORK horizontal ---------- */
+#work{padding-right:0}
+.work-track{display:flex;gap:26px;overflow-x:auto;scroll-snap-type:x mandatory;padding:10px clamp(20px,6vw,90px) 30px 0;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none}
+.work-track::-webkit-scrollbar{display:none}
+.work-card{scroll-snap-align:start;flex:0 0 min(82vw,560px);border-radius:18px;overflow:hidden;position:relative;
+  aspect-ratio:3/4;border:1px solid var(--line);display:flex;flex-direction:column;justify-content:flex-end;
+  padding:30px;isolation:isolate;text-decoration:none;color:inherit;cursor:pointer;transition:transform .45s cubic-bezier(.22,1,.36,1),border-color .4s}
+.work-card:hover{transform:translateY(-8px);border-color:rgba(255,255,255,.4)}
+.wc-go{font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.08em;color:#fff;margin-top:14px;opacity:.9}
+.work-card::before{content:'';position:absolute;inset:0;z-index:-2;background:var(--cg)}
+.work-card::after{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(transparent 30%,rgba(0,0,0,.78))}
+.work-card .wc-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;z-index:-2}
+.work-card .cat{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.75);margin-bottom:8px}
+.work-card h3{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(1.6rem,3vw,2.4rem);line-height:1;color:#fff}
+.work-card p{font-size:14px;color:rgba(255,255,255,.8);margin-top:10px;max-width:90%}
+.c-noir{--cg:linear-gradient(150deg,#1a1410,#3a2a1c 55%,#7a5a36)}
+.c-forge{--cg:linear-gradient(150deg,#0c0c0c,#1a1a1a 50%,#2a3a10)}
+.c-bloom{--cg:linear-gradient(150deg,#3a2746,#6a3f72 55%,#d98fb0)}
+.c-air{--cg:linear-gradient(150deg,#10314a,#2f6da8 55%,#9fd6ff)}
+
+/* ---------- process ---------- */
+.steps{display:grid;gap:0;margin-top:30px;max-width:880px}
+.step{display:grid;grid-template-columns:auto 1fr;gap:clamp(20px,4vw,60px);padding:34px 0;border-top:1px solid var(--line)}
+.step:last-child{border-bottom:1px solid var(--line)}
+.step .sn{font-family:'Space Mono',monospace;font-size:13px;color:var(--rose)}
+.step h4{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(1.5rem,3.4vw,2.4rem);line-height:1.05;margin-bottom:10px}
+.step p{color:#bcb8b0;font-size:clamp(.98rem,1.5vw,1.12rem);max-width:560px}
+
+/* ---------- packages ---------- */
+.tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:40px}
+.tier{border:1px solid var(--line);border-radius:18px;padding:34px 30px;background:rgba(255,255,255,.015);transition:.4s}
+.tier:hover{border-color:rgba(255,255,255,.3);transform:translateY(-6px)}
+.tier.feat{background:linear-gradient(165deg,rgba(255,125,156,.12),rgba(201,139,255,.06));border-color:rgba(255,125,156,.4)}
+.tier .tname{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ivory-dim)}
+.tier .price{font-family:'Fraunces',serif;font-weight:400;font-size:3rem;margin:16px 0 4px;line-height:1}
+.tier .price small{font-size:1rem;color:var(--ivory-dim);font-family:'Inter'}
+.tier ul{list-style:none;margin-top:22px;display:flex;flex-direction:column;gap:12px}
+.tier li{font-size:14.5px;color:#cfccc4;display:flex;gap:11px;align-items:flex-start}
+.tier li::before{content:'';margin-top:8px;width:6px;height:6px;border-radius:50%;background:var(--rose);flex:0 0 auto}
+
+/* ---------- faq ---------- */
+.faq{max-width:820px;margin-top:30px}
+.q{border-top:1px solid var(--line);padding:26px 0}
+.q:last-child{border-bottom:1px solid var(--line)}
+.q h5{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(1.15rem,2.4vw,1.6rem);margin-bottom:10px;color:var(--ivory)}
+.q p{color:#bcb8b0;font-size:1rem;max-width:680px}
+
+/* ---------- CTA ---------- */
+#cta{align-items:center;text-align:center}
+#cta .huge{font-size:clamp(3rem,13vw,12rem)}
+.cta-btn{display:inline-flex;align-items:center;gap:12px;margin-top:44px;background:var(--ivory);color:var(--ink);
+  font-family:'Space Mono',monospace;font-size:14px;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;
+  padding:18px 34px;border-radius:50px;transition:.4s}
+.cta-btn:hover{transform:translateY(-4px) scale(1.03);box-shadow:0 20px 60px rgba(255,125,156,.4)}
+footer{padding:50px clamp(20px,6vw,90px);border-top:1px solid var(--line);display:flex;flex-wrap:wrap;
+  justify-content:space-between;gap:20px;color:var(--ivory-dim);font-size:13px;font-family:'Space Mono',monospace}
+footer a{color:var(--ivory-dim);text-decoration:none}footer a:hover{color:var(--ivory)}
+
+@media(max-width:680px){
+  .label{margin-bottom:22px}
+  .step{grid-template-columns:1fr;gap:8px}
+  .hero-sub{flex-direction:column;align-items:flex-start}
+}
+
+/* ---------- contact form ---------- */
+.cform{max-width:480px;margin:32px auto 0;display:flex;flex-direction:column;gap:12px;text-align:left}
+.cform input,.cform textarea{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;padding:14px 16px;color:var(--ivory);font-family:'Inter';font-size:15px;width:100%}
+.cform textarea{min-height:78px;resize:vertical}
+.cform input:focus,.cform textarea:focus{outline:none;border-color:var(--rose)}
+.cform button{background:var(--ivory);color:var(--ink);border:none;border-radius:50px;padding:16px;font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:.3s}
+.cform button:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(255,125,156,.35)}
+.cform-msg{font-size:14px;color:var(--teal);text-align:center;min-height:18px;font-family:'Space Mono',monospace}
+.cta-alt{margin-top:20px;font-size:14px;color:var(--ivory-dim);font-family:'Space Mono',monospace}
+.cta-alt a{color:var(--ivory);text-decoration:none;border-bottom:1px solid var(--line)}
+
+/* ---------- chat assistant ---------- */
+@keyframes msgIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes fabIn{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
+.chat-fab{position:fixed;bottom:24px;right:24px;z-index:80;width:60px;height:60px;border-radius:50%;background:var(--grad);border:none;cursor:pointer;box-shadow:0 12px 40px rgba(255,125,156,.45);display:flex;align-items:center;justify-content:center;font-size:25px;transition:transform .3s;animation:fabIn .6s cubic-bezier(.34,1.56,.64,1) both}
+.chat-fab:hover{transform:scale(1.08)}
+.chat-panel{position:fixed;bottom:96px;right:24px;z-index:81;width:min(372px,calc(100vw - 36px));height:540px;max-height:calc(100vh - 130px);background:#0c0c11;border:1px solid var(--line);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(0,0,0,.6);opacity:0;visibility:hidden;transform:translateY(26px) scale(.95);transform-origin:bottom right;pointer-events:none;transition:opacity .35s ease,transform .45s cubic-bezier(.22,1,.36,1),visibility .35s}
+.chat-panel.open{opacity:1;visibility:visible;transform:none;pointer-events:auto}
+.chat-head{padding:18px 20px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02)}
+.chat-head b{font-family:'Fraunces',serif;font-weight:500;font-size:17px;color:#fff}
+.chat-head span{display:block;font-size:11px;color:var(--teal);font-family:'Space Mono',monospace;margin-top:4px}
+.chat-body{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:11px}
+.msg{max-width:84%;padding:11px 14px;border-radius:14px;font-size:14.5px;line-height:1.45;animation:msgIn .4s cubic-bezier(.22,1,.36,1) both}
+.msg.bot{background:rgba(255,255,255,.06);align-self:flex-start;border-bottom-left-radius:4px;color:#e7e4dc}
+.msg.user{background:var(--grad);color:var(--ink);align-self:flex-end;border-bottom-right-radius:4px;font-weight:500}
+.chat-quick{display:flex;flex-wrap:wrap;gap:8px;padding:0 18px 12px}
+.chat-quick button{background:transparent;border:1px solid var(--line);color:var(--ivory);border-radius:30px;padding:8px 13px;font-size:13px;cursor:pointer;transition:.2s;animation:msgIn .35s ease both}
+.chat-quick button:hover{border-color:var(--rose);background:rgba(255,125,156,.12)}
+.chat-input{display:flex;gap:8px;padding:14px;border-top:1px solid var(--line)}
+.chat-input input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:30px;padding:11px 15px;color:var(--ivory);font-family:'Inter';font-size:14px}
+.chat-input input:focus{outline:none;border-color:var(--rose)}
+.chat-input button{background:var(--ivory);color:var(--ink);border:none;border-radius:50%;width:42px;height:42px;cursor:pointer;font-size:16px;flex:0 0 auto}
+</style>
+</head>
+<body>
+
+<div class="aurora"><span class="a1"></span><span class="a2"></span><span class="a3"></span><span class="a4"></span></div>
+<div class="grain"></div>
+<div class="progress" id="progress"></div>
+
+<nav>
+  <div class="brand">Found<b><em>Local</em></b></div>
+  <a class="nav-cta" href="#cta">Get found →</a>
+</nav>
+
+<!-- 01 HERO -->
+<section id="hero">
+  <div class="label">FoundLocal — Studio for local businesses</div>
+  <h1 class="huge" id="heroWord">Found.</h1>
+  <div class="hero-sub">
+    <p>Your customers are searching right now. We make sure the one they find — and remember — is you.</p>
+    <div class="scroll-cue">Scroll to discover <i></i></div>
+  </div>
+</section>
+
+<!-- 02 PROBLEM -->
+<section id="problem">
+  <div class="label reveal">01 — The quiet problem</div>
+  <h2 class="huge reveal">In<em>visible.</em></h2>
+  <p class="lead reveal">Right now a customer near you is typing "best near me" into Google — or asking ChatGPT for a recommendation. If you're not there, you don't lose on quality. You lose on being <span class="grad-text">found.</span></p>
+</section>
+
+<!-- 03 THE SHIFT (serp climb) -->
+<section id="shift">
+  <div class="label reveal">02 — What we change</div>
+  <h2 class="huge reveal" style="font-size:clamp(2.6rem,9vw,8rem)">Top of the <em class="grad-text">list.</em></h2>
+  <p class="lead reveal">Watch what we do: take a business buried where nobody scrolls — and move it to where every customer looks first.</p>
+  <div class="serp" id="serp">
+    <div class="serp-row"><span class="rank">#8</span><span class="nm you">Your business</span><span class="meta">page 1 ↑</span></div>
+    <div class="serp-row"><span class="rank">#3</span><span class="nm">A competitor</span><span class="meta">★ 4.6</span></div>
+    <div class="serp-row"><span class="rank">#2</span><span class="nm">A competitor</span><span class="meta">★ 4.8</span></div>
+    <div class="serp-row"><span class="rank">#1</span><span class="nm">A competitor</span><span class="meta">★ 4.9</span></div>
+  </div>
+</section>
+
+<!-- 04 WHAT WE DO -->
+<section id="dowedo">
+  <div class="label reveal">03 — What you get, done for you</div>
+  <div class="do-list">
+    <div class="do-line"><span class="do-num">a</span>We <span>build</span> the site.</div>
+    <div class="do-line"><span class="do-num">b</span>We make Google <span>rank</span> you.</div>
+    <div class="do-line"><span class="do-num">c</span>We get you into <span>AI</span> answers.</div>
+    <div class="do-line"><span class="do-num">d</span>We turn clicks into <span>chats.</span></div>
+  </div>
+</section>
+
+<!-- 05 WORK -->
+<section id="work">
+  <div class="label reveal">04 — Selected work</div>
+  <h2 class="huge reveal" style="font-size:clamp(2.4rem,8vw,6.5rem);margin-bottom:20px">Made to be <em>seen.</em></h2>
+  <div class="work-track">
+    <a class="work-card c-noir" href="samples/noir.html" target="_blank" rel="noopener"><img class="wc-img" src="assets/site-noir.png"><div class="cat">Fine dining</div><h3>Maison Noir</h3><p>A candle-lit reservation experience — found first when diners search the city.</p><span class="wc-go">View live site ↗</span></a>
+    <a class="work-card c-forge" href="samples/forge.html" target="_blank" rel="noopener"><img class="wc-img" src="assets/site-forge.png"><div class="cat">Fitness</div><h3>Forge Gym</h3><p>Black &amp; acid energy. Built to convert "gym near me" into a trial booking.</p><span class="wc-go">View live site ↗</span></a>
+    <a class="work-card c-bloom" href="samples/bloom.html" target="_blank" rel="noopener"><img class="wc-img" src="assets/site-bloom.png"><div class="cat">Dental · kids</div><h3>Bloom Dental</h3><p>Warm, calm, parent-friendly — top of the map pack in its town.</p><span class="wc-go">View live site ↗</span></a>
+  </div>
+</section>
+
+<!-- 06 PROCESS -->
+<section id="process">
+  <div class="label reveal">05 — How it works</div>
+  <h2 class="huge reveal" style="font-size:clamp(2.4rem,8vw,6rem);margin-bottom:10px">You do <em>nothing.</em></h2>
+  <div class="steps">
+    <div class="step reveal"><div class="sn">01</div><div><h4>You tell me about your business</h4><p>One short message — your name, what you do, your area. No call needed. No tech words.</p></div></div>
+    <div class="step reveal"><div class="sn">02</div><div><h4>I design &amp; write everything</h4><p>The site, the words, the photos, the layout. You don't lift a finger — I send you a preview.</p></div></div>
+    <div class="step reveal"><div class="sn">03</div><div><h4>I get you found</h4><p>Google Business setup, on-page SEO, and AI-search visibility so you appear where customers look.</p></div></div>
+    <div class="step reveal"><div class="sn">04</div><div><h4>Customers reach you</h4><p>A built-in enquiry form turns a curious visitor into a real message — landing straight in your inbox.</p></div></div>
+  </div>
+</section>
+
+<!-- 07 PACKAGES -->
+<section id="packages">
+  <div class="label reveal">06 — Simple pricing</div>
+  <h2 class="huge reveal" style="font-size:clamp(2.4rem,8vw,6rem);margin-bottom:10px">One price. <em>Everything.</em></h2>
+  <div class="tiers">
+    <div class="tier reveal">
+      <div class="tname">Starter</div>
+      <div class="price">$80</div>
+      <ul><li>One-page cinematic site</li><li>Mobile &amp; desktop</li><li>Enquiry form to your inbox</li><li>Delivered in 3 days</li></ul>
+    </div>
+    <div class="tier feat reveal">
+      <div class="tname">Get Found · most popular</div>
+      <div class="price">$150</div>
+      <ul><li>Everything in Starter</li><li>Up to 5 sections</li><li>Google Business setup</li><li>On-page SEO so you rank</li><li>Delivered in 5 days</li></ul>
+    </div>
+    <div class="tier reveal">
+      <div class="tname">Full Presence</div>
+      <div class="price">$280</div>
+      <ul><li>Everything in Get Found</li><li>AI / ChatGPT visibility</li><li>Lead-capture &amp; reviews</li><li>Priority delivery</li></ul>
+    </div>
+  </div>
+</section>
+
+<!-- 08 FAQ -->
+<section id="faq">
+  <div class="label reveal">07 — Questions</div>
+  <div class="faq">
+    <div class="q reveal"><h5>I don't have content or photos — can you still help?</h5><p>Yes. Tell me your business name, what you do, and your area — I write the words and design it all for you.</p></div>
+    <div class="q reveal"><h5>Will this really get me found?</h5><p>A proper site + Google setup + AI visibility puts you where searching customers actually look. Full Presence adds SEO and ChatGPT visibility for the strongest result.</p></div>
+    <div class="q reveal"><h5>Do I need to get on a call?</h5><p>No calls. Everything's handled by message — quick and easy.</p></div>
+  </div>
+</section>
+
+<!-- 09 CTA -->
+<section id="cta">
+  <div class="label reveal" style="justify-content:center">Let's begin</div>
+  <h2 class="huge reveal">Get <em class="grad-text">found.</em></h2>
+  <p class="lead reveal" style="text-align:center;margin-left:auto;margin-right:auto">Tell me about your business — I'll send back a free preview. No calls, no pressure.</p>
+  <form class="cform reveal" id="cform">
+    <input name="name" placeholder="Your name" required>
+    <input name="business" placeholder="Business name + what you do" required>
+    <input name="email" type="email" placeholder="Your email" required>
+    <input type="hidden" name="_autoresponse" value="Thanks for reaching out to FoundLocal! 🎉 I've got your details — I'll send your free website preview shortly. — FoundLocal">
+    <textarea name="message" placeholder="Anything specific? (optional)"></textarea>
+    <button type="submit">Send — get my free preview →</button>
+    <div class="cform-msg"></div>
+  </form>
+  <div class="cta-alt reveal">No calls needed — just the form above, or tap the chat bubble ↘</div>
+</section>
+
+<footer>
+  <span>FoundLocal — websites that get local businesses found.</span>
+  <span>© 2026 FoundLocal</span>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* SHOT mode: force everything visible for clean section screenshots (?shot#section) */
+const SHOT = location.search.indexOf('shot') > -1;
+if(SHOT){
+  const s=document.createElement('style');
+  s.textContent='.reveal{opacity:1!important;transform:none!important}.do-line{color:var(--ivory)!important}';
+  document.head.appendChild(s);
+}
+
+/* progress bar */
+gsap.to('#progress',{width:'100%',ease:'none',scrollTrigger:{trigger:'body',start:'top top',end:'bottom bottom',scrub:.3}});
+
+/* hero word: split into chars and rise in */
+(function(){
+  const el=document.getElementById('heroWord');
+  const txt=el.textContent; el.textContent='';
+  [...txt].forEach(ch=>{
+    const s=document.createElement('span');
+    s.textContent=ch; s.style.display='inline-block'; s.style.willChange='transform';
+    el.appendChild(s);
+  });
+  gsap.from('#heroWord span',{yPercent:120,opacity:0,duration:1.1,ease:'expo.out',stagger:.06,delay:.15});
+  gsap.from('#hero .label',{opacity:0,y:18,duration:1,delay:.1});
+  gsap.from('#hero .hero-sub',{opacity:0,y:24,duration:1,delay:.7});
+})();
+
+/* generic reveals */
+gsap.utils.toArray('.reveal').forEach(el=>{
+  gsap.fromTo(el,{opacity:0,y:34},{opacity:1,y:0,duration:1,ease:'power3.out',
+    scrollTrigger:{trigger:el,start:'top 85%',toggleActions:'play none none reverse'}});
+});
+
+/* SERP climb: when section enters, "you" row jumps to #1 and others slide down */
+ScrollTrigger.create({
+  trigger:'#serp', start:'top 70%', once:true,
+  onEnter:()=>{
+    const rows=gsap.utils.toArray('#serp .serp-row');
+    const you=rows[0];
+    const tl=gsap.timeline({delay:.3});
+    tl.to(rows.slice(1),{y:64,duration:.7,ease:'power2.inOut',stagger:.04})
+      .to(you,{y:-192,duration:.9,ease:'power3.inOut'},'<')
+      .add(()=>{ you.querySelector('.rank').textContent='#1'; you.querySelector('.meta').textContent='top result ✓'; })
+      .to(rows,{y:0,duration:.6,ease:'power2.out',onStart:()=>{
+        // reorder DOM so it sits cleanly at top
+        const serp=document.getElementById('serp'); serp.insertBefore(you,serp.firstChild);
+        gsap.set(rows,{clearProps:'transform'});
+      }});
+  }
+});
+
+/* what-we-do: lines light up one by one as they cross center */
+gsap.utils.toArray('.do-line').forEach(line=>{
+  ScrollTrigger.create({trigger:line,start:'top 72%',end:'bottom 40%',
+    onEnter:()=>line.classList.add('on'),
+    onLeaveBack:()=>line.classList.remove('on')});
+});
+
+/* subtle parallax on huge words */
+gsap.utils.toArray('section .huge').forEach(h=>{
+  gsap.to(h,{yPercent:-8,ease:'none',scrollTrigger:{trigger:h,start:'top bottom',end:'bottom top',scrub:1}});
+});
+
+ScrollTrigger.refresh();
+</script>
+
+<!-- contact form + AI chat assistant -->
+<button class="chat-fab" id="chatFab" aria-label="Chat">💬</button>
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-head"><b>FoundLocal Assistant</b><span>● online — replies instantly</span></div>
+  <div class="chat-body" id="chatBody"></div>
+  <div class="chat-quick" id="chatQuick"></div>
+  <div class="chat-input"><input id="chatText" placeholder="Type a message…" autocomplete="off"><button id="chatSend" aria-label="Send">→</button></div>
+</div>
+<script>
+(function(){
+  var EMAIL='foundlocal12@gmail.com';
+  function post(data){return fetch('https://formsubmit.co/ajax/'+EMAIL,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(data)});}
+
+  /* contact form */
+  var cf=document.getElementById('cform');
+  if(cf){cf.addEventListener('submit',function(e){e.preventDefault();var m=cf.querySelector('.cform-msg');var d={_subject:'New FoundLocal enquiry'};new FormData(cf).forEach(function(v,k){d[k]=v;});m.textContent='Sending…';post(d).then(function(r){return r.json();}).then(function(){cf.reset();m.textContent="✅ Sent! I'll get back to you shortly.";}).catch(function(){m.textContent="✅ Got it — I'll be in touch.";});});}
+
+  /* chat assistant */
+  var fab=document.getElementById('chatFab'),panel=document.getElementById('chatPanel'),
+      body=document.getElementById('chatBody'),quick=document.getElementById('chatQuick'),
+      text=document.getElementById('chatText'),send=document.getElementById('chatSend');
+  var lead={},step=null,started=false,convo=[];
+  var AI='https://foundlocal-chat.foundlocal.workers.dev';  // FoundLocal AI brain (Groq via Cloudflare Worker)
+  var KB={
+    'What do you do?':"I build modern, mobile-first websites for local businesses — and get you found on Google and AI search like ChatGPT. Fully done-for-you. ✨",
+    'Pricing':"Three simple packages — Starter $80, Get Found $150 (+ Google ranking & SEO), Full Presence $280 (+ AI visibility & lead capture). One price, everything included.",
+    'How it works':"Easy: you tell me about your business → I design & write everything → I get you found on Google → customers message you. No calls, no jargon. 🙌"
+  };
+  var MENU=['What do you do?','Pricing','How it works','Get my free preview'];
+  function add(t,who){var d=document.createElement('div');d.className='msg '+who;d.textContent=t;body.appendChild(d);body.scrollTop=body.scrollHeight;}
+  function setQuick(opts){quick.innerHTML='';opts.forEach(function(o){var b=document.createElement('button');b.textContent=o;b.onclick=function(){handle(o);};quick.appendChild(b);});}
+  function botSay(t,after){setTimeout(function(){add(t,'bot');if(after)after();},420);}
+  function start(){if(started)return;started=true;add("Hey 👋 I'm FoundLocal's assistant. I can tell you about our service and set you up with a free website preview — what would you like to know?",'bot');setQuick(MENU);}
+  function addTyping(){var d=document.createElement('div');d.className='msg bot';d.textContent='…';body.appendChild(d);body.scrollTop=body.scrollHeight;return d;}
+  function handle(input){
+    add(input,'user');
+    if(step){return capture(input);}
+    if(KB[input]){convo.push({role:'user',content:input},{role:'assistant',content:KB[input]});botSay(KB[input],function(){setQuick(MENU);});return;}
+    if(input==='Get my free preview'||/\b(get (my )?(free )?preview|sign me up|let'?s start|book me|i'?m interested)\b/i.test(input)){quick.innerHTML='';step='name';botSay("Awesome — let's set that up. What's your name?");return;}
+    aiReply(input);
+  }
+  function aiReply(input){
+    convo.push({role:'user',content:input});
+    if(!AI){botSay("Good question! The easiest next step is a free preview — want me to set one up?",function(){setQuick(['Get my free preview','Pricing']);});return;}
+    var t=addTyping();
+    fetch(AI,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:convo})})
+      .then(function(r){return r.json();}).then(function(d){t.remove();var msg=(d&&d.reply)||"Want a free preview? Just share your name, business & email.";add(msg,'bot');convo.push({role:'assistant',content:msg});setQuick(['Get my free preview','Pricing']);})
+      .catch(function(){t.remove();botSay("Hmm, quick connection hiccup — want a free preview? Tap below.",function(){setQuick(['Get my free preview']);});});
+  }
+  function capture(v){
+    if(step==='name'){lead.name=v;step='business';botSay("Nice to meet you, "+v.split(' ')[0]+"! What's your business + what you do?");}
+    else if(step==='business'){lead.business=v;step='contact';botSay("Got it. What's the best email to send your preview to?");}
+    else if(step==='contact'){lead.contact=v;step=null;botSay("Perfect — sending this over now…",function(){
+      post({_subject:'New FoundLocal lead 🚀',_autoresponse:"Thanks for reaching out to FoundLocal! 🎉 I've got your details — I'll send your free website preview shortly. — FoundLocal",name:lead.name,business:lead.business,email:lead.contact})
+        .then(function(r){return r.json();}).then(function(){add("Done ✅ You're all set — I'll get your free preview over shortly. Talk soon!",'bot');})
+        .catch(function(){add("All noted ✅ I'll be in touch shortly!",'bot');});
+    });}
+  }
+  send.onclick=function(){var v=text.value.trim();if(v){handle(v);text.value='';}};
+  text.addEventListener('keydown',function(e){if(e.key==='Enter')send.onclick();});
+  fab.onclick=function(){panel.classList.toggle('open');if(panel.classList.contains('open'))start();};
+})();
+</script>
+</body>
+</html>
