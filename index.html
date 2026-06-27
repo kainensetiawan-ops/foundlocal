@@ -425,7 +425,7 @@ ScrollTrigger.refresh();
       body=document.getElementById('chatBody'),quick=document.getElementById('chatQuick'),
       text=document.getElementById('chatText'),send=document.getElementById('chatSend');
   var lead={},step=null,started=false,convo=[];
-  var AI='';  // FoundLocal AI brain endpoint — set after the free Worker deploys
+  var AI='https://foundlocal-chat.foundlocal.workers.dev';  // FoundLocal AI brain (Groq via Cloudflare Worker)
   var KB={
     'What do you do?':"I build modern, mobile-first websites for local businesses — and get you found on Google and AI search like ChatGPT. Fully done-for-you. ✨",
     'Pricing':"Three simple packages — Starter $80, Get Found $150 (+ Google ranking & SEO), Full Presence $280 (+ AI visibility & lead capture). One price, everything included.",

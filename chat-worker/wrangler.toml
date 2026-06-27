@@ -1,6 +1,8 @@
 name = "foundlocal-chat"
 main = "worker.js"
 compatibility_date = "2024-11-01"
+account_id = "100284d8017df44374f9d1c83d6c9582"
+workers_dev = true
 # Deploy:  wrangler deploy
 # Set the free Groq key as a secret (never in code):  wrangler secret put GROQ_API_KEY
 # Result URL:  https://foundlocal-chat.<your-subdomain>.workers.dev
